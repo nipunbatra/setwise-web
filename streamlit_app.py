@@ -743,7 +743,7 @@ subjective = [
         ],
         "marks": 4
     }
-]'''
+]
 quiz_metadata = {
     "title": "Enhanced Setwise Demo Quiz",
     "subject": "Mathematics & Science",
