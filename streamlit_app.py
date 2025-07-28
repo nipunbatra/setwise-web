@@ -145,6 +145,45 @@ subjective = [
     }
 ]''',
 
+        "Machine Learning": '''mcq = [
+    {
+        "question": r"Which algorithm is best for linear classification?",
+        "options": [r"Logistic Regression", r"K-Means", r"DBSCAN", r"Apriori"],
+        "answer": r"Logistic Regression",
+        "marks": 2
+    },
+    {
+        "question": r"What is the purpose of cross-validation?",
+        "options": [r"Feature selection", r"Model evaluation", r"Data cleaning", r"Hyperparameter optimization"],
+        "answer": r"Model evaluation",
+        "marks": 2
+    },
+    {
+        "question": r"In gradient descent, what does the learning rate control?",
+        "options": [r"Step size", r"Number of iterations", r"Feature scaling", r"Regularization strength"],
+        "answer": r"Step size",
+        "marks": 3
+    }
+]
+
+subjective = [
+    {
+        "question": r"Explain the bias-variance tradeoff in machine learning.",
+        "answer": r"Bias measures how far predictions are from true values. Variance measures prediction sensitivity to training data changes. High bias = underfitting, high variance = overfitting. Optimal models balance both.",
+        "marks": 8
+    },
+    {
+        "question": r"Compare supervised vs unsupervised learning with examples.",
+        "answer": r"Supervised learning uses labeled data (classification, regression). Examples: spam detection, price prediction. Unsupervised learning finds patterns in unlabeled data. Examples: customer segmentation, anomaly detection.",
+        "marks": 10
+    },
+    {
+        "question": r"Describe the Random Forest algorithm and its advantages.",
+        "answer": r"Random Forest combines multiple decision trees using bagging and random feature selection. Advantages: reduces overfitting, handles missing values, provides feature importance, robust to outliers.",
+        "marks": 12
+    }
+]''',
+
         "Template": '''mcq = [
     {
         "question": r"Sample MCQ with LaTeX: What is $\\int e^x dx$?",
@@ -180,9 +219,11 @@ subjective = [
     }
     return examples.get(subject, "")
 
-def generate_quiz_pdfs(questions_text, template, num_sets):
+def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
     """Generate quiz PDFs using the setwise package with comprehensive debugging"""
     debug_log = []
+    if header_config is None:
+        header_config = {}
     
     try:
         debug_log.append("=== STARTING QUIZ GENERATION ===")
@@ -249,11 +290,20 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             print(f"[DEBUG] Using random seed: {random_seed}")
             start_time = time.time()
             
+            # Prepare header configuration for quiz generation
+            quiz_config = {
+                "title": header_config.get("title", "Quiz"),
+                "subject": header_config.get("subject", ""),
+                "exam_info": header_config.get("exam_info", "")
+            }
+            print(f"[DEBUG] Header config: {quiz_config}")
+            
             success = generator.generate_quizzes(
                 num_sets=num_sets,
                 template_name=template,
                 compile_pdf=True,
-                seed=random_seed
+                seed=random_seed,
+                quiz_config=quiz_config
             )
             
             end_time = time.time()
@@ -329,7 +379,7 @@ def main():
         st.info("The quiz generator requires the setwise package to be installed.")
         return
     
-    # Controls row
+    # Controls row 1
     col_ctrl1, col_ctrl2, col_ctrl3, col_ctrl4 = st.columns([1, 1, 1, 2])
     
     with col_ctrl1:
@@ -339,12 +389,32 @@ def main():
         num_sets = st.slider("Sets", 1, 5, 2)
     
     with col_ctrl3:
-        example = st.selectbox("Examples", ["", "Physics", "Mathematics", "Programming", "Template"])
+        example = st.selectbox("Examples", ["", "Physics", "Mathematics", "Programming", "Machine Learning", "Template"])
     
     with col_ctrl4:
         if st.button("Load Example", disabled=not example):
             st.session_state.questions = load_example_questions(example)
             st.rerun()
+    
+    # Controls row 2 - Header customization
+    st.markdown("**Quiz Header Customization:**")
+    col_header1, col_header2, col_header3 = st.columns([1, 1, 1])
+    
+    with col_header1:
+        quiz_title = st.text_input("Quiz Title", value="Quiz", help="Main title that appears at the top")
+    
+    with col_header2:
+        subject_name = st.text_input("Subject", value="", help="Subject name (e.g., 'Machine Learning', 'Physics')")
+    
+    with col_header3:
+        exam_info = st.text_input("Exam Info", value="", help="Additional info (e.g., 'Midterm Exam', 'Final Test')")
+    
+    # Store header info in session state for quiz generation
+    st.session_state.header_config = {
+        "title": quiz_title,
+        "subject": subject_name,
+        "exam_info": exam_info
+    }
     
     # Main split pane layout
     col_left, col_right = st.columns([1, 1])
@@ -369,10 +439,14 @@ def main():
         "marks": 2
     },
     {
-        "question": r"What is the capital of Japan?",
-        "options": [r"Seoul", r"Beijing", r"Tokyo", r"Bangkok"],
-        "answer": r"Tokyo",
-        "marks": 2
+        "question": r"A car travels at {{ speed }} km/h for {{ time }} hours. What distance does it cover?",
+        "options": [r"{{ speed * time }} km", r"{{ speed + time }} km", r"{{ speed / time }} km", r"{{ speed - time }} km"],
+        "answer": r"{{ speed * time }} km",
+        "marks": 3,
+        "variables": {
+            "speed": [60, 80, 100, 120],
+            "time": [2, 3, 4, 5]
+        }
     }
 ]
 
@@ -383,9 +457,36 @@ subjective = [
         "marks": 5
     },
     {
-        "question": r"Consider a quadratic function $f(x) = x^2 - 4x + 3$. Find the vertex and roots.",
-        "answer": r"Vertex: $(2, -1)$ using $x = -\\frac{b}{2a}$. Roots: $x = 1, 3$ by factoring $(x-1)(x-3) = 0$.",
-        "marks": 6
+        "question": r"A projectile is launched with initial velocity {{ v0 }} m/s at angle {{ angle }}°.",
+        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g} = {{ height }} m$. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}°)}{g} = {{ range }} m$.",
+        "marks": 8,
+        "variables": {
+            "v0": [20, 25, 30],
+            "angle": [30, 45, 60],
+            "height": "{{ (v0 * sin(radians(angle)))**2 / (2 * 9.8) | round(1) }}",
+            "range": "{{ v0**2 * sin(radians(2*angle)) / 9.8 | round(1) }}"
+        }
+    },
+    {
+        "question": r"Solve the physics problem step by step.",
+        "parts": [
+            {
+                "question": r"A ball is thrown upward with initial velocity $v_0 = 20$ m/s. Calculate the maximum height reached.",
+                "answer": r"Using $v^2 = v_0^2 - 2gh$ at maximum height where $v = 0$: $h = \\frac{v_0^2}{2g} = \\frac{20^2}{2 \\times 9.8} = 20.4$ m",
+                "marks": 3
+            },
+            {
+                "question": r"Find the time taken to reach maximum height.",
+                "answer": r"Using $v = v_0 - gt$ where $v = 0$: $t = \\frac{v_0}{g} = \\frac{20}{9.8} = 2.04$ s",
+                "marks": 2
+            },
+            {
+                "question": r"Calculate the total time of flight.",
+                "answer": r"Total time = $2t = 2 \\times 2.04 = 4.08$ s (time to go up and come back down)",
+                "marks": 3
+            }
+        ],
+        "marks": 8
     }
 ]'''
         
@@ -436,8 +537,9 @@ subjective = [
             
             with st.spinner(f"Generating {num_sets} quiz sets..."):
                 debug_container.text("Step 1: Validating questions...")
+                header_config = st.session_state.get('header_config', {})
                 print(f"[STREAMLIT] About to call generate_quiz_pdfs with {len(questions_text)} chars, template={template}, sets={num_sets}")
-                quiz_sets, error = generate_quiz_pdfs(questions_text, template, num_sets)
+                quiz_sets, error = generate_quiz_pdfs(questions_text, template, num_sets, header_config)
                 debug_container.text("Step 2: Generation complete, processing results...")
                 print(f"[STREAMLIT] generate_quiz_pdfs returned: quiz_sets={len(quiz_sets) if quiz_sets else 0}, error={bool(error)}")
             
