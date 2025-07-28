@@ -87,10 +87,9 @@ subjective = [
 ]''',
         "Machine Learning": '''mcq = [
     {
-        "question": r"Which of the following best describes the bias-variance tradeoff in machine learning?",
+        "question": r"Which of the following best describes the bias-variance tradeoff?",
         "options": [
-            r"High bias models always perform better than high variance models",
-            r"Bias and variance are independent and don't affect each other", 
+            r"High bias models always perform better",
             r"Reducing bias typically increases variance, and vice versa",
             r"Variance only matters in unsupervised learning"
         ],
@@ -98,58 +97,48 @@ subjective = [
         "marks": 2
     },
     {
-        "question": r"In a decision tree, which impurity measure is most commonly used for classification tasks?",
-        "options": [
-            r"Mean Squared Error (MSE)",
-            r"Gini Impurity", 
-            r"Mean Absolute Error (MAE)",
-            r"R-squared"
-        ],
+        "question": r"Which impurity measure is most commonly used for classification in decision trees?",
+        "options": [r"MSE", r"Gini Impurity", r"MAE"],
         "answer": r"Gini Impurity",
-        "marks": 2
-    },
-    {
-        "template": r"In k-fold cross-validation with k={{ k_value }}, how many times is the model trained?",
-        "options": [r"{{ k_value - 1 }}", r"{{ k_value }}", r"{{ k_value + 1 }}", r"{{ k_value * 2 }}"],
-        "answer": r"{{ k_value }}",
-        "variables": [
-            {"k_value": 5},
-            {"k_value": 10}
-        ],
         "marks": 2
     }
 ]
 
 subjective = [
     {
-        "question": r"Compare and contrast overfitting and underfitting in machine learning models. Provide strategies to address each issue.",
-        "answer": r"Overfitting: model memorizes training data, high training accuracy but low validation accuracy. Solutions: regularization, more data, simpler model. Underfitting: model too simple, poor performance on both training and validation. Solutions: more complex model, feature engineering.",
-        "marks": 8
-    },
-    {
-        "template": r"Consider a dataset with {{ n_pos }} positive samples and {{ n_neg }} negative samples. Calculate the precision if the model predicts {{ tp }} true positives and {{ fp }} false positives.",
-        "answer": r"Precision = TP/(TP+FP) = {{ tp }}/({{ tp }}+{{ fp }}) = {{ tp/(tp+fp) }}",
-        "variables": [
-            {"n_pos": 100, "n_neg": 50, "tp": 85, "fp": 10},
-            {"n_pos": 200, "n_neg": 80, "tp": 180, "fp": 15}
-        ],
+        "question": r"Compare overfitting and underfitting in machine learning models.",
+        "answer": r"Overfitting: model memorizes training data, high training accuracy but low validation accuracy. Underfitting: model too simple, poor performance on both training and validation.",
         "marks": 6
     },
     {
-        "question": r"Analyze the performance of a neural network model:",
-        "parts": [
+        "template": r"""Consider the following dataset for linear regression:
+
+\\begin{center}
+\\begin{tabular}{|c|c|c|}
+\\hline
+\\textbf{Sample} & \\textbf{Feature} & \\textbf{Target} \\\\
+\\hline
+1 & {{ x1 }} & {{ y1 }} \\\\
+\\hline
+2 & {{ x2 }} & {{ y2 }} \\\\
+\\hline
+\\end{tabular}
+\\end{center}
+
+Calculate the mean squared error if predictions are {{ pred1 }} and {{ pred2 }}.""",
+        "variables": [
             {
-                "question": r"Explain the vanishing gradient problem and its impact on deep networks.",
-                "answer": r"Gradients become exponentially small in early layers due to product of small derivatives, preventing learning in deep networks.",
-                "marks": 4
+                "x1": 2, "y1": 5, "x2": 4, "y2": 11, 
+                "pred1": 4.8, "pred2": 10.5,
+                "answer": "MSE = ((5-4.8)² + (11-10.5)²)/2 = 0.145"
             },
             {
-                "question": r"Suggest two techniques to mitigate this problem.",
-                "answer": r"1) Use ReLU activation functions instead of sigmoid/tanh, 2) Apply batch normalization or gradient clipping",
-                "marks": 4
+                "x1": 1, "y1": 3, "x2": 3, "y2": 7,
+                "pred1": 2.9, "pred2": 7.1, 
+                "answer": "MSE = ((3-2.9)² + (7-7.1)²)/2 = 0.01"
             }
         ],
-        "marks": 8
+        "marks": 5
     }
 ]'''
     }
@@ -437,32 +426,82 @@ def main():
     with col_left:
         st.subheader("Questions Editor")
         
-        # Initialize default questions - SIMPLE TEST (no templates)
+        # Initialize default questions - MAGIC VERSION with working templates! 🪄
         if 'questions' not in st.session_state:
             st.session_state.questions = '''mcq = [
     {
-        "question": r"What is $2 + 2$?",
-        "options": [r"3", r"4", r"5", r"6"],
-        "answer": r"4",
+        "question": r"Which of the following best describes the bias-variance tradeoff in machine learning?",
+        "options": [
+            r"High bias models always perform better than high variance models",
+            r"Bias and variance are independent and don't affect each other", 
+            r"Reducing bias typically increases variance, and vice versa",
+            r"Variance only matters in unsupervised learning"
+        ],
+        "answer": r"Reducing bias typically increases variance, and vice versa",
         "marks": 2
     },
     {
-        "question": r"Which planet is closest to the Sun?",
-        "options": [r"Venus", r"Mercury", r"Earth", r"Mars"],
-        "answer": r"Mercury",
+        "question": r"In a decision tree, which impurity measure is most commonly used for classification tasks?",
+        "options": [
+            r"Mean Squared Error (MSE)",
+            r"Gini Impurity", 
+            r"Mean Absolute Error (MAE)",
+            r"R-squared"
+        ],
+        "answer": r"Gini Impurity",
+        "marks": 2
+    },
+    {
+        "question": r"Which activation function is most commonly used in hidden layers of modern deep neural networks?",
+        "options": [
+            r"Sigmoid",
+            r"Tanh", 
+            r"ReLU",
+            r"Linear"
+        ],
+        "answer": r"ReLU",
         "marks": 2
     }
 ]
 
 subjective = [
     {
-        "question": r"Explain the concept of photosynthesis.",
-        "answer": r"Photosynthesis is the process by which plants convert sunlight into energy.",
-        "marks": 5
+        "question": r"Compare and contrast the following three supervised learning algorithms in terms of their assumptions, strengths, and weaknesses: Linear Regression, Decision Trees, and k-NN. Fill in a comparison table and provide a brief explanation for each entry.",
+        "answer": r"Linear: Linear relationship, normality | Interpretable, fast | Limited to linear patterns. Trees: No assumptions | Interpretable, handles non-linear | Prone to overfitting. k-NN: Locality assumption | Simple, non-parametric | Computationally expensive, curse of dimensionality",
+        "marks": 9
     },
     {
-        "question": r"Derive Newton's second law of motion.",
-        "answer": r"F = ma can be derived from Newton's first law and the definition of momentum.",
+        "template": r"""Consider a dataset with {{ n_pos }} positive samples and {{ n_neg }} negative samples. Calculate the precision if the model predicts {{ tp }} true positives and {{ fp }} false positives.""",
+        "variables": [
+            {
+                "n_pos": 100, "n_neg": 50, "tp": 85, "fp": 10,
+                "answer": "Precision = TP/(TP+FP) = 85/(85+10) = 0.894"
+            },
+            {
+                "n_pos": 200, "n_neg": 80, "tp": 180, "fp": 15,
+                "answer": "Precision = TP/(TP+FP) = 180/(180+15) = 0.923"
+            }
+        ],
+        "marks": 6
+    },
+    {
+        "template": r"""A k-Nearest Neighbors classifier is trained on a dataset with {{ n_samples }} samples and {{ n_features }} features.
+
+\\textbf{a)} What is the time complexity for predicting a single test sample when k = {{ k_value }}? \\textbf{[2 marks]}
+
+\\textbf{b)} If we use Euclidean distance and the training data has features with very different scales (e.g., age in years vs income in dollars), what preprocessing step should be applied and why? \\textbf{[3 marks]}
+
+\\textbf{c)} How would you choose the optimal value of k for this dataset? Describe the method and potential issues. \\textbf{[3 marks]}""",
+        "variables": [
+            {
+                "n_samples": 1000, "n_features": 20, "k_value": 5,
+                "answer": "a) O(n*d) = O(20000) for distance calculation + O(n log k) for finding k nearest, b) Feature scaling/normalization to prevent features with larger scales from dominating, c) Cross-validation; issues: bias-variance tradeoff, computational cost"
+            },
+            {
+                "n_samples": 5000, "n_features": 50, "k_value": 3,
+                "answer": "a) O(n*d) = O(250000) for distance calculation + O(n log k) for finding k nearest, b) Standardization or min-max scaling to ensure equal contribution, c) Grid search with CV; issues: curse of dimensionality, choice of distance metric"
+            }
+        ],
         "marks": 8
     }
 ]'''
