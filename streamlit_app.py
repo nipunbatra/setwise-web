@@ -40,42 +40,6 @@ def load_example_questions(subject):
         "options": [r"$9.8\\,\\text{m/s}^2$", r"$10\\,\\text{m/s}^2$", r"$8.9\\,\\text{m/s}^2$", r"$11\\,\\text{m/s}^2$"],
         "answer": r"$9.8\\,\\text{m/s}^2$",
         "marks": 1
-    },
-    {
-        "question": r"Which law states that force equals mass times acceleration?",
-        "options": [r"Newton's First Law", r"Newton's Second Law", r"Newton's Third Law", r"Law of Conservation"],
-        "answer": r"Newton's Second Law",
-        "marks": 1
-    },
-    {
-        "question": r"What is the formula for electric power?",
-        "options": [r"$P = VI$", r"$P = IR$", r"$P = \\frac{V}{I}$", r"$P = V + I$"],
-        "answer": r"$P = VI$",
-        "marks": 1
-    },
-    {
-        "question": r"The speed of light in vacuum is:",
-        "options": [r"$3 \\times 10^8\\,\\text{m/s}$", r"$3 \\times 10^6\\,\\text{m/s}$", r"$9 \\times 10^8\\,\\text{m/s}$", r"$3 \\times 10^{10}\\,\\text{m/s}$"],
-        "answer": r"$3 \\times 10^8\\,\\text{m/s}$",
-        "marks": 1
-    },
-    {
-        "question": r"What type of wave is sound?",
-        "options": [r"Electromagnetic", r"Longitudinal", r"Transverse", r"Surface"],
-        "answer": r"Longitudinal",
-        "marks": 1
-    },
-    {
-        "question": r"The unit of electric current is:",
-        "options": [r"Volt", r"Ohm", r"Ampere", r"Watt"],
-        "answer": r"Ampere",
-        "marks": 1
-    },
-    {
-        "question": r"Which particle has no electric charge?",
-        "options": [r"Proton", r"Electron", r"Neutron", r"Ion"],
-        "answer": r"Neutron",
-        "marks": 1
     }
 ]
 
@@ -83,21 +47,6 @@ subjective = [
     {
         "question": r"Derive the kinetic energy formula. Show that $KE = \\frac{1}{2}mv^2$.",
         "answer": r"Starting with Newton's second law F=ma and work-energy theorem, we integrate force over distance to get kinetic energy.",
-        "marks": 5
-    },
-    {
-        "question": r"Explain Ohm's Law and derive the relationship between voltage, current, and resistance.",
-        "answer": r"Ohm's Law states V=IR. For a conductor at constant temperature, voltage is directly proportional to current.",
-        "marks": 4
-    },
-    {
-        "question": r"Describe the photoelectric effect and explain why it supports the particle nature of light.",
-        "answer": r"The photoelectric effect shows electrons are emitted when light hits a surface, demonstrating light's quantum nature.",
-        "marks": 6
-    },
-    {
-        "question": r"What is simple harmonic motion? Give examples and derive the equation of motion.",
-        "answer": r"SHM is periodic motion where restoring force is proportional to displacement: F = -kx, leading to x(t) = A cos(ωt + φ).",
         "marks": 5
     }
 ]''',
@@ -108,48 +57,6 @@ subjective = [
         "options": [r"$\\cos(x)$", r"$-\\cos(x)$", r"$\\tan(x)$", r"$-\\sin(x)$"],
         "answer": r"$\\cos(x)$",
         "marks": 1
-    },
-    {
-        "question": r"The integral $\\int x^2 dx$ equals:",
-        "options": [r"$\\frac{x^3}{3} + C$", r"$2x + C$", r"$x^3 + C$", r"$\\frac{x^2}{2} + C$"],
-        "answer": r"$\\frac{x^3}{3} + C$",
-        "marks": 1
-    },
-    {
-        "question": r"What is $\\lim_{x \\to 0} \\frac{\\sin x}{x}$?",
-        "options": [r"0", r"1", r"$\\infty$", r"Does not exist"],
-        "answer": r"1",
-        "marks": 2
-    },
-    {
-        "question": r"The slope of the line $y = 3x + 5$ is:",
-        "options": [r"3", r"5", r"8", r"$\\frac{5}{3}$"],
-        "answer": r"3",
-        "marks": 1
-    },
-    {
-        "question": r"Which of these is NOT a rational number?",
-        "options": [r"$\\frac{22}{7}$", r"$0.\\overline{3}$", r"$\\sqrt{2}$", r"$-5$"],
-        "answer": r"$\\sqrt{2}$",
-        "marks": 1
-    },
-    {
-        "question": r"The quadratic formula is:",
-        "options": [r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{b^2+4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{4ac-b^2}}{2a}$"],
-        "answer": r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$",
-        "marks": 1
-    },
-    {
-        "question": r"What is the value of $\\pi$ to 3 decimal places?",
-        "options": [r"3.142", r"3.141", r"3.140", r"3.143"],
-        "answer": r"3.142",
-        "marks": 1
-    },
-    {
-        "question": r"The factorial of 5 is:",
-        "options": [r"25", r"120", r"20", r"100"],
-        "answer": r"120",
-        "marks": 1
     }
 ]
 
@@ -158,21 +65,6 @@ subjective = [
         "question": r"Prove that $\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$ using mathematical induction.",
         "answer": r"Base case: n=1, LHS=1, RHS=1(2)/2=1. Inductive step: assume true for k, prove for k+1.",
         "marks": 5
-    },
-    {
-        "question": r"Find the area under the curve $y = x^2$ from $x = 0$ to $x = 2$.",
-        "answer": r"Area = $\\int_0^2 x^2 dx = \\left[\\frac{x^3}{3}\\right]_0^2 = \\frac{8}{3}$",
-        "marks": 4
-    },
-    {
-        "question": r"Solve the system of equations: $2x + 3y = 7$ and $x - y = 1$.",
-        "answer": r"From second equation: x = y + 1. Substituting: 2(y+1) + 3y = 7, so y = 1, x = 2.",
-        "marks": 4
-    },
-    {
-        "question": r"Prove that the square root of 2 is irrational.",
-        "answer": r"Assume $\\sqrt{2} = \\frac{p}{q}$ in lowest terms. Then $2q^2 = p^2$, so p is even. This leads to contradiction.",
-        "marks": 6
     }
 ]''',
 
@@ -182,60 +74,6 @@ subjective = [
         "options": [r"[]", r"{}", r"()", r"<>"],
         "answer": r"[]",
         "marks": 1
-    },
-    {
-        "question": r"Time complexity of binary search?",
-        "options": [r"$O(n)$", r"$O(\\log n)$", r"$O(n^2)$", r"$O(1)$"],
-        "answer": r"$O(\\log n)$",
-        "marks": 1
-    },
-    {
-        "question": r"What does SQL stand for?",
-        "options": [r"Structured Query Language", r"Simple Query Language", r"Standard Query Language", r"Sequential Query Language"],
-        "answer": r"Structured Query Language",
-        "marks": 1
-    },
-    {
-        "question": r"Which sorting algorithm has best average case complexity?",
-        "options": [r"Bubble Sort", r"Quick Sort", r"Selection Sort", r"Insertion Sort"],
-        "answer": r"Quick Sort",
-        "marks": 2
-    },
-    {
-        "question": r"In Python, what is the output of print(type([]))?",
-        "options": [r"<class 'list'>", r"<class 'array'>", r"list", r"array"],
-        "answer": r"<class 'list'>",
-        "marks": 1
-    },
-    {
-        "question": r"Which data structure uses LIFO principle?",
-        "options": [r"Queue", r"Stack", r"Array", r"Tree"],
-        "answer": r"Stack",
-        "marks": 1
-    },
-    {
-        "question": r"What is the purpose of a constructor in OOP?",
-        "options": [r"Destroy objects", r"Initialize objects", r"Copy objects", r"Compare objects"],
-        "answer": r"Initialize objects",
-        "marks": 1
-    },
-    {
-        "question": r"Which HTTP method is used to retrieve data?",
-        "options": [r"POST", r"GET", r"PUT", r"DELETE"],
-        "answer": r"GET",
-        "marks": 1
-    },
-    {
-        "question": r"What is the difference between `==` and `is` in Python?",
-        "options": [r"No difference", r"`==` compares values, `is` compares identity", r"`is` compares values, `==` compares identity", r"Both compare identity"],
-        "answer": r"`==` compares values, `is` compares identity",
-        "marks": 2
-    },
-    {
-        "question": r"Which of the following is NOT a Python data type?",
-        "options": [r"list", r"tuple", r"array", r"dict"],
-        "answer": r"array",
-        "marks": 1
     }
 ]
 
@@ -244,113 +82,6 @@ subjective = [
         "question": r"Explain recursion with an example. Write a recursive factorial function.",
         "answer": r"Recursion is when a function calls itself. def factorial(n): return 1 if n <= 1 else n * factorial(n-1)",
         "marks": 5
-    },
-    {
-        "question": r"Compare and contrast arrays and linked lists. When would you use each?",
-        "answer": r"Arrays have O(1) access but fixed size. Linked lists have dynamic size but O(n) access. Use arrays for frequent access, linked lists for frequent insertions.",
-        "marks": 6
-    },
-    {
-        "question": r"Explain the concept of Big O notation and give examples.",
-        "answer": r"Big O describes algorithm efficiency. O(1) constant, O(n) linear, O(n²) quadratic. Example: array access O(1), linear search O(n).",
-        "marks": 4
-    },
-    {
-        "question": r"What is the difference between SQL JOIN types? Provide examples.",
-        "answer": r"INNER JOIN returns matching records. LEFT JOIN returns all left records. RIGHT JOIN returns all right records. FULL JOIN returns all records.",
-        "marks": 5
-    },
-    {
-        "question": r"Describe the Model-View-Controller (MVC) architecture pattern and its benefits.",
-        "answer": r"MVC separates application logic into three components: Model (data), View (UI), Controller (logic). Benefits include separation of concerns, testability, and maintainability.",
-        "marks": 6
-    }
-]'''
-    },
-    
-    "Mixed": '''mcq = [
-    {
-        "question": r"What is the derivative of $\\sin(x)$?",
-        "options": [r"$\\cos(x)$", r"$-\\cos(x)$", r"$\\tan(x)$", r"$-\\sin(x)$"],
-        "answer": r"$\\cos(x)$",
-        "marks": 2
-    },
-    {
-        "question": r"Which data structure uses FIFO principle?",
-        "options": [r"Stack", r"Queue", r"Array", r"Tree"],
-        "answer": r"Queue",
-        "marks": 1
-    },
-    {
-        "question": r"What is the unit of electric current?",
-        "options": [r"Volt", r"Ohm", r"Ampere", r"Watt"],
-        "answer": r"Ampere",
-        "marks": 1
-    },
-    {
-        "question": r"Which is the correct quadratic formula?",
-        "options": [r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{b^2+4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{4ac-b^2}}{2a}$"],
-        "answer": r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$",
-        "marks": 2
-    },
-    {
-        "question": r"What is Newton's second law of motion?",
-        "options": [r"$F = ma$", r"$F = mv$", r"$F = m/a$", r"$F = a/m$"],
-        "answer": r"$F = ma$",
-        "marks": 1
-    }
-]
-
-subjective = [
-    {
-        "question": r"Prove that the sum of first $n$ natural numbers is $\\frac{n(n+1)}{2}$.",
-        "answer": r"Use mathematical induction. Base case: n=1, sum=1=1(2)/2. Inductive step assumes true for k, proves for k+1.",
-        "marks": 5
-    },
-    {
-        "question": r"Explain the difference between supervised and unsupervised machine learning.",
-        "answer": r"Supervised learning uses labeled data to train models. Unsupervised learning finds patterns in unlabeled data through clustering, dimensionality reduction, etc.",
-        "marks": 4
-    }
-]''',
-
-    "LaTeX Test": '''mcq = [
-    {
-        "question": r"Which of these LaTeX expressions renders correctly? $\\int_0^1 x^2 dx$",
-        "options": [r"$\\frac{1}{3}$", r"$\\frac{2}{3}$", r"$1$", r"$\\frac{1}{2}$"],
-        "answer": r"$\\frac{1}{3}$",
-        "marks": 2
-    },
-    {
-        "question": r"What is $\\lim_{x \\to 0} \\frac{\\sin x}{x}$?",
-        "options": [r"$0$", r"$1$", r"$\\infty$", r"undefined"],
-        "answer": r"$1$",
-        "marks": 2
-    },
-    {
-        "question": r"Simplify: $\\sqrt{x^2 + 2x + 1}$ for $x \\geq -1$",
-        "options": [r"$x + 1$", r"$x - 1$", r"$|x + 1|$", r"$x^2 + 1$"],
-        "answer": r"$x + 1$",
-        "marks": 2
-    },
-    {
-        "question": r"Matrix multiplication: $\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix} \\begin{pmatrix} 5 \\\\ 6 \\end{pmatrix} = ?$",
-        "options": [r"$\\begin{pmatrix} 17 \\\\ 39 \\end{pmatrix}$", r"$\\begin{pmatrix} 11 \\\\ 24 \\end{pmatrix}$", r"$\\begin{pmatrix} 5 \\\\ 18 \\end{pmatrix}$", r"undefined"],
-        "answer": r"$\\begin{pmatrix} 17 \\\\ 39 \\end{pmatrix}$",
-        "marks": 3
-    }
-]
-
-subjective = [
-    {
-        "question": r"Derive the formula for the area of a circle using integration. Start with $A = \\int_{-r}^{r} 2\\sqrt{r^2 - x^2} dx$.",
-        "answer": r"Using trigonometric substitution $x = r\\sin\\theta$, the integral becomes $2r^2\\int_{-\\pi/2}^{\\pi/2} \\cos^2\\theta d\\theta = \\pi r^2$.",
-        "marks": 6
-    },
-    {
-        "question": r"Show that $e^{i\\pi} + 1 = 0$ using Euler's formula.",
-        "answer": r"Euler's formula: $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$. For $\\theta = \\pi$: $e^{i\\pi} = \\cos\\pi + i\\sin\\pi = -1 + 0i = -1$. Therefore $e^{i\\pi} + 1 = 0$.",
-        "marks": 4
     }
 ]'''
     }
@@ -364,7 +95,7 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         debug_log.append("=== STARTING QUIZ GENERATION ===")
         
         if not SETWISE_AVAILABLE:
-            return None, f"Setwise package not available. Import error: {IMPORT_ERROR}\n\nPlease ensure the setwise package is installed."
+            return None, f"Setwise package not available. Import error: {IMPORT_ERROR}\\n\\nPlease ensure the setwise package is installed."
         
         debug_log.append("✓ Setwise package available")
         
@@ -373,7 +104,7 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             exec(questions_text)
             debug_log.append("✓ Questions syntax valid")
         except SyntaxError as e:
-            return None, f"Python syntax error: {str(e)}\n\nCheck your mcq = [...] and subjective = [...] format."
+            return None, f"Python syntax error: {str(e)}\\n\\nCheck your mcq = [...] and subjective = [...] format."
         except Exception as e:
             return None, f"Error in questions format: {str(e)}"
         
@@ -389,159 +120,46 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         debug_log.append(f"✓ Output directory created: {output_dir}")
         
         try:
-            # Debug: Check if questions file exists and has content
-            if not os.path.exists(questions_file):
-                return None, f"Questions file not created: {questions_file}"
+            # Find the correct template directory
+            import setwise
+            from pathlib import Path
+            setwise_dir = Path(setwise.__file__).parent
+            templates_dir = setwise_dir / 'templates'
+            debug_log.append(f"✓ Using templates from: {templates_dir}")
             
-            with open(questions_file, 'r') as f:
-                file_content = f.read()
+            generator = QuizGenerator(
+                template_dir=str(templates_dir),
+                output_dir=output_dir,
+                questions_file=questions_file
+            )
             
-            debug_log.append(f"✓ File content length: {len(file_content)} chars")
+            debug_log.append("✓ QuizGenerator initialized")
             
-            if not file_content.strip():
-                return None, f"Questions file is empty: {questions_file}"
+            success = generator.generate_quizzes(
+                num_sets=num_sets,
+                template_name=template,
+                compile_pdf=True,
+                seed=42
+            )
             
-            # Debug: Try to import the questions to see if they load properly
-            try:
-                import importlib.util
-                spec = importlib.util.spec_from_file_location("test_questions", questions_file)
-                questions_module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(questions_module)
-                
-                mcq_questions = getattr(questions_module, 'mcq', [])
-                subj_questions = getattr(questions_module, 'subjective', [])
-                
-                debug_log.append(f"✓ Module loaded - MCQ: {len(mcq_questions)}, Subjective: {len(subj_questions)}")
-                
-                # Show first question for debugging
-                if mcq_questions:
-                    debug_log.append(f"✓ First MCQ: {mcq_questions[0].get('question', 'No question field')[:50]}...")
-                if subj_questions:
-                    debug_log.append(f"✓ First Subjective: {subj_questions[0].get('question', 'No question field')[:50]}...")
-                
-                if len(mcq_questions) == 0 and len(subj_questions) == 0:
-                    return None, f"No questions found in file. MCQ: {len(mcq_questions)}, Subjective: {len(subj_questions)}"
-                    
-            except Exception as import_err:
-                debug_log.append(f"✗ Import error: {str(import_err)}")
-                return None, f"Failed to import questions from file: {str(import_err)}\n\nDebug log:\n" + "\n".join(debug_log)
+            debug_log.append(f"→ generate_quizzes returned: {success}")
             
-            # Debug: Check output directory
-            if not os.path.exists(output_dir):
-                return None, f"Output directory does not exist: {output_dir}"
-            
-            if not os.access(output_dir, os.W_OK):
-                return None, f"Output directory not writable: {output_dir}"
-            
-            debug_log.append("✓ Output directory accessible")
-            
-            # Use QuizGenerator API with debug info
-            try:
-                debug_log.append("→ Initializing QuizGenerator...")
+            if not success:
+                debug_info = "\\n".join(debug_log)
+                return None, f"QuizGenerator returned False.\\n\\nFull Debug Log:\\n{debug_info}"
                 
-                # Find the correct template directory
-                import setwise
-                from pathlib import Path
-                setwise_dir = Path(setwise.__file__).parent
-                templates_dir = setwise_dir / 'templates'
-                debug_log.append(f"✓ Using templates from: {templates_dir}")
-                
-                generator = QuizGenerator(
-                    template_dir=str(templates_dir),
-                    output_dir=output_dir,
-                    questions_file=questions_file
-                )
-                
-                debug_log.append("✓ QuizGenerator initialized")
-                
-                # Debug: Check if generator loaded questions
-                generator_mcq = getattr(generator, 'mcq', [])
-                generator_subj = getattr(generator, 'subjective', [])
-                
-                debug_log.append(f"✓ Generator loaded - MCQ: {len(generator_mcq)}, Subjective: {len(generator_subj)}")
-                
-                if not generator_mcq and not generator_subj:
-                    return None, f"QuizGenerator failed to load questions. MCQ: {len(generator_mcq)}, Subjective: {len(generator_subj)}\n\nDebug log:\n" + "\n".join(debug_log)
-                
-                # Check available templates
-                try:
-                    from setwise.template_manager import TemplateManager
-                    tm = TemplateManager()
-                    available_templates = tm.list_templates()
-                    debug_log.append(f"✓ Available templates: {available_templates}")
-                    
-                    if template not in available_templates:
-                        debug_log.append(f"⚠ Template '{template}' not in available list, using anyway")
-                        
-                except Exception as tm_err:
-                    debug_log.append(f"⚠ Could not check templates: {str(tm_err)}")
-                
-            except Exception as gen_init_err:
-                debug_log.append(f"✗ Generator init error: {str(gen_init_err)}")
-                return None, f"Failed to initialize QuizGenerator: {str(gen_init_err)}\n\nDebug log:\n" + "\n".join(debug_log)
-            
-            # Try to generate quizzes with detailed logging
-            try:
-                debug_log.append(f"→ Calling generate_quizzes with template='{template}', sets={num_sets}, seed=42")
-                
-                # Check if pdflatex is available
-                import subprocess
-                try:
-                    subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
-                    debug_log.append("✓ pdflatex is available")
-                except (subprocess.CalledProcessError, FileNotFoundError):
-                    debug_log.append("✗ pdflatex not found - this could be the problem!")
-                
-                success = generator.generate_quizzes(
-                    num_sets=num_sets,
-                    template_name=template,
-                    compile_pdf=True,
-                    seed=42
-                )
-                
-                debug_log.append(f"→ generate_quizzes returned: {success}")
-                
-                # Check what files were actually created
-                all_files = os.listdir(output_dir) if os.path.exists(output_dir) else []
-                debug_log.append(f"→ Files in output dir: {all_files}")
-                
-                # Look for any .tex files too
-                tex_files = [f for f in all_files if f.endswith('.tex')]
-                pdf_files = [f for f in all_files if f.endswith('.pdf')]
-                debug_log.append(f"→ TEX files: {tex_files}")
-                debug_log.append(f"→ PDF files: {pdf_files}")
-                
-                if not success:
-                    # Try to get more info from the generator object
-                    if hasattr(generator, 'last_error'):
-                        debug_log.append(f"→ Generator last_error: {getattr(generator, 'last_error', 'None')}")
-                    
-                    debug_info = "\n".join(debug_log)
-                    return None, f"QuizGenerator returned False.\n\nFull Debug Log:\n{debug_info}"
-                    
-            except Exception as gen_err:
-                debug_log.append(f"✗ Generation exception: {str(gen_err)}")
-                import traceback
-                debug_log.append(f"✗ Traceback: {traceback.format_exc()}")
-                return None, f"QuizGenerator.generate_quizzes() failed: {str(gen_err)}\n\nDebug log:\n" + "\n".join(debug_log)
-            
         except Exception as e:
             import traceback
             error_details = traceback.format_exc()
-            debug_log.append(f"✗ Outer exception: {str(e)}")
-            debug_log.append(f"✗ Traceback: {error_details}")
-            return None, f"Generation error: {str(e)}\n\nFull Debug Log:\n" + "\n".join(debug_log)
+            debug_log.append(f"✗ Error: {str(e)}")
+            return None, f"Generation error: {str(e)}\\n\\nFull Debug Log:\\n" + "\\n".join(debug_log)
         
         # Collect results
         quiz_sets = []
-        files_found = []
         
         for i in range(1, num_sets + 1):
             pdf_path = os.path.join(output_dir, f'quiz_set_{i}.pdf')
             answer_path = os.path.join(output_dir, f'answer_key_{i}.txt')
-            
-            files_found.append(f"PDF {i}: {os.path.exists(pdf_path)}")
-            files_found.append(f"Answer {i}: {os.path.exists(answer_path)}")
             
             if os.path.exists(pdf_path):
                 with open(pdf_path, 'rb') as f:
@@ -557,11 +175,6 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
                     'pdf_data': pdf_data,
                     'answer_key': answer_key
                 })
-        
-        # If generate_quizzes returned True but no files found, that's weird
-        if not quiz_sets:
-            all_files = os.listdir(output_dir) if os.path.exists(output_dir) else []
-            return None, f"generate_quizzes returned True but no PDFs found.\nFiles expected: {files_found}\nAll files in directory: {all_files}"
         
         # Cleanup
         try:
@@ -586,24 +199,6 @@ def display_pdf_embed(pdf_data, height=400):
     st.markdown(pdf_html, unsafe_allow_html=True)
 
 def main():
-    # Custom CSS for better appearance
-    st.markdown("""
-    <style>
-    .main > div { padding-top: 1rem; }
-    .stTextArea textarea { 
-        font-family: 'Monaco', 'Courier New', monospace;
-        font-size: 14px;
-    }
-    .quiz-set-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        background: white;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
     st.title("Setwise Quiz Generator")
     st.markdown("Professional LaTeX quiz generator with live preview")
     
@@ -623,7 +218,7 @@ def main():
         num_sets = st.slider("Sets", 1, 5, 2)
     
     with col_ctrl3:
-        example = st.selectbox("Examples", ["", "Physics", "Mathematics", "Programming", "Mixed", "LaTeX Test"])
+        example = st.selectbox("Examples", ["", "Physics", "Mathematics", "Programming"])
     
     with col_ctrl4:
         if st.button("Load Example", disabled=not example):
@@ -645,25 +240,13 @@ def main():
         "options": [r"3", r"4", r"5", r"6"],
         "answer": r"4",
         "marks": 1
-    },
-    {
-        "question": r"Which planet is closest to the Sun?",
-        "options": [r"Venus", r"Mercury", r"Earth", r"Mars"],
-        "answer": r"Mercury",
-        "marks": 1
-    },
-    {
-        "question": r"What is the capital of Japan?",
-        "options": [r"Seoul", r"Beijing", r"Tokyo", r"Bangkok"],
-        "answer": r"Tokyo",
-        "marks": 1
     }
 ]
 
 subjective = [
     {
-        "question": r"Explain the concept of photosynthesis.",
-        "answer": r"Photosynthesis is the process by which plants convert sunlight into energy.",
+        "question": r"Explain photosynthesis.",
+        "answer": r"Process by which plants convert sunlight to energy.",
         "marks": 5
     }
 ]'''
