@@ -19,6 +19,13 @@ except ImportError as e:
     SETWISE_AVAILABLE = False
     IMPORT_ERROR = str(e)
 
+# Try to import PDF viewer
+try:
+    from streamlit_pdf_viewer import pdf_viewer
+    PDF_VIEWER_AVAILABLE = True
+except ImportError:
+    PDF_VIEWER_AVAILABLE = False
+
 st.set_page_config(
     page_title="Setwise Quiz Generator",
     page_icon="🎯",
@@ -224,7 +231,7 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
         print(f"[DEBUG] ✓ Output directory created: {output_dir}")
         
         try:
-            # Find the correct template directory
+            # Find the correct template directory - setwise expects to be run from its own directory
             print("[DEBUG] Setting up templates...")
             import setwise
             from pathlib import Path
@@ -233,11 +240,15 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
             debug_log.append(f"✓ Using templates from: {templates_dir}")
             print(f"[DEBUG] ✓ Using templates from: {templates_dir}")
             
+            # Change to setwise directory (CLI expects this)
+            original_cwd = os.getcwd()
+            print(f"[DEBUG] Changing directory from {original_cwd} to {setwise_dir}")
+            os.chdir(str(setwise_dir))
+            
             print("[DEBUG] Initializing QuizGenerator...")
             generator = QuizGenerator(
-                template_dir=str(templates_dir),
-                output_dir=output_dir,
-                questions_file=questions_file
+                questions_file=questions_file,
+                output_dir=output_dir
             )
             
             debug_log.append("✓ QuizGenerator initialized")
@@ -277,6 +288,10 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
                 end_time = time.time()
                 debug_log.append(f"→ generate_quizzes returned: {success} (took {end_time-start_time:.2f}s)")
                 print(f"[DEBUG] → generate_quizzes returned: {success} (took {end_time-start_time:.2f}s)")
+                
+                # Restore original directory
+                print(f"[DEBUG] Restoring directory to {original_cwd}")
+                os.chdir(original_cwd)
                 
                 if not success:
                     print("[ERROR] QuizGenerator returned False")
@@ -350,15 +365,54 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
     except Exception as e:
         return None, f"Unexpected error: {str(e)}"
 
-def display_pdf_embed(pdf_data, height=400):
-    """Display PDF with browser compatibility"""
-    # Simple approach: show basic info and let user use download buttons
-    st.success(f"✅ PDF generated successfully ({len(pdf_data):,} bytes)")
-    st.markdown("*Use the Download PDF button to view the quiz (some browsers block inline PDF preview)*")
+def display_pdf_embed(pdf_data, height=400, key_suffix=""):
+    """Display PDF with streamlit-pdf-viewer for better compatibility"""
+    # Debug: Check if pdf_data is valid
+    if pdf_data is None:
+        st.error("PDF data is None - generation may have failed")
+        return
+    
+    if not isinstance(pdf_data, bytes):
+        st.error(f"PDF data has wrong type: {type(pdf_data)} (expected bytes)")
+        return
+    
+    if len(pdf_data) == 0:
+        st.error("PDF data is empty")
+        return
+    
+    if PDF_VIEWER_AVAILABLE:
+        try:
+            # Try different approaches to fix the NoneType error
+            print(f"[DEBUG] Attempting PDF viewer with data type: {type(pdf_data)}, size: {len(pdf_data)}")
+            
+            # Use the ORIGINAL working version (before zoom_level caused issues)
+            pdf_viewer(
+                input=pdf_data,
+                width=700,
+                height=height,
+                key=f"pdf_viewer_{key_suffix}"
+            )
+            st.caption("📖 PDF Preview - Use download button for full-size PDF")
+        except Exception as e:
+            import traceback
+            print(f"[DEBUG] PDF viewer exception details:")
+            print(traceback.format_exc())
+            
+            # Fallback to simple success message
+            st.error(f"PDF viewer error: {e}")
+            st.success(f"✅ PDF generated successfully ({len(pdf_data):,} bytes)")
+            st.markdown("*Use the Download PDF button to view the quiz*")
+    else:
+        # Fallback when PDF viewer not available
+        st.success(f"✅ PDF generated successfully ({len(pdf_data):,} bytes)")
+        st.markdown("*Use the Download PDF button to view the quiz (PDF viewer not available)*")
 
 def main():
     st.title("Setwise Quiz Generator")
     st.markdown("Professional LaTeX quiz generator with live preview")
+    
+    # Add notice about session state reset
+    st.info("🔄 **Updated!** Questions have been reset to the working format. Previous complex questions that were failing have been replaced with simple, tested examples.")
     
     # Show status if package not available
     if not SETWISE_AVAILABLE:
@@ -410,82 +464,32 @@ def main():
     with col_left:
         st.subheader("Questions Editor")
         
-        # Initialize default questions - EXACT COPY from setwise examples
-        if 'questions' not in st.session_state:
-            st.session_state.questions = '''# Multiple Choice Questions - Machine Learning Supervised Learning
-mcq = [
+        # FORCE RESET: Clear old session state and use working questions
+        # This ensures both local and Streamlit Cloud use the same working format
+        st.session_state.questions = '''mcq = [
     {
-        "question": r"""Which of the following best describes the bias-variance tradeoff in machine learning?""",
-        "options": [
-            r"High bias models always perform better than high variance models",
-            r"Bias and variance are independent and don't affect each other", 
-            r"Reducing bias typically increases variance, and vice versa",
-            r"Variance only matters in unsupervised learning",
-            r"Bias and variance can both be minimized simultaneously without any tradeoff"
-        ],
-        "answer": r"Reducing bias typically increases variance, and vice versa",
-        "marks": 2
+        "question": r"What is 2 + 2?",
+        "options": [r"3", r"4", r"5", r"6"],
+        "answer": r"4",
+        "marks": 1
     },
     {
-        "question": r"""In a decision tree, which impurity measure is most commonly used for classification tasks?""",
-        "options": [
-            r"Mean Squared Error (MSE)",
-            r"Gini Impurity", 
-            r"Mean Absolute Error (MAE)",
-            r"R-squared",
-            r"Cross-entropy",
-            r"Pearson correlation"
-        ],
-        "answer": r"Gini Impurity",
-        "marks": 2
+        "question": r"Which planet is closest to the Sun?",
+        "options": [r"Venus", r"Mercury", r"Earth", r"Mars"],
+        "answer": r"Mercury",
+        "marks": 1
     }
 ]
 
-# Subjective Questions with templated variants - Machine Learning
 subjective = [
     {
-        "question": r"""Compare and contrast the following three supervised learning algorithms in terms of their assumptions, strengths, and weaknesses: Linear Regression, Decision Trees, and k-NN. Fill in a comparison table and provide a brief explanation for each entry.""",
-        "answer": r"Linear: Linear relationship, normality | Interpretable, fast | Limited to linear patterns. Trees: No assumptions | Interpretable, handles non-linear | Prone to overfitting. k-NN: Locality assumption | Simple, non-parametric | Computationally expensive, curse of dimensionality",
-        "marks": 9
+        "question": r"Explain the concept of addition.",
+        "answer": r"Addition is the mathematical operation of combining numbers to get their sum.",
+        "marks": 5
     },
     {
-        "template": r"""Consider the following dataset for linear regression:
-
-\\begin{center}
-\\begin{tabular}{|c|c|c|c|}
-\\hline
-\\textbf{Sample} & \\textbf{Feature 1} & \\textbf{Feature 2} & \\textbf{Target} \\\\
-\\hline
-1 & {{ x1_1 }} & {{ x2_1 }} & {{ y1 }} \\\\
-\\hline
-2 & {{ x1_2 }} & {{ x2_2 }} & {{ y2 }} \\\\
-\\hline
-3 & {{ x1_3 }} & {{ x2_3 }} & {{ y3 }} \\\\
-\\hline
-4 & {{ x1_4 }} & {{ x2_4 }} & {{ y4 }} \\\\
-\\hline
-\\end{tabular}
-\\end{center}
-
-\\textbf{a)} Calculate the mean squared error (MSE) if the model predicts $\\hat{y} = {{ pred1 }}, {{ pred2 }}, {{ pred3 }}, {{ pred4 }}$ respectively. \\textbf{[3 marks]}
-
-\\textbf{b)} If we use L2 regularization with $\\lambda = {{ lambda_val }}$, write the complete loss function. \\textbf{[2 marks]}""",
-        "variables": [
-            {
-                "x1_1": 2, "x2_1": 1, "y1": 5, "x1_2": 4, "x2_2": 3, "y2": 11, 
-                "x1_3": 1, "x2_3": 2, "y3": 4, "x1_4": 3, "x2_4": 4, "y4": 10,
-                "pred1": 4.8, "pred2": 10.5, "pred3": 4.2, "pred4": 9.8,
-                "lambda_val": 0.01,
-                "answer": "a) MSE = 0.1425, b) Loss = MSE + 0.01 * Σ(wi²)"
-            },
-            {
-                "x1_1": 1, "x2_1": 2, "y1": 6, "x1_2": 3, "x2_2": 1, "y2": 7, 
-                "x1_3": 2, "x2_3": 3, "y3": 9, "x1_4": 4, "x2_4": 2, "y4": 10,
-                "pred1": 5.9, "pred2": 7.1, "pred3": 8.8, "pred4": 9.9,
-                "lambda_val": 0.05,
-                "answer": "a) MSE = 0.0175, b) Loss = MSE + 0.05 * Σ(wi²)"
-            }
-        ],
+        "question": r"Describe the solar system.",
+        "answer": r"The solar system consists of the Sun and the celestial objects that orbit it, including planets, moons, asteroids, and comets.",
         "marks": 5
     }
 ]'''
@@ -579,10 +583,12 @@ subjective = [
                     sub_col1, sub_col2, sub_col3 = st.columns([2, 1, 1])
                     
                     with sub_col1:
-                        if quiz_set['pdf_data']:
-                            display_pdf_embed(quiz_set['pdf_data'])
+                        pdf_data = quiz_set.get('pdf_data')
+                        print(f"[DEBUG] Quiz set {i+1} PDF data: type={type(pdf_data)}, size={len(pdf_data) if pdf_data else 'None'}")
+                        if pdf_data:
+                            display_pdf_embed(pdf_data, height=400, key_suffix=f"set_{i}_{len(quiz_sets)}")
                         else:
-                            st.warning("PDF generation failed for this set")
+                            st.warning(f"PDF generation failed for set {i+1} - no PDF data")
                     
                     with sub_col2:
                         if quiz_set['pdf_data']:
