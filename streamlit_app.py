@@ -51,18 +51,18 @@ def load_example_questions(subject):
 
 subjective = [
     {
-        "question": r"Derive the kinetic energy formula. Show that $KE = \\frac{1}{2}mv^2$.\\n\\n(a) Start with work-energy theorem\\n(b) Use Newton's second law\\n(c) Integrate to find the final expression",
-        "answer": r"(a) Work-energy theorem: W = ΔKE\\n(b) F = ma, so W = ∫F·dx = ∫ma·dx\\n(c) Using v = dx/dt and a = dv/dt: W = ∫mv(dv/dt)dx = ∫mv dv = ½mv² - ½mv₀²\\nTherefore KE = ½mv²",
+        "question": r"Derive the kinetic energy formula. Show that $KE = \\frac{1}{2}mv^2$.",
+        "answer": r"Starting with Newton's second law F=ma and work-energy theorem, we integrate force over distance to get kinetic energy.",
         "marks": 8
     },
     {
-        "question": r"A projectile is launched at angle θ with initial velocity v₀.\\n\\n(a) Find the maximum height reached\\n(b) Calculate the range\\n(c) At what angle is range maximum?",
-        "answer": r"(a) H = (v₀sinθ)²/(2g)\\n(b) R = v₀²sin(2θ)/g\\n(c) Maximum range at θ = 45° since sin(2θ) is maximum when 2θ = 90°",
+        "question": r"A projectile is launched at angle $\\theta$ with initial velocity $v_0$. Find the maximum height and range.",
+        "answer": r"Maximum height: $H = \\frac{(v_0\\sin\\theta)^2}{2g}$, Range: $R = \\frac{v_0^2\\sin(2\\theta)}{g}$. Maximum range occurs at $\\theta = 45°$.",
         "marks": 10
     },
     {
-        "question": r"Explain electromagnetic induction.\\n\\n(a) State Faraday's law\\n(b) Give two practical applications\\n(c) Explain Lenz's law with an example",
-        "answer": r"(a) EMF = -dΦ/dt where Φ is magnetic flux\\n(b) Applications: generators, transformers, induction motors\\n(c) Lenz's law: induced current opposes the change causing it. Example: moving magnet toward coil induces current creating opposing magnetic field",
+        "question": r"State Faraday's law of electromagnetic induction and give two practical applications.",
+        "answer": r"Faraday's law: $\\mathcal{E} = -\\frac{d\\Phi_B}{dt}$ where $\\Phi_B$ is magnetic flux. Applications: electric generators, transformers.",
         "marks": 12
     }
 ]''',
@@ -90,18 +90,18 @@ subjective = [
 
 subjective = [
     {
-        "question": r"Prove that $\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$ using mathematical induction.\\n\\n(a) State and verify the base case\\n(b) Write the inductive hypothesis\\n(c) Prove the inductive step",
-        "answer": r"(a) Base case n=1: LHS = 1, RHS = 1(2)/2 = 1 ✓\\n(b) Assume true for k: ∑ᵢ₌₁ᵏ i = k(k+1)/2\\n(c) For n=k+1: ∑ᵢ₌₁ᵏ⁺¹ i = ∑ᵢ₌₁ᵏ i + (k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2",
+        "question": r"Prove that $\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$ using mathematical induction.",
+        "answer": r"Base case: n=1, LHS=1, RHS=1(2)/2=1. Inductive step: assume true for k, prove for k+1.",
         "marks": 8
     },
     {
-        "question": r"Find the area between curves $y = x^2$ and $y = 2x$.\\n\\n(a) Find intersection points\\n(b) Set up the integral\\n(c) Evaluate the integral",
-        "answer": r"(a) x² = 2x → x² - 2x = 0 → x(x-2) = 0 → x = 0, 2\\n(b) Area = ∫₀² (2x - x²) dx\\n(c) = [x² - x³/3]₀² = 4 - 8/3 = 4/3",
+        "question": r"Find the area between curves $y = x^2$ and $y = 2x$.",
+        "answer": r"Intersection points: $x^2 = 2x \\Rightarrow x = 0, 2$. Area = $\\int_0^2 (2x - x^2) dx = \\frac{4}{3}$.",
         "marks": 10
     },
     {
-        "question": r"Solve the differential equation $\\frac{dy}{dx} = \\frac{x}{y}$.\\n\\n(a) Separate variables\\n(b) Integrate both sides\\n(c) Find the general solution",
-        "answer": r"(a) y dy = x dx\\n(b) ∫y dy = ∫x dx → y²/2 = x²/2 + C\\n(c) y² = x² + 2C → y² - x² = K (hyperbola family)",
+        "question": r"Solve the differential equation $\\frac{dy}{dx} = \\frac{x}{y}$.",
+        "answer": r"Separating variables: $y dy = x dx$. Integrating: $\\frac{y^2}{2} = \\frac{x^2}{2} + C$. General solution: $y^2 - x^2 = K$.",
         "marks": 8
     }
 ]''',
@@ -129,18 +129,18 @@ subjective = [
 
 subjective = [
     {
-        "question": r"Explain recursion and implement factorial function.\\n\\n(a) Define recursion\\n(b) Write recursive factorial code\\n(c) Trace execution for factorial(4)",
-        "answer": r"(a) Recursion: function calls itself with simpler input until base case\\n(b) def factorial(n):\\n    if n <= 1: return 1\\n    return n * factorial(n-1)\\n(c) f(4)→4*f(3)→4*3*f(2)→4*3*2*f(1)→4*3*2*1=24",
+        "question": r"Explain recursion with an example. Write a recursive factorial function.",
+        "answer": r"Recursion is when a function calls itself. def factorial(n): return 1 if n <= 1 else n * factorial(n-1)",
         "marks": 8
     },
     {
-        "question": r"Compare sorting algorithms.\\n\\n(a) Time complexity of bubble sort vs quicksort\\n(b) When to use each algorithm\\n(c) Write bubble sort pseudocode",
-        "answer": r"(a) Bubble: O(n²) always; Quicksort: O(n log n) average, O(n²) worst\\n(b) Bubble: educational/small data; Quick: large datasets\\n(c) for i=0 to n-1:\\n    for j=0 to n-i-2:\\n        if arr[j] > arr[j+1]: swap(arr[j], arr[j+1])",
+        "question": r"Compare time complexity of bubble sort vs quicksort algorithms.",
+        "answer": r"Bubble sort: O(n²) in all cases. Quicksort: O(n log n) average, O(n²) worst case. Quicksort is generally preferred for large datasets.",
         "marks": 10
     },
     {
-        "question": r"Design a simple REST API.\\n\\n(a) List 4 HTTP methods and their purposes\\n(b) Design endpoints for a book library system\\n(c) Write a sample JSON response for GET /books",
-        "answer": r"(a) GET(retrieve), POST(create), PUT(update), DELETE(remove)\\n(b) GET /books, POST /books, PUT /books/:id, DELETE /books/:id\\n(c) {\\\"books\\\": [{\\\"id\\\": 1, \\\"title\\\": \\\"Python Guide\\\", \\\"author\\\": \\\"Smith\\\"}]}",
+        "question": r"Design REST API endpoints for a book library system. List the main HTTP methods.",
+        "answer": r"Main methods: GET (retrieve), POST (create), PUT (update), DELETE (remove). Endpoints: GET /books, POST /books, PUT /books/:id, DELETE /books/:id",
         "marks": 12
     }
 ]''',
@@ -156,8 +156,8 @@ subjective = [
 
 subjective = [
     {
-        "question": r"Template subjective question with parts:\\n\\nGiven the function $f(x) = x^3 - 3x^2 + 2x$.\\n\\n(a) Find $f'(x)$\\n(b) Solve $f'(x) = 0$\\n(c) Classify the critical points",
-        "answer": r"(a) $f'(x) = 3x^2 - 6x + 2$\\n(b) Using quadratic formula: $x = \\frac{6 \\pm \\sqrt{36-24}}{6} = \\frac{6 \\pm 2\\sqrt{3}}{6} = 1 \\pm \\frac{\\sqrt{3}}{3}$\\n(c) Use second derivative test: $f''(x) = 6x - 6$. Both points are inflection regions.",
+        "question": r"Given the function $f(x) = x^3 - 3x^2 + 2x$, find $f'(x)$ and solve $f'(x) = 0$.",
+        "answer": r"$f'(x) = 3x^2 - 6x + 2$. Using quadratic formula: $x = \\frac{6 \\pm \\sqrt{36-24}}{6} = 1 \\pm \\frac{\\sqrt{3}}{3}$",
         "marks": 10
     }
 ]'''
@@ -170,40 +170,53 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
     
     try:
         debug_log.append("=== STARTING QUIZ GENERATION ===")
+        print(f"[DEBUG] Starting generation: template={template}, sets={num_sets}")
         
         if not SETWISE_AVAILABLE:
+            print(f"[ERROR] Setwise not available: {IMPORT_ERROR}")
             return None, f"Setwise package not available. Import error: {IMPORT_ERROR}\\n\\nPlease ensure the setwise package is installed."
         
         debug_log.append("✓ Setwise package available")
+        print("[DEBUG] ✓ Setwise package available")
         
         # Validate questions format
         try:
+            print("[DEBUG] Validating questions syntax...")
             exec(questions_text)
             debug_log.append("✓ Questions syntax valid")
+            print("[DEBUG] ✓ Questions syntax valid")
         except SyntaxError as e:
+            print(f"[ERROR] Syntax error: {e}")
             return None, f"Python syntax error: {str(e)}\\n\\nCheck your mcq = [...] and subjective = [...] format."
         except Exception as e:
+            print(f"[ERROR] Questions format error: {e}")
             return None, f"Error in questions format: {str(e)}"
         
         # Create temporary file for questions
+        print("[DEBUG] Creating temporary files...")
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
             f.write(questions_text)
             questions_file = f.name
         
         debug_log.append(f"✓ Questions file created: {questions_file}")
+        print(f"[DEBUG] ✓ Questions file created: {questions_file}")
         
         # Create temporary output directory
         output_dir = tempfile.mkdtemp()
         debug_log.append(f"✓ Output directory created: {output_dir}")
+        print(f"[DEBUG] ✓ Output directory created: {output_dir}")
         
         try:
             # Find the correct template directory
+            print("[DEBUG] Setting up templates...")
             import setwise
             from pathlib import Path
             setwise_dir = Path(setwise.__file__).parent
             templates_dir = setwise_dir / 'templates'
             debug_log.append(f"✓ Using templates from: {templates_dir}")
+            print(f"[DEBUG] ✓ Using templates from: {templates_dir}")
             
+            print("[DEBUG] Initializing QuizGenerator...")
             generator = QuizGenerator(
                 template_dir=str(templates_dir),
                 output_dir=output_dir,
@@ -211,6 +224,11 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             )
             
             debug_log.append("✓ QuizGenerator initialized")
+            print("[DEBUG] ✓ QuizGenerator initialized")
+            
+            print(f"[DEBUG] Calling generate_quizzes(sets={num_sets}, template={template})...")
+            import time
+            start_time = time.time()
             
             success = generator.generate_quizzes(
                 num_sets=num_sets,
@@ -219,9 +237,12 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
                 seed=42
             )
             
-            debug_log.append(f"→ generate_quizzes returned: {success}")
+            end_time = time.time()
+            debug_log.append(f"→ generate_quizzes returned: {success} (took {end_time-start_time:.2f}s)")
+            print(f"[DEBUG] → generate_quizzes returned: {success} (took {end_time-start_time:.2f}s)")
             
             if not success:
+                print("[ERROR] QuizGenerator returned False")
                 debug_info = "\\n".join(debug_log)
                 return None, f"QuizGenerator returned False.\\n\\nFull Debug Log:\\n{debug_info}"
                 
@@ -232,26 +253,35 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             return None, f"Generation error: {str(e)}\\n\\nFull Debug Log:\\n" + "\\n".join(debug_log)
         
         # Collect results
+        print("[DEBUG] Collecting results...")
         quiz_sets = []
         
         for i in range(1, num_sets + 1):
             pdf_path = os.path.join(output_dir, f'quiz_set_{i}.pdf')
             answer_path = os.path.join(output_dir, f'answer_key_{i}.txt')
             
+            print(f"[DEBUG] Checking for files: PDF={os.path.exists(pdf_path)}, Answer={os.path.exists(answer_path)}")
+            
             if os.path.exists(pdf_path):
                 with open(pdf_path, 'rb') as f:
                     pdf_data = f.read()
+                
+                print(f"[DEBUG] Read PDF {i}: {len(pdf_data)} bytes")
                 
                 answer_key = ""
                 if os.path.exists(answer_path):
                     with open(answer_path, 'r') as f:
                         answer_key = f.read()
+                    print(f"[DEBUG] Read answer key {i}: {len(answer_key)} chars")
                 
                 quiz_sets.append({
                     'name': f'Quiz Set {i}',
                     'pdf_data': pdf_data,
                     'answer_key': answer_key
                 })
+                print(f"[DEBUG] Added quiz set {i} to results")
+        
+        print(f"[DEBUG] Final results: {len(quiz_sets)} quiz sets collected")
         
         # Cleanup
         try:
@@ -329,8 +359,8 @@ def main():
 
 subjective = [
     {
-        "question": r"Explain photosynthesis.\\n\\n(a) Define the process\\n(b) Write the chemical equation\\n(c) Name two factors that affect the rate",
-        "answer": r"(a) Process by which plants convert light energy into chemical energy\\n(b) 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂\\n(c) Light intensity, temperature, CO₂ concentration",
+        "question": r"Explain the concept of photosynthesis.",
+        "answer": r"Photosynthesis is the process by which plants convert sunlight into energy.",
         "marks": 8
     }
 ]'''
@@ -369,8 +399,16 @@ subjective = [
         st.subheader(f"PDF Preview ({num_sets} sets)")
         
         if st.session_state.get('generate_now', False) and questions_text.strip():
+            # Add debug info in the UI
+            st.info("🔄 Starting quiz generation...")
+            debug_container = st.empty()
+            
             with st.spinner(f"Generating {num_sets} quiz sets..."):
+                debug_container.text("Step 1: Validating questions...")
+                print(f"[STREAMLIT] About to call generate_quiz_pdfs with {len(questions_text)} chars, template={template}, sets={num_sets}")
                 quiz_sets, error = generate_quiz_pdfs(questions_text, template, num_sets)
+                debug_container.text("Step 2: Generation complete, processing results...")
+                print(f"[STREAMLIT] generate_quiz_pdfs returned: quiz_sets={len(quiz_sets) if quiz_sets else 0}, error={bool(error)}")
             
             if error:
                 st.error("Generation Failed")
