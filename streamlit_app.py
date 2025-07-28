@@ -275,18 +275,66 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         output_dir = tempfile.mkdtemp()
         
         try:
-            # Use QuizGenerator API
-            generator = QuizGenerator(
-                output_dir=output_dir,
-                questions_file=questions_file
-            )
+            # Debug: Check if questions file exists and has content
+            if not os.path.exists(questions_file):
+                return None, f"Questions file not created: {questions_file}"
             
-            success = generator.generate_quizzes(
-                num_sets=num_sets,
-                template_name=template,
-                compile_pdf=True,
-                seed=42
-            )
+            with open(questions_file, 'r') as f:
+                file_content = f.read()
+            
+            if not file_content.strip():
+                return None, f"Questions file is empty: {questions_file}"
+            
+            # Debug: Try to import the questions to see if they load properly
+            try:
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("test_questions", questions_file)
+                questions_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(questions_module)
+                
+                mcq_count = len(getattr(questions_module, 'mcq', []))
+                subj_count = len(getattr(questions_module, 'subjective', []))
+                
+                if mcq_count == 0 and subj_count == 0:
+                    return None, f"No questions found in file. MCQ: {mcq_count}, Subjective: {subj_count}"
+                    
+            except Exception as import_err:
+                return None, f"Failed to import questions from file: {str(import_err)}"
+            
+            # Debug: Check output directory
+            if not os.path.exists(output_dir):
+                return None, f"Output directory does not exist: {output_dir}"
+            
+            if not os.access(output_dir, os.W_OK):
+                return None, f"Output directory not writable: {output_dir}"
+            
+            # Use QuizGenerator API with debug info
+            try:
+                generator = QuizGenerator(
+                    output_dir=output_dir,
+                    questions_file=questions_file
+                )
+                
+                # Debug: Check if generator loaded questions
+                generator_mcq = getattr(generator, 'mcq', [])
+                generator_subj = getattr(generator, 'subjective', [])
+                
+                if not generator_mcq and not generator_subj:
+                    return None, f"QuizGenerator failed to load questions. MCQ: {len(generator_mcq)}, Subjective: {len(generator_subj)}"
+                
+            except Exception as gen_init_err:
+                return None, f"Failed to initialize QuizGenerator: {str(gen_init_err)}"
+            
+            # Try to generate quizzes
+            try:
+                success = generator.generate_quizzes(
+                    num_sets=num_sets,
+                    template_name=template,
+                    compile_pdf=True,
+                    seed=42
+                )
+            except Exception as gen_err:
+                return None, f"QuizGenerator.generate_quizzes() failed: {str(gen_err)}"
             
             if not success:
                 # Try to get more specific error information
