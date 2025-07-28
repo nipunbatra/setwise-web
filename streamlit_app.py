@@ -424,7 +424,7 @@ def main():
     with col_left:
         st.subheader("Questions Editor")
         
-        # Initialize default questions
+        # Initialize default questions - SIMPLE TEST (no templates)
         if 'questions' not in st.session_state:
             st.session_state.questions = '''mcq = [
     {
@@ -438,16 +438,6 @@ def main():
         "options": [r"Venus", r"Mercury", r"Earth", r"Mars"],
         "answer": r"Mercury",
         "marks": 2
-    },
-    {
-        "template": r"A car travels at {{ speed }} km/h for {{ time }} hours. What distance does it cover?",
-        "options": [r"{{ speed * time }} km", r"{{ speed + time }} km", r"{{ speed / time }} km", r"{{ speed - time }} km"],
-        "answer": r"{{ speed * time }} km",
-        "variables": [
-            {"speed": 60, "time": 2},
-            {"speed": 80, "time": 3}
-        ],
-        "marks": 3
     }
 ]
 
@@ -458,29 +448,9 @@ subjective = [
         "marks": 5
     },
     {
-        "template": r"A projectile is launched with initial velocity {{ v0 }} m/s at angle {{ angle }}°. Calculate the maximum height and range.",
-        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g}$ m. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}°)}{g}$ m.",
-        "variables": [
-            {"v0": 20, "angle": 30},
-            {"v0": 25, "angle": 45}
-        ],
+        "question": r"Derive Newton's second law of motion.",
+        "answer": r"F = ma can be derived from Newton's first law and the definition of momentum.",
         "marks": 8
-    },
-    {
-        "question": r"Solve the physics problem step by step.",
-        "parts": [
-            {
-                "question": r"A ball is thrown upward with initial velocity $v_0 = 20$ m/s. Calculate the maximum height reached.",
-                "answer": r"Using $v^2 = v_0^2 - 2gh$ at maximum height where $v = 0$: $h = \\frac{v_0^2}{2g} = \\frac{20^2}{2 \\times 9.8} = 20.4$ m",
-                "marks": 3
-            },
-            {
-                "question": r"Find the time taken to reach maximum height.",
-                "answer": r"Using $v = v_0 - gt$ where $v = 0$: $t = \\frac{v_0}{g} = \\frac{20}{9.8} = 2.04$ s",
-                "marks": 2
-            }
-        ],
-        "marks": 5
     }
 ]'''
         
