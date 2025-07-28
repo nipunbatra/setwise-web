@@ -54,12 +54,12 @@ mcq = [
     {
         "template": r"A ball is dropped from height {{ h }} m. What is its velocity just before hitting the ground? (g = 9.8 m/s²)",
         "options": [
-            r"$\\sqrt{2g \\times {{ h }}}$ ≈ {{ velocity:.1f }} m/s",
-            r"$g \\times {{ h }}$ = {{ h * 9.8 }} m/s", 
-            r"$\\frac{g \\times {{ h }}}{2}$ = {{ h * 4.9 }} m/s",
-            r"$2g \\times {{ h }}$ = {{ 2 * h * 9.8 }} m/s"
+            r"$\\sqrt{2g \$\times$ {{ h }}}$ ≈ {{ velocity:.1f }} m/s",
+            r"$g \$\times$ {{ h }}$ = {{ h * 9.8 }} m/s", 
+            r"$\\frac{g \$\times$ {{ h }}}{2}$ = {{ h * 4.9 }} m/s",
+            r"$2g \$\times$ {{ h }}$ = {{ 2 * h * 9.8 }} m/s"
         ],
-        "answer": r"$\\sqrt{2g \\times {{ h }}}$ ≈ {{ velocity:.1f }} m/s",
+        "answer": r"$\\sqrt{2g \$\times$ {{ h }}}$ ≈ {{ velocity:.1f }} m/s",
         "variables": [
             {"h": 20, "velocity": 19.8},
             {"h": 45, "velocity": 29.7},
@@ -93,7 +93,7 @@ subjective = [
     },
     {
         "template": r"A projectile is launched with initial velocity {{ v0 }} m/s at angle {{ angle }}°. Calculate the maximum height and range.",
-        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g}$ m. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}°)}{g}$ m.",
+        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g}$ m. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \$\times$ {{ angle }}°)}{g}$ m.",
         "variables": [
             {"v0": 20, "angle": 30},
             {"v0": 25, "angle": 45}
@@ -105,7 +105,7 @@ subjective = [
         "parts": [
             {
                 "question": r"Calculate the maximum height reached.",
-                "answer": r"Using $v^2 = v_0^2 - 2gh$ at maximum height where $v = 0$: $h = \\frac{v_0^2}{2g} = \\frac{20^2}{2 \\times 9.8} = 20.4$ m",
+                "answer": r"Using $v^2 = v_0^2 - 2gh$ at maximum height where $v = 0$: $h = \\frac{v_0^2}{2g} = \\frac{20^2}{2 \$\times$ 9.8} = 20.4$ m",
                 "marks": 3
             },
             {
@@ -184,11 +184,11 @@ subjective = [
         "variables": [
             {
                 "layers": 2, "neurons": 64, "input_dim": 784, "output_dim": 10,
-                "answer": "Layer 1: (784×64)+64=50,240. Layer 2: (64×64)+64=4,160. Output: (64×10)+10=650. Total: 55,050 parameters"
+                "answer": "Layer 1: (784$\times$64)+64=50,240. Layer 2: (64$\times$64)+64=4,160. Output: (64$\times$10)+10=650. Total: 55,050 parameters"
             },
             {
                 "layers": 1, "neurons": 128, "input_dim": 1000, "output_dim": 5,
-                "answer": "Layer 1: (1000×128)+128=128,128. Output: (128×5)+5=645. Total: 128,773 parameters"
+                "answer": "Layer 1: (1000$\times$128)+128=128,128. Output: (128$\times$5)+5=645. Total: 128,773 parameters"
             }
         ],
         "marks": 8
@@ -464,8 +464,9 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
         for i in range(1, num_sets + 1):
             pdf_path = os.path.join(output_dir, f'quiz_set_{i}.pdf')
             answer_path = os.path.join(output_dir, f'answer_key_{i}.txt')
+            tex_path = os.path.join(output_dir, f'quiz_set_{i}.tex')
             
-            print(f"[DEBUG] Checking for files: PDF={os.path.exists(pdf_path)}, Answer={os.path.exists(answer_path)}")
+            print(f"[DEBUG] Checking for files: PDF={os.path.exists(pdf_path)}, Answer={os.path.exists(answer_path)}, TEX={os.path.exists(tex_path)}")
             
             if os.path.exists(pdf_path):
                 with open(pdf_path, 'rb') as f:
@@ -479,10 +480,17 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
                         answer_key = f.read()
                     print(f"[DEBUG] Read answer key {i}: {len(answer_key)} chars")
                 
+                tex_data = ""
+                if os.path.exists(tex_path):
+                    with open(tex_path, 'r', encoding='utf-8') as f:
+                        tex_data = f.read()
+                    print(f"[DEBUG] Read TEX {i}: {len(tex_data)} chars")
+                
                 quiz_sets.append({
                     'name': f'Quiz Set {i}',
                     'pdf_data': pdf_data,
-                    'answer_key': answer_key
+                    'answer_key': answer_key,
+                    'tex_data': tex_data
                 })
                 print(f"[DEBUG] Added quiz set {i} to results")
         
@@ -546,15 +554,22 @@ def main():
     st.markdown("**Professional LaTeX quiz generator with advanced templating**")
     
     # ✨ NEW FEATURES SHOWCASE
-    st.success("""
-    🎉 **NEW in Setwise v2.0!** This webapp now showcases enhanced features:
+    st.info("""
+    🎉 **NEW in Setwise v2.0!** This webapp showcases enhanced features:
     
     ✅ **Quiz Metadata** - Professional headers with title, duration, instructions  
     ✅ **Templated MCQ Questions** - Variables in both questions AND options  
     ✅ **Multi-part Questions** - Complex problems with individual marks  
     ✅ **Enhanced Examples** - Physics & Machine Learning with templates  
+    """)
     
-    Try the **Physics** or **Machine Learning** examples to see templated questions in action! 🚀
+    st.warning("""
+    ⚠️ **Server Limitations:** The web interface has LaTeX and processing limitations. 
+    For best results with advanced features, **install locally**: 
+    ```bash
+    pip install git+https://github.com/nipunbatra/setwise.git
+    ```
+    💡 Try the **"Try Simpler Example"** button if generation fails!
     """)
     
     # Feature comparison table
@@ -631,7 +646,13 @@ def main():
         
         # ✨ NEW: Showcase Setwise v2.0 enhanced features!
         if 'questions' not in st.session_state:
-            st.session_state.questions = '''# ✨ NEW Setwise v2.0 Features Demo!
+            # Try to load from file first, fallback to inline
+            try:
+                with open('simple_working_test.py', 'r') as f:
+                    st.session_state.questions = f.read()
+            except:
+# Load working example that's been tested locally
+                st.session_state.questions = '''# ✨ Setwise v2.0 Demo - Tested and Working!
 quiz_metadata = {
     "title": "Enhanced Setwise Demo Quiz",
     "subject": "Mathematics & Science",
@@ -648,7 +669,98 @@ mcq = [
         "marks": 1
     },
     {
-        "template": r"Calculate: {{ a }} × {{ b }} = ?",
+        "template": r"Calculate: {{ a }} + {{ b }} = ?",
+        "options": [
+            r"{{ a + b }}",
+            r"{{ a - b }}", 
+            r"{{ a * b }}",
+            r"{{ a }}"
+        ],
+        "answer": r"{{ a + b }}",
+        "variables": [
+            {"a": 3, "b": 4},   # 3 + 4 = 7
+            {"a": 5, "b": 2},   # 5 + 2 = 7  
+            {"a": 8, "b": 1}    # 8 + 1 = 9
+        ],
+        "marks": 2
+    },
+    {
+        "template": r"A circle has radius {{ r }} cm. What is its area? (pi = 3.14)",
+        "options": [
+            r"{{ 3.14 * r * r }} square cm",
+            r"{{ 2 * 3.14 * r }} square cm",
+            r"{{ 3.14 * r }} square cm",
+            r"{{ r * r }} square cm"
+        ],
+        "answer": r"{{ 3.14 * r * r }} square cm",
+        "variables": [
+            {"r": 2},   # Area = 12.56
+            {"r": 3},   # Area = 28.26
+            {"r": 5}    # Area = 78.5
+        ],
+        "marks": 3
+    }
+]
+
+subjective = [
+    {
+        "question": r"Explain the concept of mathematical operations.",
+        "answer": r"Mathematical operations are procedures that combine numbers to produce new numbers. The four basic operations are addition, subtraction, multiplication, and division.",
+        "marks": 4
+    },
+    {
+        "template": r"Calculate the area and perimeter of a rectangle with length {{ length }} units and width {{ width }} units.",
+        "variables": [
+            {
+                "length": 8, "width": 5,
+                "answer": "Area = length $\times$ width = 8 $\times$ 5 = 40 square units. Perimeter = 2(length + width) = 2(8 + 5) = 26 units."
+            },
+            {
+                "length": 12, "width": 3, 
+                "answer": "Area = length $\times$ width = 12 $\times$ 3 = 36 square units. Perimeter = 2(length + width) = 2(12 + 3) = 30 units."
+            }
+        ],
+        "marks": 6
+    },
+    {
+        "question": r"Problem Solving Steps:",
+        "parts": [
+            {
+                "question": r"What is 15 + 25?",
+                "answer": r"15 + 25 = 40",
+                "marks": 1
+            },
+            {
+                "question": r"What is 40 $\div$ 8?", 
+                "answer": r"40 $\div$ 8 = 5",
+                "marks": 1
+            },
+            {
+                "question": r"Explain why these operations give these results.",
+                "answer": r"Addition combines quantities: 15 + 25 counts all units together. Division splits equally: 40 $\div$ 8 means 40 split into 8 equal groups of 5.",
+                "marks": 2
+            }
+        ],
+        "marks": 4
+    }
+]'''
+quiz_metadata = {
+    "title": "Enhanced Setwise Demo Quiz",
+    "subject": "Mathematics & Science",
+    "duration": "45 minutes", 
+    "total_marks": 20,
+    "instructions": ["Show your work", "Use proper units"]
+}
+
+mcq = [
+    {
+        "question": r"What is 2 + 2?",
+        "options": [r"3", r"4", r"5", r"6"],
+        "answer": r"4",
+        "marks": 1
+    },
+    {
+        "template": r"Calculate: {{ a }} $\times$ {{ b }} = ?",
         "options": [
             r"{{ a * b }}",
             r"{{ a + b }}", 
@@ -692,11 +804,11 @@ subjective = [
         "variables": [
             {
                 "length": 8, "width": 5,
-                "answer": "Area = length × width = 8 × 5 = 40 square units. Perimeter = 2(length + width) = 2(8 + 5) = 26 units."
+                "answer": "Area = length $\times$ width = 8 $\times$ 5 = 40 square units. Perimeter = 2(length + width) = 2(8 + 5) = 26 units."
             },
             {
                 "length": 12, "width": 3, 
-                "answer": "Area = length × width = 12 × 3 = 36 square units. Perimeter = 2(length + width) = 2(12 + 3) = 30 units."
+                "answer": "Area = length $\times$ width = 12 $\times$ 3 = 36 square units. Perimeter = 2(length + width) = 2(12 + 3) = 30 units."
             }
         ],
         "marks": 6
@@ -710,13 +822,13 @@ subjective = [
                 "marks": 1
             },
             {
-                "question": r"What is 40 ÷ 8?", 
-                "answer": r"40 ÷ 8 = 5",
+                "question": r"What is 40 $\div$ 8?", 
+                "answer": r"40 $\div$ 8 = 5",
                 "marks": 1
             },
             {
                 "question": r"Explain why these operations give these results.",
-                "answer": r"Addition combines quantities: 15 + 25 counts all units together. Division splits equally: 40 ÷ 8 means 40 split into 8 equal groups of 5.",
+                "answer": r"Addition combines quantities: 15 + 25 counts all units together. Division splits equally: 40 $\div$ 8 means 40 split into 8 equal groups of 5.",
                 "marks": 2
             }
         ],
@@ -808,20 +920,33 @@ subjective = [
             
                 with col_error1:
                     if st.button("💡 Try Simpler Example", use_container_width=True):
-                        st.session_state.questions = '''# Simple test without templates
+                        # Load the verified working example
+                        try:
+                            with open('simple_working_test.py', 'r') as f:
+                                st.session_state.questions = f.read()
+                            st.rerun()
+                        except:
+                            # Fallback to inline simple example
+                            st.session_state.questions = '''# Ultra simple test
+quiz_metadata = {
+    "title": "Simple Test Quiz",
+    "duration": "30 minutes",
+    "total_marks": 10
+}
+
 mcq = [{
     "question": r"What is 2 + 2?",
     "options": [r"3", r"4", r"5", r"6"],
     "answer": r"4",
-    "marks": 1
+    "marks": 2
 }]
 
 subjective = [{
-    "question": r"Explain addition.",
+    "question": r"What is addition?",
     "answer": r"Addition combines numbers.",
-    "marks": 2
+    "marks": 3
 }]'''
-                        st.rerun()
+                            st.rerun()
             
                 with col_error2:
                     if st.button("📋 Copy for Local Testing", use_container_width=True):
@@ -898,8 +1023,8 @@ subjective = [{
                 for i, quiz_set in enumerate(quiz_sets):
                     st.markdown(f"**{quiz_set['name']}**")
                     
-                    # Three sub-columns: PDF preview, downloads, answer key
-                    sub_col1, sub_col2, sub_col3 = st.columns([2, 1, 1])
+                    # Four sub-columns: PDF preview, PDF download, TEX download, answer key
+                    sub_col1, sub_col2, sub_col3, sub_col4 = st.columns([2, 0.7, 0.7, 0.6])
                     
                     with sub_col1:
                         pdf_data = quiz_set.get('pdf_data')
@@ -922,6 +1047,18 @@ subjective = [{
                             )
                     
                     with sub_col3:
+                        if quiz_set.get('tex_data'):
+                            st.download_button(
+                                label="Download TEX",
+                                data=quiz_set['tex_data'],
+                                file_name=f"quiz_set_{i+1}.tex",
+                                mime="text/plain",
+                                key=f"download_tex_{i}_{len(quiz_sets)}",
+                                use_container_width=True,
+                                help="Download LaTeX source file"
+                            )
+                    
+                    with sub_col4:
                         if quiz_set['answer_key']:
                             st.download_button(
                                 label="Download Answers",
@@ -949,7 +1086,7 @@ subjective = [{
             st.info("📝 Enter questions and click 'Generate Quiz Sets' to get started!")
     
             # Enhanced help with troubleshooting
-            with st.expander("📚 How to Use This Interface", expanded=True):
+            with st.expander("📚 How to Use This Interface", expanded=False):
                 st.markdown("""
                 **✨ Quick Start:**
                 1. **Edit questions** in the left pane (or load an example)
