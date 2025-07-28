@@ -325,7 +325,7 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             except Exception as gen_init_err:
                 return None, f"Failed to initialize QuizGenerator: {str(gen_init_err)}"
             
-            # Try to generate quizzes
+            # Try to generate quizzes with detailed logging
             try:
                 success = generator.generate_quizzes(
                     num_sets=num_sets,
@@ -333,38 +333,19 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
                     compile_pdf=True,
                     seed=42
                 )
+                
+                # Debug: Log what actually happened
+                debug_info = f"generate_quizzes returned: {success}\n"
+                debug_info += f"Template: {template}\n"
+                debug_info += f"Sets: {num_sets}\n"
+                debug_info += f"Generator MCQ: {len(generator_mcq)}\n" 
+                debug_info += f"Generator Subjective: {len(generator_subj)}\n"
+                
+                if not success:
+                    return None, f"QuizGenerator returned False. Debug info:\n{debug_info}"
+                    
             except Exception as gen_err:
                 return None, f"QuizGenerator.generate_quizzes() failed: {str(gen_err)}"
-            
-            if not success:
-                # Try to get more specific error information
-                log_files = []
-                for i in range(1, num_sets + 1):
-                    log_path = os.path.join(output_dir, f'quiz_set_{i}.log')
-                    if os.path.exists(log_path):
-                        with open(log_path, 'r') as f:
-                            log_content = f.read()
-                            if 'Error' in log_content or 'error' in log_content:
-                                log_files.append(f"Set {i} LaTeX log:\n{log_content[-500:]}")  # Last 500 chars
-                
-                error_msg = "Quiz generation failed."
-                if log_files:
-                    error_msg += "\n\nLaTeX compilation errors:\n" + "\n\n".join(log_files)
-                else:
-                    # List files in output directory for debugging
-                    try:
-                        files_in_dir = os.listdir(output_dir)
-                        error_msg += f"\n\nFiles generated: {files_in_dir}"
-                    except:
-                        error_msg += f"\n\nCould not list files in: {output_dir}"
-                    
-                    error_msg += "\nPossible issues:\n"
-                    error_msg += "- LaTeX syntax errors in questions\n"
-                    error_msg += "- Missing LaTeX packages (pdflatex not found?)\n"
-                    error_msg += "- Template loading issues\n"
-                    error_msg += "- PDF compilation failed"
-                
-                return None, error_msg
             
         except Exception as e:
             import traceback
@@ -373,9 +354,14 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         
         # Collect results
         quiz_sets = []
+        files_found = []
+        
         for i in range(1, num_sets + 1):
             pdf_path = os.path.join(output_dir, f'quiz_set_{i}.pdf')
             answer_path = os.path.join(output_dir, f'answer_key_{i}.txt')
+            
+            files_found.append(f"PDF {i}: {os.path.exists(pdf_path)}")
+            files_found.append(f"Answer {i}: {os.path.exists(answer_path)}")
             
             if os.path.exists(pdf_path):
                 with open(pdf_path, 'rb') as f:
@@ -391,6 +377,11 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
                     'pdf_data': pdf_data,
                     'answer_key': answer_key
                 })
+        
+        # If generate_quizzes returned True but no files found, that's weird
+        if not quiz_sets:
+            all_files = os.listdir(output_dir) if os.path.exists(output_dir) else []
+            return None, f"generate_quizzes returned True but no PDFs found.\nFiles expected: {files_found}\nAll files in directory: {all_files}"
         
         # Cleanup
         try:
