@@ -202,33 +202,21 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
         # Create temporary file for questions with header metadata
         print("[DEBUG] Creating temporary files...")
         
-        # Add header metadata to questions file
-        quiz_metadata = f"""
-# Quiz Configuration
-quiz_config = {{
-    "title": "{header_config.get('title', 'Quiz')}",
-    "subject": "{header_config.get('subject', '')}",
-    "exam_info": "{header_config.get('exam_info', '')}",
-    "institution": "",
-    "date": "",
-    "duration": "",
-    "instructions": ""
-}}
-
-"""
+        # Create questions file WITHOUT quiz_config to test if that's causing issues
+        print("[DEBUG] Creating questions file WITHOUT quiz_config metadata...")
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            full_content = quiz_metadata + questions_text
+            full_content = questions_text  # Just the questions, no metadata
             f.write(full_content)
             questions_file = f.name
         
         debug_log.append(f"✓ Questions file created: {questions_file}")
         print(f"[DEBUG] ✓ Questions file created: {questions_file}")
         print(f"[DEBUG] Questions file content length: {len(full_content)} chars")
-        print(f"[DEBUG] Questions file preview:")
-        print("--- FILE START ---")
-        print(full_content[:500] + "..." if len(full_content) > 500 else full_content)
-        print("--- FILE END ---")
+        print(f"[DEBUG] FULL Questions file content:")
+        print("=" * 80)
+        print(full_content)
+        print("=" * 80)
         
         # Create temporary output directory
         output_dir = tempfile.mkdtemp()
@@ -422,83 +410,83 @@ def main():
     with col_left:
         st.subheader("Questions Editor")
         
-        # Initialize default questions - MAGIC VERSION with working templates! 🪄
+        # Initialize default questions - EXACT COPY from setwise examples
         if 'questions' not in st.session_state:
-            st.session_state.questions = '''mcq = [
+            st.session_state.questions = '''# Multiple Choice Questions - Machine Learning Supervised Learning
+mcq = [
     {
-        "question": r"Which of the following best describes the bias-variance tradeoff in machine learning?",
+        "question": r"""Which of the following best describes the bias-variance tradeoff in machine learning?""",
         "options": [
             r"High bias models always perform better than high variance models",
             r"Bias and variance are independent and don't affect each other", 
             r"Reducing bias typically increases variance, and vice versa",
-            r"Variance only matters in unsupervised learning"
+            r"Variance only matters in unsupervised learning",
+            r"Bias and variance can both be minimized simultaneously without any tradeoff"
         ],
         "answer": r"Reducing bias typically increases variance, and vice versa",
         "marks": 2
     },
     {
-        "question": r"In a decision tree, which impurity measure is most commonly used for classification tasks?",
+        "question": r"""In a decision tree, which impurity measure is most commonly used for classification tasks?""",
         "options": [
             r"Mean Squared Error (MSE)",
             r"Gini Impurity", 
             r"Mean Absolute Error (MAE)",
-            r"R-squared"
+            r"R-squared",
+            r"Cross-entropy",
+            r"Pearson correlation"
         ],
         "answer": r"Gini Impurity",
-        "marks": 2
-    },
-    {
-        "question": r"Which activation function is most commonly used in hidden layers of modern deep neural networks?",
-        "options": [
-            r"Sigmoid",
-            r"Tanh", 
-            r"ReLU",
-            r"Linear"
-        ],
-        "answer": r"ReLU",
         "marks": 2
     }
 ]
 
+# Subjective Questions with templated variants - Machine Learning
 subjective = [
     {
-        "question": r"Compare and contrast the following three supervised learning algorithms in terms of their assumptions, strengths, and weaknesses: Linear Regression, Decision Trees, and k-NN. Fill in a comparison table and provide a brief explanation for each entry.",
+        "question": r"""Compare and contrast the following three supervised learning algorithms in terms of their assumptions, strengths, and weaknesses: Linear Regression, Decision Trees, and k-NN. Fill in a comparison table and provide a brief explanation for each entry.""",
         "answer": r"Linear: Linear relationship, normality | Interpretable, fast | Limited to linear patterns. Trees: No assumptions | Interpretable, handles non-linear | Prone to overfitting. k-NN: Locality assumption | Simple, non-parametric | Computationally expensive, curse of dimensionality",
         "marks": 9
     },
     {
-        "template": r"""Consider a dataset with {{ n_pos }} positive samples and {{ n_neg }} negative samples. Calculate the precision if the model predicts {{ tp }} true positives and {{ fp }} false positives.""",
+        "template": r"""Consider the following dataset for linear regression:
+
+\\begin{center}
+\\begin{tabular}{|c|c|c|c|}
+\\hline
+\\textbf{Sample} & \\textbf{Feature 1} & \\textbf{Feature 2} & \\textbf{Target} \\\\
+\\hline
+1 & {{ x1_1 }} & {{ x2_1 }} & {{ y1 }} \\\\
+\\hline
+2 & {{ x1_2 }} & {{ x2_2 }} & {{ y2 }} \\\\
+\\hline
+3 & {{ x1_3 }} & {{ x2_3 }} & {{ y3 }} \\\\
+\\hline
+4 & {{ x1_4 }} & {{ x2_4 }} & {{ y4 }} \\\\
+\\hline
+\\end{tabular}
+\\end{center}
+
+\\textbf{a)} Calculate the mean squared error (MSE) if the model predicts $\\hat{y} = {{ pred1 }}, {{ pred2 }}, {{ pred3 }}, {{ pred4 }}$ respectively. \\textbf{[3 marks]}
+
+\\textbf{b)} If we use L2 regularization with $\\lambda = {{ lambda_val }}$, write the complete loss function. \\textbf{[2 marks]}""",
         "variables": [
             {
-                "n_pos": 100, "n_neg": 50, "tp": 85, "fp": 10,
-                "answer": "Precision = TP/(TP+FP) = 85/(85+10) = 0.894"
+                "x1_1": 2, "x2_1": 1, "y1": 5, "x1_2": 4, "x2_2": 3, "y2": 11, 
+                "x1_3": 1, "x2_3": 2, "y3": 4, "x1_4": 3, "x2_4": 4, "y4": 10,
+                "pred1": 4.8, "pred2": 10.5, "pred3": 4.2, "pred4": 9.8,
+                "lambda_val": 0.01,
+                "answer": "a) MSE = 0.1425, b) Loss = MSE + 0.01 * Σ(wi²)"
             },
             {
-                "n_pos": 200, "n_neg": 80, "tp": 180, "fp": 15,
-                "answer": "Precision = TP/(TP+FP) = 180/(180+15) = 0.923"
+                "x1_1": 1, "x2_1": 2, "y1": 6, "x1_2": 3, "x2_2": 1, "y2": 7, 
+                "x1_3": 2, "x2_3": 3, "y3": 9, "x1_4": 4, "x2_4": 2, "y4": 10,
+                "pred1": 5.9, "pred2": 7.1, "pred3": 8.8, "pred4": 9.9,
+                "lambda_val": 0.05,
+                "answer": "a) MSE = 0.0175, b) Loss = MSE + 0.05 * Σ(wi²)"
             }
         ],
-        "marks": 6
-    },
-    {
-        "template": r"""A k-Nearest Neighbors classifier is trained on a dataset with {{ n_samples }} samples and {{ n_features }} features.
-
-\\textbf{a)} What is the time complexity for predicting a single test sample when k = {{ k_value }}? \\textbf{[2 marks]}
-
-\\textbf{b)} If we use Euclidean distance and the training data has features with very different scales (e.g., age in years vs income in dollars), what preprocessing step should be applied and why? \\textbf{[3 marks]}
-
-\\textbf{c)} How would you choose the optimal value of k for this dataset? Describe the method and potential issues. \\textbf{[3 marks]}""",
-        "variables": [
-            {
-                "n_samples": 1000, "n_features": 20, "k_value": 5,
-                "answer": "a) O(n*d) = O(20000) for distance calculation + O(n log k) for finding k nearest, b) Feature scaling/normalization to prevent features with larger scales from dominating, c) Cross-validation; issues: bias-variance tradeoff, computational cost"
-            },
-            {
-                "n_samples": 5000, "n_features": 50, "k_value": 3,
-                "answer": "a) O(n*d) = O(250000) for distance calculation + O(n log k) for finding k nearest, b) Standardization or min-max scaling to ensure equal contribution, c) Grid search with CV; issues: curse of dimensionality, choice of distance metric"
-            }
-        ],
-        "marks": 8
+        "marks": 5
     }
 ]'''
         
