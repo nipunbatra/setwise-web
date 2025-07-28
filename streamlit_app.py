@@ -361,20 +361,88 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
                 
                 if not success:
                     print("[ERROR] QuizGenerator returned False")
-                    # Try to read any error logs from the generator if available
-                    try:
-                        # Check if there are any error files in the output directory
-                        error_files = [f for f in os.listdir(output_dir) if 'error' in f.lower() or 'log' in f.lower()]
-                        if error_files:
-                            print(f"[DEBUG] Found error files: {error_files}")
-                            for ef in error_files:
-                                with open(os.path.join(output_dir, ef), 'r') as f:
-                                    print(f"[DEBUG] Error file {ef}: {f.read()}")
-                    except:
-                        pass
                     
-                    debug_info = "\\n".join(debug_log)
-                    return None, f"QuizGenerator returned False.\\n\\nFull Debug Log:\\n{debug_info}"
+                    # Enhanced error investigation
+                    enhanced_debug = []
+                    
+                    # 1. Check generated files
+                    try:
+                        files = os.listdir(output_dir)
+                        enhanced_debug.append(f"Files created: {files}")
+                        
+                        # Look for .log files specifically
+                        log_files = [f for f in files if f.endswith('.log')]
+                        tex_files = [f for f in files if f.endswith('.tex')]
+                        pdf_files = [f for f in files if f.endswith('.pdf')]
+                        
+                        enhanced_debug.append(f"LaTeX files: {tex_files}")
+                        enhanced_debug.append(f"PDF files: {pdf_files}")
+                        enhanced_debug.append(f"Log files: {log_files}")
+                        
+                        # Read LaTeX log files for compilation errors
+                        for log_file in log_files:
+                            log_path = os.path.join(output_dir, log_file)
+                            with open(log_path, 'r', encoding='utf-8', errors='ignore') as f:
+                                log_content = f.read()
+                                if 'Error' in log_content or 'error' in log_content:
+                                    enhanced_debug.append(f"LaTeX errors in {log_file}:")
+                                    # Extract error lines
+                                    error_lines = [line.strip() for line in log_content.split('\n') 
+                                                 if ('error' in line.lower() or 'Error' in line) and line.strip()]
+                                    enhanced_debug.extend(error_lines[:5])  # First 5 errors
+                        
+                        # Check if TEX files were created but PDF compilation failed
+                        if tex_files and not pdf_files:
+                            enhanced_debug.append("❌ LaTeX files created but PDF compilation failed")
+                            enhanced_debug.append("💡 This suggests a LaTeX compilation error")
+                            
+                            # Try to read the tex file to see if it's valid
+                            for tex_file in tex_files[:1]:  # Check first tex file
+                                tex_path = os.path.join(output_dir, tex_file)
+                                with open(tex_path, 'r', encoding='utf-8', errors='ignore') as f:
+                                    tex_content = f.read()
+                                    enhanced_debug.append(f"TEX file size: {len(tex_content)} characters")
+                                    if len(tex_content) < 100:
+                                        enhanced_debug.append("⚠️ TEX file seems very small - generation may have failed")
+                                    enhanced_debug.append(f"TEX content preview: {tex_content[:200]}...")
+                        
+                        elif not tex_files:
+                            enhanced_debug.append("❌ No LaTeX files created - question processing failed")
+                            enhanced_debug.append("💡 This suggests an error in question validation or template processing")
+                            
+                    except Exception as e:
+                        enhanced_debug.append(f"Error investigating files: {e}")
+                    
+                    # 2. Check template and questions
+                    try:
+                        enhanced_debug.append(f"Template used: {template}")
+                        enhanced_debug.append(f"Number of sets: {num_sets}")
+                        enhanced_debug.append(f"Questions file size: {len(open(questions_file).read())} chars")
+                        
+                        # Try to validate questions manually
+                        with open(questions_file, 'r') as f:
+                            content = f.read()
+                            enhanced_debug.append(f"Questions preview: {content[:300]}...")
+                            
+                    except Exception as e:
+                        enhanced_debug.append(f"Error checking questions: {e}")
+                    
+                    # 3. Suggest local testing
+                    enhanced_debug.append("")
+                    enhanced_debug.append("🔍 TROUBLESHOOTING SUGGESTIONS:")
+                    enhanced_debug.append("1. Try running locally: pip install git+https://github.com/nipunbatra/setwise.git")
+                    enhanced_debug.append("2. Test with: setwise generate --questions-file your_file.py --sets 1")
+                    enhanced_debug.append("3. Check LaTeX installation: pdflatex --version")
+                    enhanced_debug.append("4. Validate questions: setwise questions validate your_file.py")
+                    enhanced_debug.append("")
+                    enhanced_debug.append("💡 This error often occurs due to:")
+                    enhanced_debug.append("   - LaTeX not properly installed on server")
+                    enhanced_debug.append("   - Invalid question syntax")
+                    enhanced_debug.append("   - Template rendering errors")
+                    enhanced_debug.append("   - Permission issues in temporary directories")
+                    
+                    debug_info = "\\n".join(debug_log + enhanced_debug)
+                    return None, f"QuizGenerator returned False.\\n\\nDetailed Debug Information:\\n{debug_info}"
                     
             except Exception as gen_error:
                 end_time = time.time()
@@ -562,7 +630,8 @@ def main():
         st.subheader("Questions Editor")
         
         # ✨ NEW: Showcase Setwise v2.0 enhanced features!
-        st.session_state.questions = '''# ✨ NEW Setwise v2.0 Features Demo!
+        if 'questions' not in st.session_state:
+            st.session_state.questions = '''# ✨ NEW Setwise v2.0 Features Demo!
 quiz_metadata = {
     "title": "Enhanced Setwise Demo Quiz",
     "subject": "Mathematics & Science",
@@ -732,9 +801,98 @@ subjective = [
                 pass
             
             if error:
-                st.error("Generation Failed")
-                with st.expander("View Error Details"):
-                    st.text(error)
+                st.error("⚠️ Quiz Generation Failed")
+            
+                # Add quick actions for user
+                col_error1, col_error2, col_error3 = st.columns(3)
+            
+                with col_error1:
+                    if st.button("💡 Try Simpler Example", use_container_width=True):
+                        st.session_state.questions = '''# Simple test without templates
+mcq = [{
+    "question": r"What is 2 + 2?",
+    "options": [r"3", r"4", r"5", r"6"],
+    "answer": r"4",
+    "marks": 1
+}]
+
+subjective = [{
+    "question": r"Explain addition.",
+    "answer": r"Addition combines numbers.",
+    "marks": 2
+}]'''
+                        st.rerun()
+            
+                with col_error2:
+                    if st.button("📋 Copy for Local Testing", use_container_width=True):
+                        # Create local test instructions
+                        local_test = f'''# Save this as test_quiz.py
+{questions_text}
+
+# Then run locally:
+# pip install git+https://github.com/nipunbatra/setwise.git
+# setwise generate --questions-file test_quiz.py --sets 1'''
+                        st.code(local_test, language="python")
+            
+                with col_error3:
+                    if st.button("🔍 Show Raw Logs", use_container_width=True):
+                        st.session_state.show_raw_logs = True
+            
+                # Show different error views
+                if st.session_state.get('show_raw_logs', False):
+                    with st.expander("🔍 Raw Server Logs (Technical Details)", expanded=True):
+                        st.text(error)
+                        if st.button("Hide Raw Logs"):
+                            st.session_state.show_raw_logs = False
+                else:
+                    with st.expander("View Error Details", expanded=False):
+                        # Parse and show user-friendly error info
+                        if "LaTeX files created but PDF compilation failed" in error:
+                            st.warning("**LaTeX Compilation Error** 📄")
+                            st.markdown("""
+                            The questions were processed successfully, but PDF generation failed. This usually means:
+                        
+                            - **LaTeX is not properly installed on the server**
+                            - **Complex math expressions need fixing**
+                            - **Missing LaTeX packages**
+                        
+                            **💡 Try:**
+                            1. Use simpler math expressions
+                            2. Test locally with your own LaTeX installation
+                            3. Check the "Try Simpler Example" button above
+                            """)
+                        elif "No LaTeX files created" in error:
+                            st.warning("**Question Processing Error** ❌")
+                            st.markdown("""
+                            The questions couldn't be processed. This usually means:
+                        
+                            - **Syntax error in questions file**
+                            - **Invalid question structure**
+                            - **Template rendering error**
+                        
+                            **💡 Try:**
+                            1. Check your Python syntax
+                            2. Validate question format
+                            3. Use the "Try Simpler Example" button above
+                            """)
+                        else:
+                            st.info("**General Generation Error** ⚠️")
+                            st.markdown("""
+                            Quiz generation failed for unknown reasons. This could be:
+                        
+                            - **Server configuration issues**
+                            - **Temporary file permission problems**
+                            - **Resource limitations**
+                        
+                            **💡 Try:**
+                            1. Refresh the page and try again
+                            2. Use simpler questions
+                            3. Test locally (recommended)
+                            """)
+                    
+                        # Always show the technical details as a sub-expander
+                        with st.expander("🔧 Technical Details (for debugging)"):
+                            st.text(error)
             elif quiz_sets:
                 # Display each PDF set in rows
                 for i, quiz_set in enumerate(quiz_sets):
@@ -788,19 +946,77 @@ subjective = [
                 st.warning("No PDFs generated")
         else:
             # Show instructions when no preview
-            st.info("Enter questions and click 'Generate Quiz Sets'")
-            st.markdown("""
-            **How to use:**
-            1. Edit questions in left pane
-            2. Choose template and number of sets
-            3. Click generate to see live PDF previews
-            4. Download PDFs and answer keys
-            
-            **Question format:**
-            - Use `mcq = [...]` and `subjective = [...]` arrays
-            - LaTeX math: `r"What is $x^2$?"`
-            - MCQ needs `answer` field matching an option
-            """)
+            st.info("📝 Enter questions and click 'Generate Quiz Sets' to get started!")
+    
+            # Enhanced help with troubleshooting
+            with st.expander("📚 How to Use This Interface", expanded=True):
+                st.markdown("""
+                **✨ Quick Start:**
+                1. **Edit questions** in the left pane (or load an example)
+                2. **Choose template** (default/compact/minimal) and number of sets
+                3. **Click "Generate Quiz Sets"** to see live PDF previews
+                4. **Download** PDFs and answer keys when ready
+        
+                **📋 Question Format:**
+                ```python
+                # Required arrays
+                mcq = [...]          # Multiple choice questions
+                subjective = [...]   # Written answer questions
+        
+                # Optional (NEW in v2.0!)
+                quiz_metadata = {    # Professional headers
+                    "title": "My Quiz",
+                    "duration": "60 minutes"
+                }
+                ```
+        
+                **🔧 NEW v2.0 Features:**
+                - **Templated MCQ:** Use `{{ variables }}` in questions and options
+                - **Quiz metadata:** Professional headers with title, duration
+                - **Multi-part questions:** Individual marks for each part
+        
+                **💡 If Generation Fails:**
+                - Try the **"Physics"** or **"Machine Learning"** examples first
+                - Use **"Try Simpler Example"** button if you see errors
+                - **Test locally** for best reliability: `pip install git+https://github.com/nipunbatra/setwise.git`
+                """)
+    
+            # Add a tips section
+            with st.expander("💡 Pro Tips & Troubleshooting"):
+                st.markdown("""
+                **🎯 Best Practices:**
+                - Start with **built-in examples** (Physics, ML) to see v2.0 features
+                - Use **raw strings** for LaTeX: `r"$x^2$"` instead of `"$x^2$"`
+                - **MCQ answers** must exactly match one of the options
+                - **Test simple questions** first, then add complexity
+        
+                **🔧 Common Issues:**
+                - **"Generation Failed"**: Often due to server LaTeX limitations
+                - **Solution**: Download and test locally for full reliability
+                - **Syntax errors**: Check Python syntax and question structure
+                - **Template errors**: Ensure all `{{ variables }}` are defined
+        
+                **🖥️ Local Testing (Recommended):**
+                ```bash
+                # Install Setwise locally for best experience
+                pip install git+https://github.com/nipunbatra/setwise.git
+        
+                # Create your questions file and test
+                setwise generate --questions-file my_quiz.py --sets 3
+                ```
+        
+                **🌐 This web interface is great for:**
+                - Quick experimentation and demos
+                - Exploring v2.0 features
+                - Learning question formats
+                - Sharing examples
+        
+                **💻 Local installation is better for:**
+                - Production quiz generation
+                - Complex LaTeX expressions
+                - Large question sets
+                - Reliable PDF generation
+                """)
 
 if __name__ == "__main__":
     main()
