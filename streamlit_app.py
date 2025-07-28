@@ -172,12 +172,41 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
         debug_log.append("✓ Setwise package available")
         print("[DEBUG] ✓ Setwise package available")
         
-        # Validate questions format
+        # Validate questions format and inspect content
         try:
             print("[DEBUG] Validating questions syntax...")
-            exec(questions_text)
+            exec_globals = {}
+            exec(questions_text, exec_globals)
             debug_log.append("✓ Questions syntax valid")
             print("[DEBUG] ✓ Questions syntax valid")
+            
+            # Debug: inspect the parsed questions
+            if 'mcq' in exec_globals:
+                mcq_questions = exec_globals['mcq']
+                print(f"[DEBUG] Found {len(mcq_questions)} MCQ questions")
+                for i, q in enumerate(mcq_questions):
+                    print(f"[DEBUG] MCQ {i+1}: keys = {list(q.keys())}")
+                    if 'template' in q:
+                        print(f"[DEBUG] MCQ {i+1} is templated with variables: {q.get('variables', 'NONE')}")
+                    elif 'question' in q:
+                        print(f"[DEBUG] MCQ {i+1} is standard question")
+                    else:
+                        print(f"[DEBUG] MCQ {i+1} ERROR: no 'question' or 'template' field!")
+            
+            if 'subjective' in exec_globals:
+                subj_questions = exec_globals['subjective']
+                print(f"[DEBUG] Found {len(subj_questions)} subjective questions")
+                for i, q in enumerate(subj_questions):
+                    print(f"[DEBUG] SUBJ {i+1}: keys = {list(q.keys())}")
+                    if 'template' in q:
+                        print(f"[DEBUG] SUBJ {i+1} is templated with variables: {q.get('variables', 'NONE')}")
+                    elif 'question' in q:
+                        print(f"[DEBUG] SUBJ {i+1} is standard question")
+                        if 'parts' in q:
+                            print(f"[DEBUG] SUBJ {i+1} has {len(q['parts'])} parts")
+                    else:
+                        print(f"[DEBUG] SUBJ {i+1} ERROR: no 'question' or 'template' field!")
+                        
         except SyntaxError as e:
             print(f"[ERROR] Syntax error: {e}")
             return None, f"Python syntax error: {str(e)}\\n\\nCheck your mcq = [...] and subjective = [...] format."
@@ -204,11 +233,17 @@ quiz_config = {{
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            f.write(quiz_metadata + questions_text)
+            full_content = quiz_metadata + questions_text
+            f.write(full_content)
             questions_file = f.name
         
         debug_log.append(f"✓ Questions file created: {questions_file}")
         print(f"[DEBUG] ✓ Questions file created: {questions_file}")
+        print(f"[DEBUG] Questions file content length: {len(full_content)} chars")
+        print(f"[DEBUG] Questions file preview:")
+        print("--- FILE START ---")
+        print(full_content[:500] + "..." if len(full_content) > 500 else full_content)
+        print("--- FILE END ---")
         
         # Create temporary output directory
         output_dir = tempfile.mkdtemp()
@@ -245,21 +280,41 @@ quiz_config = {{
             # Header configuration is now included in the questions file as quiz_config
             print(f"[DEBUG] Header metadata included in questions file: title='{header_config.get('title', 'Quiz')}', subject='{header_config.get('subject', '')}', exam_info='{header_config.get('exam_info', '')}'")
             
-            success = generator.generate_quizzes(
-                num_sets=num_sets,
-                template_name=template,
-                compile_pdf=True,
-                seed=random_seed
-            )
-            
-            end_time = time.time()
-            debug_log.append(f"→ generate_quizzes returned: {success} (took {end_time-start_time:.2f}s)")
-            print(f"[DEBUG] → generate_quizzes returned: {success} (took {end_time-start_time:.2f}s)")
-            
-            if not success:
-                print("[ERROR] QuizGenerator returned False")
+            try:
+                success = generator.generate_quizzes(
+                    num_sets=num_sets,
+                    template_name=template,
+                    compile_pdf=True,
+                    seed=random_seed
+                )
+                
+                end_time = time.time()
+                debug_log.append(f"→ generate_quizzes returned: {success} (took {end_time-start_time:.2f}s)")
+                print(f"[DEBUG] → generate_quizzes returned: {success} (took {end_time-start_time:.2f}s)")
+                
+                if not success:
+                    print("[ERROR] QuizGenerator returned False")
+                    # Try to read any error logs from the generator if available
+                    try:
+                        # Check if there are any error files in the output directory
+                        error_files = [f for f in os.listdir(output_dir) if 'error' in f.lower() or 'log' in f.lower()]
+                        if error_files:
+                            print(f"[DEBUG] Found error files: {error_files}")
+                            for ef in error_files:
+                                with open(os.path.join(output_dir, ef), 'r') as f:
+                                    print(f"[DEBUG] Error file {ef}: {f.read()}")
+                    except:
+                        pass
+                    
+                    debug_info = "\\n".join(debug_log)
+                    return None, f"QuizGenerator returned False.\\n\\nFull Debug Log:\\n{debug_info}"
+                    
+            except Exception as gen_error:
+                end_time = time.time()
+                print(f"[ERROR] Exception during generate_quizzes: {gen_error}")
+                debug_log.append(f"✗ Exception during generation: {str(gen_error)}")
                 debug_info = "\\n".join(debug_log)
-                return None, f"QuizGenerator returned False.\\n\\nFull Debug Log:\\n{debug_info}"
+                return None, f"Generation exception: {str(gen_error)}\\n\\nFull Debug Log:\\n{debug_info}"
                 
         except Exception as e:
             import traceback
