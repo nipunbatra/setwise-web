@@ -224,6 +224,18 @@ subjective = [
         "options": [r"POST", r"GET", r"PUT", r"DELETE"],
         "answer": r"GET",
         "marks": 1
+    },
+    {
+        "question": r"What is the difference between `==` and `is` in Python?",
+        "options": [r"No difference", r"`==` compares values, `is` compares identity", r"`is` compares values, `==` compares identity", r"Both compare identity"],
+        "answer": r"`==` compares values, `is` compares identity",
+        "marks": 2
+    },
+    {
+        "question": r"Which of the following is NOT a Python data type?",
+        "options": [r"list", r"tuple", r"array", r"dict"],
+        "answer": r"array",
+        "marks": 1
     }
 ]
 
@@ -247,20 +259,119 @@ subjective = [
         "question": r"What is the difference between SQL JOIN types? Provide examples.",
         "answer": r"INNER JOIN returns matching records. LEFT JOIN returns all left records. RIGHT JOIN returns all right records. FULL JOIN returns all records.",
         "marks": 5
+    },
+    {
+        "question": r"Describe the Model-View-Controller (MVC) architecture pattern and its benefits.",
+        "answer": r"MVC separates application logic into three components: Model (data), View (UI), Controller (logic). Benefits include separation of concerns, testability, and maintainability.",
+        "marks": 6
+    }
+]'''
+    },
+    
+    "Mixed": '''mcq = [
+    {
+        "question": r"What is the derivative of $\\sin(x)$?",
+        "options": [r"$\\cos(x)$", r"$-\\cos(x)$", r"$\\tan(x)$", r"$-\\sin(x)$"],
+        "answer": r"$\\cos(x)$",
+        "marks": 2
+    },
+    {
+        "question": r"Which data structure uses FIFO principle?",
+        "options": [r"Stack", r"Queue", r"Array", r"Tree"],
+        "answer": r"Queue",
+        "marks": 1
+    },
+    {
+        "question": r"What is the unit of electric current?",
+        "options": [r"Volt", r"Ohm", r"Ampere", r"Watt"],
+        "answer": r"Ampere",
+        "marks": 1
+    },
+    {
+        "question": r"Which is the correct quadratic formula?",
+        "options": [r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{b^2+4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{4ac-b^2}}{2a}$"],
+        "answer": r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$",
+        "marks": 2
+    },
+    {
+        "question": r"What is Newton's second law of motion?",
+        "options": [r"$F = ma$", r"$F = mv$", r"$F = m/a$", r"$F = a/m$"],
+        "answer": r"$F = ma$",
+        "marks": 1
+    }
+]
+
+subjective = [
+    {
+        "question": r"Prove that the sum of first $n$ natural numbers is $\\frac{n(n+1)}{2}$.",
+        "answer": r"Use mathematical induction. Base case: n=1, sum=1=1(2)/2. Inductive step assumes true for k, proves for k+1.",
+        "marks": 5
+    },
+    {
+        "question": r"Explain the difference between supervised and unsupervised machine learning.",
+        "answer": r"Supervised learning uses labeled data to train models. Unsupervised learning finds patterns in unlabeled data through clustering, dimensionality reduction, etc.",
+        "marks": 4
+    }
+]''',
+
+    "LaTeX Test": '''mcq = [
+    {
+        "question": r"Which of these LaTeX expressions renders correctly? $\\int_0^1 x^2 dx$",
+        "options": [r"$\\frac{1}{3}$", r"$\\frac{2}{3}$", r"$1$", r"$\\frac{1}{2}$"],
+        "answer": r"$\\frac{1}{3}$",
+        "marks": 2
+    },
+    {
+        "question": r"What is $\\lim_{x \\to 0} \\frac{\\sin x}{x}$?",
+        "options": [r"$0$", r"$1$", r"$\\infty$", r"undefined"],
+        "answer": r"$1$",
+        "marks": 2
+    },
+    {
+        "question": r"Simplify: $\\sqrt{x^2 + 2x + 1}$ for $x \\geq -1$",
+        "options": [r"$x + 1$", r"$x - 1$", r"$|x + 1|$", r"$x^2 + 1$"],
+        "answer": r"$x + 1$",
+        "marks": 2
+    },
+    {
+        "question": r"Matrix multiplication: $\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix} \\begin{pmatrix} 5 \\\\ 6 \\end{pmatrix} = ?$",
+        "options": [r"$\\begin{pmatrix} 17 \\\\ 39 \\end{pmatrix}$", r"$\\begin{pmatrix} 11 \\\\ 24 \\end{pmatrix}$", r"$\\begin{pmatrix} 5 \\\\ 18 \\end{pmatrix}$", r"undefined"],
+        "answer": r"$\\begin{pmatrix} 17 \\\\ 39 \\end{pmatrix}$",
+        "marks": 3
+    }
+]
+
+subjective = [
+    {
+        "question": r"Derive the formula for the area of a circle using integration. Start with $A = \\int_{-r}^{r} 2\\sqrt{r^2 - x^2} dx$.",
+        "answer": r"Using trigonometric substitution $x = r\\sin\\theta$, the integral becomes $2r^2\\int_{-\\pi/2}^{\\pi/2} \\cos^2\\theta d\\theta = \\pi r^2$.",
+        "marks": 6
+    },
+    {
+        "question": r"Show that $e^{i\\pi} + 1 = 0$ using Euler's formula.",
+        "answer": r"Euler's formula: $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$. For $\\theta = \\pi$: $e^{i\\pi} = \\cos\\pi + i\\sin\\pi = -1 + 0i = -1$. Therefore $e^{i\\pi} + 1 = 0$.",
+        "marks": 4
     }
 ]'''
     }
     return examples.get(subject, "")
 
 def generate_quiz_pdfs(questions_text, template, num_sets):
-    """Generate quiz PDFs using the setwise package"""
+    """Generate quiz PDFs using the setwise package with comprehensive debugging"""
+    debug_log = []
+    
     try:
+        debug_log.append("=== STARTING QUIZ GENERATION ===")
+        
         if not SETWISE_AVAILABLE:
             return None, f"Setwise package not available. Import error: {IMPORT_ERROR}\n\nPlease ensure the setwise package is installed."
+        
+        debug_log.append("✓ Setwise package available")
         
         # Validate questions format
         try:
             exec(questions_text)
+            debug_log.append("✓ Questions syntax valid")
         except SyntaxError as e:
             return None, f"Python syntax error: {str(e)}\n\nCheck your mcq = [...] and subjective = [...] format."
         except Exception as e:
@@ -271,8 +382,11 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             f.write(questions_text)
             questions_file = f.name
         
+        debug_log.append(f"✓ Questions file created: {questions_file}")
+        
         # Create temporary output directory
         output_dir = tempfile.mkdtemp()
+        debug_log.append(f"✓ Output directory created: {output_dir}")
         
         try:
             # Debug: Check if questions file exists and has content
@@ -281,6 +395,8 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             
             with open(questions_file, 'r') as f:
                 file_content = f.read()
+            
+            debug_log.append(f"✓ File content length: {len(file_content)} chars")
             
             if not file_content.strip():
                 return None, f"Questions file is empty: {questions_file}"
@@ -292,14 +408,23 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
                 questions_module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(questions_module)
                 
-                mcq_count = len(getattr(questions_module, 'mcq', []))
-                subj_count = len(getattr(questions_module, 'subjective', []))
+                mcq_questions = getattr(questions_module, 'mcq', [])
+                subj_questions = getattr(questions_module, 'subjective', [])
                 
-                if mcq_count == 0 and subj_count == 0:
-                    return None, f"No questions found in file. MCQ: {mcq_count}, Subjective: {subj_count}"
+                debug_log.append(f"✓ Module loaded - MCQ: {len(mcq_questions)}, Subjective: {len(subj_questions)}")
+                
+                # Show first question for debugging
+                if mcq_questions:
+                    debug_log.append(f"✓ First MCQ: {mcq_questions[0].get('question', 'No question field')[:50]}...")
+                if subj_questions:
+                    debug_log.append(f"✓ First Subjective: {subj_questions[0].get('question', 'No question field')[:50]}...")
+                
+                if len(mcq_questions) == 0 and len(subj_questions) == 0:
+                    return None, f"No questions found in file. MCQ: {len(mcq_questions)}, Subjective: {len(subj_questions)}"
                     
             except Exception as import_err:
-                return None, f"Failed to import questions from file: {str(import_err)}"
+                debug_log.append(f"✗ Import error: {str(import_err)}")
+                return None, f"Failed to import questions from file: {str(import_err)}\n\nDebug log:\n" + "\n".join(debug_log)
             
             # Debug: Check output directory
             if not os.path.exists(output_dir):
@@ -308,25 +433,65 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             if not os.access(output_dir, os.W_OK):
                 return None, f"Output directory not writable: {output_dir}"
             
+            debug_log.append("✓ Output directory accessible")
+            
             # Use QuizGenerator API with debug info
             try:
+                debug_log.append("→ Initializing QuizGenerator...")
+                
+                # Find the correct template directory
+                import setwise
+                from pathlib import Path
+                setwise_dir = Path(setwise.__file__).parent
+                templates_dir = setwise_dir / 'templates'
+                debug_log.append(f"✓ Using templates from: {templates_dir}")
+                
                 generator = QuizGenerator(
+                    template_dir=str(templates_dir),
                     output_dir=output_dir,
                     questions_file=questions_file
                 )
+                
+                debug_log.append("✓ QuizGenerator initialized")
                 
                 # Debug: Check if generator loaded questions
                 generator_mcq = getattr(generator, 'mcq', [])
                 generator_subj = getattr(generator, 'subjective', [])
                 
+                debug_log.append(f"✓ Generator loaded - MCQ: {len(generator_mcq)}, Subjective: {len(generator_subj)}")
+                
                 if not generator_mcq and not generator_subj:
-                    return None, f"QuizGenerator failed to load questions. MCQ: {len(generator_mcq)}, Subjective: {len(generator_subj)}"
+                    return None, f"QuizGenerator failed to load questions. MCQ: {len(generator_mcq)}, Subjective: {len(generator_subj)}\n\nDebug log:\n" + "\n".join(debug_log)
+                
+                # Check available templates
+                try:
+                    from setwise.template_manager import TemplateManager
+                    tm = TemplateManager()
+                    available_templates = tm.list_templates()
+                    debug_log.append(f"✓ Available templates: {available_templates}")
+                    
+                    if template not in available_templates:
+                        debug_log.append(f"⚠ Template '{template}' not in available list, using anyway")
+                        
+                except Exception as tm_err:
+                    debug_log.append(f"⚠ Could not check templates: {str(tm_err)}")
                 
             except Exception as gen_init_err:
-                return None, f"Failed to initialize QuizGenerator: {str(gen_init_err)}"
+                debug_log.append(f"✗ Generator init error: {str(gen_init_err)}")
+                return None, f"Failed to initialize QuizGenerator: {str(gen_init_err)}\n\nDebug log:\n" + "\n".join(debug_log)
             
             # Try to generate quizzes with detailed logging
             try:
+                debug_log.append(f"→ Calling generate_quizzes with template='{template}', sets={num_sets}, seed=42")
+                
+                # Check if pdflatex is available
+                import subprocess
+                try:
+                    subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
+                    debug_log.append("✓ pdflatex is available")
+                except (subprocess.CalledProcessError, FileNotFoundError):
+                    debug_log.append("✗ pdflatex not found - this could be the problem!")
+                
                 success = generator.generate_quizzes(
                     num_sets=num_sets,
                     template_name=template,
@@ -334,23 +499,38 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
                     seed=42
                 )
                 
-                # Debug: Log what actually happened
-                debug_info = f"generate_quizzes returned: {success}\n"
-                debug_info += f"Template: {template}\n"
-                debug_info += f"Sets: {num_sets}\n"
-                debug_info += f"Generator MCQ: {len(generator_mcq)}\n" 
-                debug_info += f"Generator Subjective: {len(generator_subj)}\n"
+                debug_log.append(f"→ generate_quizzes returned: {success}")
+                
+                # Check what files were actually created
+                all_files = os.listdir(output_dir) if os.path.exists(output_dir) else []
+                debug_log.append(f"→ Files in output dir: {all_files}")
+                
+                # Look for any .tex files too
+                tex_files = [f for f in all_files if f.endswith('.tex')]
+                pdf_files = [f for f in all_files if f.endswith('.pdf')]
+                debug_log.append(f"→ TEX files: {tex_files}")
+                debug_log.append(f"→ PDF files: {pdf_files}")
                 
                 if not success:
-                    return None, f"QuizGenerator returned False. Debug info:\n{debug_info}"
+                    # Try to get more info from the generator object
+                    if hasattr(generator, 'last_error'):
+                        debug_log.append(f"→ Generator last_error: {getattr(generator, 'last_error', 'None')}")
+                    
+                    debug_info = "\n".join(debug_log)
+                    return None, f"QuizGenerator returned False.\n\nFull Debug Log:\n{debug_info}"
                     
             except Exception as gen_err:
-                return None, f"QuizGenerator.generate_quizzes() failed: {str(gen_err)}"
+                debug_log.append(f"✗ Generation exception: {str(gen_err)}")
+                import traceback
+                debug_log.append(f"✗ Traceback: {traceback.format_exc()}")
+                return None, f"QuizGenerator.generate_quizzes() failed: {str(gen_err)}\n\nDebug log:\n" + "\n".join(debug_log)
             
         except Exception as e:
             import traceback
             error_details = traceback.format_exc()
-            return None, f"Generation error: {str(e)}\n\nDetailed traceback:\n{error_details}"
+            debug_log.append(f"✗ Outer exception: {str(e)}")
+            debug_log.append(f"✗ Traceback: {error_details}")
+            return None, f"Generation error: {str(e)}\n\nFull Debug Log:\n" + "\n".join(debug_log)
         
         # Collect results
         quiz_sets = []
@@ -443,7 +623,7 @@ def main():
         num_sets = st.slider("Sets", 1, 5, 2)
     
     with col_ctrl3:
-        example = st.selectbox("Examples", ["", "Physics", "Mathematics", "Programming"])
+        example = st.selectbox("Examples", ["", "Physics", "Mathematics", "Programming", "Mixed", "LaTeX Test"])
     
     with col_ctrl4:
         if st.button("Load Example", disabled=not example):
