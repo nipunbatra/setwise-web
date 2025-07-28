@@ -42,14 +42,10 @@ def load_example_questions(subject):
         "marks": 3
     },
     {
-        "template": r"A car travels at {{ speed }} km/h for {{ time }} hours. What distance does it cover?",
-        "options": [r"{{ speed * time }} km", r"{{ speed + time }} km", r"{{ speed / time }} km", r"{{ speed - time }} km"],
-        "answer": r"{{ speed * time }} km",
-        "variables": [
-            {"speed": 60, "time": 2},
-            {"speed": 80, "time": 3}
-        ],
-        "marks": 3
+        "question": r"Which law states that force equals mass times acceleration?",
+        "options": [r"Newton's First Law", r"Newton's Second Law", r"Newton's Third Law", r"Conservation of Energy"],
+        "answer": r"Newton's Second Law",
+        "marks": 2
     }
 ]
 
