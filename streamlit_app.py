@@ -281,37 +281,25 @@ quiz_config = {{
             print(f"[DEBUG] Header metadata included in questions file: title='{header_config.get('title', 'Quiz')}', subject='{header_config.get('subject', '')}', exam_info='{header_config.get('exam_info', '')}'")
             
             try:
-                # Add timeout monitoring
-                import signal
+                print("[DEBUG] Starting quiz generation...")
                 
-                def timeout_handler(signum, frame):
-                    raise TimeoutError("Quiz generation timed out after 60 seconds")
+                success = generator.generate_quizzes(
+                    num_sets=num_sets,
+                    template_name=template,
+                    compile_pdf=True,
+                    seed=random_seed
+                )
                 
-                print("[DEBUG] Starting generation with 60 second timeout...")
-                signal.signal(signal.SIGALRM, timeout_handler)
-                signal.alarm(60)  # 60 second timeout
-                
+                # Check intermediate results during generation
+                print(f"[DEBUG] Post-generation check - files in output dir:")
                 try:
-                    success = generator.generate_quizzes(
-                        num_sets=num_sets,
-                        template_name=template,
-                        compile_pdf=True,
-                        seed=random_seed
-                    )
-                    
-                    # Check intermediate results during generation
-                    print(f"[DEBUG] Post-generation check - files in output dir:")
-                    try:
-                        files = os.listdir(output_dir)
-                        for f in files:
-                            fpath = os.path.join(output_dir, f)
-                            size = os.path.getsize(fpath) if os.path.isfile(fpath) else 0
-                            print(f"[DEBUG]   {f}: {size} bytes")
-                    except Exception as e:
-                        print(f"[DEBUG]   Error listing files: {e}")
-                        
-                finally:
-                    signal.alarm(0)  # Cancel the alarm
+                    files = os.listdir(output_dir)
+                    for f in files:
+                        fpath = os.path.join(output_dir, f)
+                        size = os.path.getsize(fpath) if os.path.isfile(fpath) else 0
+                        print(f"[DEBUG]   {f}: {size} bytes")
+                except Exception as e:
+                    print(f"[DEBUG]   Error listing files: {e}")
                 
                 end_time = time.time()
                 debug_log.append(f"→ generate_quizzes returned: {success} (took {end_time-start_time:.2f}s)")
@@ -333,13 +321,6 @@ quiz_config = {{
                     
                     debug_info = "\\n".join(debug_log)
                     return None, f"QuizGenerator returned False.\\n\\nFull Debug Log:\\n{debug_info}"
-                    
-            except TimeoutError as timeout_error:
-                end_time = time.time()
-                print(f"[ERROR] Timeout during generation: {timeout_error}")
-                debug_log.append(f"✗ Timeout after {end_time-start_time:.2f}s: {str(timeout_error)}")
-                debug_info = "\\n".join(debug_log)
-                return None, f"Generation timeout: {str(timeout_error)}\\n\\nFull Debug Log:\\n{debug_info}"
                     
             except Exception as gen_error:
                 end_time = time.time()
