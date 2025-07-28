@@ -289,10 +289,39 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             )
             
             if not success:
-                return None, "Quiz generation failed. Check your question format and LaTeX syntax."
+                # Try to get more specific error information
+                log_files = []
+                for i in range(1, num_sets + 1):
+                    log_path = os.path.join(output_dir, f'quiz_set_{i}.log')
+                    if os.path.exists(log_path):
+                        with open(log_path, 'r') as f:
+                            log_content = f.read()
+                            if 'Error' in log_content or 'error' in log_content:
+                                log_files.append(f"Set {i} LaTeX log:\n{log_content[-500:]}")  # Last 500 chars
+                
+                error_msg = "Quiz generation failed."
+                if log_files:
+                    error_msg += "\n\nLaTeX compilation errors:\n" + "\n\n".join(log_files)
+                else:
+                    # List files in output directory for debugging
+                    try:
+                        files_in_dir = os.listdir(output_dir)
+                        error_msg += f"\n\nFiles generated: {files_in_dir}"
+                    except:
+                        error_msg += f"\n\nCould not list files in: {output_dir}"
+                    
+                    error_msg += "\nPossible issues:\n"
+                    error_msg += "- LaTeX syntax errors in questions\n"
+                    error_msg += "- Missing LaTeX packages (pdflatex not found?)\n"
+                    error_msg += "- Template loading issues\n"
+                    error_msg += "- PDF compilation failed"
+                
+                return None, error_msg
             
         except Exception as e:
-            return None, f"Generation error: {str(e)}"
+            import traceback
+            error_details = traceback.format_exc()
+            return None, f"Generation error: {str(e)}\n\nDetailed traceback:\n{error_details}"
         
         # Collect results
         quiz_sets = []
