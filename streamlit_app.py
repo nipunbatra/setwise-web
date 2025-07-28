@@ -151,6 +151,12 @@ subjective = [
         "options": [r"$e^x + C$", r"$xe^x + C$", r"$\\frac{e^x}{x} + C$", r"$\\ln(e^x) + C$"],
         "answer": r"$e^x + C$",
         "marks": 3
+    },
+    {
+        "question": r"Which represents the slope-intercept form of a line?",
+        "options": [r"$ax + by = c$", r"$y = mx + b$", r"$\\frac{x}{a} + \\frac{y}{b} = 1$", r"$(y - y_1) = m(x - x_1)$"],
+        "answer": r"$y = mx + b$",
+        "marks": 2
     }
 ]
 
@@ -158,7 +164,17 @@ subjective = [
     {
         "question": r"Given the function $f(x) = x^3 - 3x^2 + 2x$, find $f'(x)$ and solve $f'(x) = 0$.",
         "answer": r"$f'(x) = 3x^2 - 6x + 2$. Using quadratic formula: $x = \\frac{6 \\pm \\sqrt{36-24}}{6} = 1 \\pm \\frac{\\sqrt{3}}{3}$",
-        "marks": 10
+        "marks": 8
+    },
+    {
+        "question": r"A particle moves along a line with position $s(t) = t^3 - 6t^2 + 9t$. Find when the velocity is zero.",
+        "answer": r"Velocity $v(t) = s'(t) = 3t^2 - 12t + 9 = 3(t^2 - 4t + 3) = 3(t-1)(t-3)$. Zero when $t = 1$ or $t = 3$.",
+        "marks": 7
+    },
+    {
+        "question": r"Evaluate the definite integral $\\int_0^2 (x^2 + 1) dx$ using the fundamental theorem of calculus.",
+        "answer": r"$\\int_0^2 (x^2 + 1) dx = \\left[\\frac{x^3}{3} + x\\right]_0^2 = \\frac{8}{3} + 2 - 0 = \\frac{14}{3}$",
+        "marks": 5
     }
 ]'''
     }
@@ -228,13 +244,16 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
             
             print(f"[DEBUG] Calling generate_quizzes(sets={num_sets}, template={template})...")
             import time
+            import random
+            random_seed = random.randint(1, 10000)
+            print(f"[DEBUG] Using random seed: {random_seed}")
             start_time = time.time()
             
             success = generator.generate_quizzes(
                 num_sets=num_sets,
                 template_name=template,
                 compile_pdf=True,
-                seed=42
+                seed=random_seed
             )
             
             end_time = time.time()
@@ -361,7 +380,12 @@ subjective = [
     {
         "question": r"Explain the concept of photosynthesis.",
         "answer": r"Photosynthesis is the process by which plants convert sunlight into energy.",
-        "marks": 8
+        "marks": 5
+    },
+    {
+        "question": r"Consider a quadratic function $f(x) = x^2 - 4x + 3$. Find the vertex and roots.",
+        "answer": r"Vertex: $(2, -1)$ using $x = -\\frac{b}{2a}$. Roots: $x = 1, 3$ by factoring $(x-1)(x-3) = 0$.",
+        "marks": 6
     }
 ]'''
         
@@ -391,6 +415,9 @@ subjective = [
         
         with col_btn2:
             if st.button("Generate Quiz Sets", type="primary", use_container_width=True):
+                # Clear previous results to ensure fresh generation
+                if 'quiz_results' in st.session_state:
+                    del st.session_state.quiz_results
                 st.session_state.generate_now = True
                 st.rerun()
     
@@ -398,7 +425,11 @@ subjective = [
     with col_right:
         st.subheader(f"PDF Preview ({num_sets} sets)")
         
-        if st.session_state.get('generate_now', False) and questions_text.strip():
+        # Check if we need to generate new quizzes or show existing ones
+        should_generate = st.session_state.get('generate_now', False) and questions_text.strip()
+        has_existing = 'quiz_results' in st.session_state and st.session_state.quiz_results
+        
+        if should_generate:
             # Add debug info in the UI
             st.info("🔄 Starting quiz generation...")
             debug_container = st.empty()
@@ -409,6 +440,29 @@ subjective = [
                 quiz_sets, error = generate_quiz_pdfs(questions_text, template, num_sets)
                 debug_container.text("Step 2: Generation complete, processing results...")
                 print(f"[STREAMLIT] generate_quiz_pdfs returned: quiz_sets={len(quiz_sets) if quiz_sets else 0}, error={bool(error)}")
+            
+            # Store results in session state to prevent regeneration on download
+            if quiz_sets and not error:
+                st.session_state.quiz_results = {
+                    'quiz_sets': quiz_sets,
+                    'error': error,
+                    'template': template,
+                    'num_sets': num_sets
+                }
+            
+            # Reset generate flag but preserve generated content
+            if 'generate_now' in st.session_state:
+                del st.session_state.generate_now
+        
+        # Display results (either newly generated or from session state)
+        if has_existing or (should_generate and not st.session_state.get('generate_now')):
+            if has_existing:
+                quiz_data = st.session_state.quiz_results
+                quiz_sets = quiz_data['quiz_sets']
+                error = quiz_data['error']
+            else:
+                # Use the results we just generated
+                pass
             
             if error:
                 st.error("Generation Failed")
@@ -460,9 +514,7 @@ subjective = [
                     if i < len(quiz_sets) - 1:
                         st.markdown("---")
                 
-                # Reset generate flag but preserve generated content
-                if 'generate_now' in st.session_state:
-                    del st.session_state.generate_now
+                # Results are now preserved in session state for downloads
             else:
                 st.warning("No PDFs generated")
         else:
