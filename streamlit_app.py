@@ -36,16 +36,13 @@ def load_example_questions(subject):
         "marks": 2
     },
     {
-        "question": r"The acceleration due to gravity is approximately:",  
-        "options": [r"$9.8\\,\\text{m/s}^2$", r"$10\\,\\text{m/s}^2$", r"$8.9\\,\\text{m/s}^2$", r"$11\\,\\text{m/s}^2$"],
-        "answer": r"$9.8\\,\\text{m/s}^2$",
-        "marks": 2
-    },
-    {
-        "question": r"Which law states that force equals mass times acceleration?",
-        "options": [r"Newton's First Law", r"Newton's Second Law", r"Newton's Third Law", r"Conservation of Energy"],
-        "answer": r"Newton's Second Law", 
-        "marks": 2
+        "question": r"A ball is dropped from height {{ h }} m. What is its velocity just before hitting the ground?",
+        "options": [r"$\\sqrt{2g \\times {{ h }}}$ m/s", r"$g \\times {{ h }}$ m/s", r"$\\frac{g \\times {{ h }}}{2}$ m/s", r"$2g \\times {{ h }}$ m/s"],
+        "answer": r"$\\sqrt{2g \\times {{ h }}}$ m/s",
+        "marks": 3,
+        "variables": {
+            "h": [10, 15, 20, 25, 30]
+        }
     }
 ]
 
@@ -56,164 +53,41 @@ subjective = [
         "marks": 8
     },
     {
-        "question": r"A projectile is launched at angle $\\theta$ with initial velocity $v_0$. Find the maximum height and range.",
-        "answer": r"Maximum height: $H = \\frac{(v_0\\sin\\theta)^2}{2g}$, Range: $R = \\frac{v_0^2\\sin(2\\theta)}{g}$. Maximum range occurs at $\\theta = 45°$.",
-        "marks": 10
+        "question": r"A projectile motion problem with variables.",
+        "parts": [
+            {
+                "question": r"A ball is thrown at {{ angle }}° with velocity {{ v0 }} m/s. Find the maximum height.",
+                "answer": r"$H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g} = {{ height }}$ m",
+                "marks": 4
+            },
+            {
+                "question": r"Calculate the range of the projectile.",
+                "answer": r"$R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}°)}{g} = {{ range }}$ m", 
+                "marks": 4
+            },
+            {
+                "question": r"At what angle is the range maximum for the same initial speed?",
+                "answer": r"Range is maximum at 45° since $\\sin(2\\theta)$ is maximum when $2\\theta = 90°$",
+                "marks": 2
+            }
+        ],
+        "marks": 10,
+        "variables": {
+            "v0": [20, 25, 30],
+            "angle": [30, 45, 60],
+            "height": "{{ (v0 * sin(radians(angle)))**2 / (2 * 9.8) | round(1) }}",
+            "range": "{{ v0**2 * sin(radians(2*angle)) / 9.8 | round(1) }}"
+        }
     },
     {
-        "question": r"State Faraday's law of electromagnetic induction and give two practical applications.",
-        "answer": r"Faraday's law: $\\mathcal{E} = -\\frac{d\\Phi_B}{dt}$ where $\\Phi_B$ is magnetic flux. Applications: electric generators, transformers.",
-        "marks": 12
-    }
-]''',
-        
-        "Mathematics": '''mcq = [
-    {
-        "question": r"What is the derivative of $\\sin(x)$?",
-        "options": [r"$\\cos(x)$", r"$-\\cos(x)$", r"$\\tan(x)$", r"$-\\sin(x)$"],
-        "answer": r"$\\cos(x)$",
-        "marks": 2
-    },
-    {
-        "question": r"The integral $\\int_0^1 x^2 dx$ equals:",
-        "options": [r"$\\frac{1}{3}$", r"$\\frac{1}{2}$", r"$1$", r"$\\frac{2}{3}$"],
-        "answer": r"$\\frac{1}{3}$",
-        "marks": 2
-    },
-    {
-        "question": r"What is $\\lim_{x \\to 0} \\frac{\\sin x}{x}$?",
-        "options": [r"0", r"1", r"$\\infty$", r"Does not exist"],
-        "answer": r"1",
-        "marks": 3
-    }
-]
-
-subjective = [
-    {
-        "question": r"Prove that $\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$ using mathematical induction.",
-        "answer": r"Base case: n=1, LHS=1, RHS=1(2)/2=1. Inductive step: assume true for k, prove for k+1.",
-        "marks": 8
-    },
-    {
-        "question": r"Find the area between curves $y = x^2$ and $y = 2x$.",
-        "answer": r"Intersection points: $x^2 = 2x \\Rightarrow x = 0, 2$. Area = $\\int_0^2 (2x - x^2) dx = \\frac{4}{3}$.",
-        "marks": 10
-    },
-    {
-        "question": r"Solve the differential equation $\\frac{dy}{dx} = \\frac{x}{y}$.",
-        "answer": r"Separating variables: $y dy = x dx$. Integrating: $\\frac{y^2}{2} = \\frac{x^2}{2} + C$. General solution: $y^2 - x^2 = K$.",
-        "marks": 8
-    }
-]''',
-
-        "Programming": '''mcq = [
-    {
-        "question": r"Which creates a list in Python?",
-        "options": [r"[]", r"{}", r"()", r"<>"],
-        "answer": r"[]",
-        "marks": 2
-    },
-    {
-        "question": r"Time complexity of binary search is:",
-        "options": [r"$O(n)$", r"$O(\\log n)$", r"$O(n^2)$", r"$O(1)$"],
-        "answer": r"$O(\\log n)$",
-        "marks": 2
-    },
-    {
-        "question": r"Which data structure uses LIFO principle?",
-        "options": [r"Queue", r"Stack", r"Array", r"Tree"],
-        "answer": r"Stack",
-        "marks": 2
-    }
-]
-
-subjective = [
-    {
-        "question": r"Explain recursion with an example. Write a recursive factorial function.",
-        "answer": r"Recursion is when a function calls itself. def factorial(n): return 1 if n <= 1 else n * factorial(n-1)",
-        "marks": 8
-    },
-    {
-        "question": r"Compare time complexity of bubble sort vs quicksort algorithms.",
-        "answer": r"Bubble sort: O(n²) in all cases. Quicksort: O(n log n) average, O(n²) worst case. Quicksort is generally preferred for large datasets.",
-        "marks": 10
-    },
-    {
-        "question": r"Design REST API endpoints for a book library system. List the main HTTP methods.",
-        "answer": r"Main methods: GET (retrieve), POST (create), PUT (update), DELETE (remove). Endpoints: GET /books, POST /books, PUT /books/:id, DELETE /books/:id",
-        "marks": 12
-    }
-]''',
-
-        "Machine Learning": '''mcq = [
-    {
-        "question": r"Which algorithm is best for linear classification?",
-        "options": [r"Logistic Regression", r"K-Means", r"DBSCAN", r"Apriori"],
-        "answer": r"Logistic Regression",
-        "marks": 2
-    },
-    {
-        "question": r"What is the purpose of cross-validation?",
-        "options": [r"Feature selection", r"Model evaluation", r"Data cleaning", r"Hyperparameter optimization"],
-        "answer": r"Model evaluation",
-        "marks": 2
-    },
-    {
-        "question": r"In gradient descent, what does the learning rate control?",
-        "options": [r"Step size", r"Number of iterations", r"Feature scaling", r"Regularization strength"],
-        "answer": r"Step size",
-        "marks": 3
-    }
-]
-
-subjective = [
-    {
-        "question": r"Explain the bias-variance tradeoff in machine learning.",
-        "answer": r"Bias measures how far predictions are from true values. Variance measures prediction sensitivity to training data changes. High bias = underfitting, high variance = overfitting. Optimal models balance both.",
-        "marks": 8
-    },
-    {
-        "question": r"Compare supervised vs unsupervised learning with examples.",
-        "answer": r"Supervised learning uses labeled data (classification, regression). Examples: spam detection, price prediction. Unsupervised learning finds patterns in unlabeled data. Examples: customer segmentation, anomaly detection.",
-        "marks": 10
-    },
-    {
-        "question": r"Describe the Random Forest algorithm and its advantages.",
-        "answer": r"Random Forest combines multiple decision trees using bagging and random feature selection. Advantages: reduces overfitting, handles missing values, provides feature importance, robust to outliers.",
-        "marks": 12
-    }
-]''',
-
-        "Template": '''mcq = [
-    {
-        "question": r"Sample MCQ with LaTeX: What is $\\int e^x dx$?",
-        "options": [r"$e^x + C$", r"$xe^x + C$", r"$\\frac{e^x}{x} + C$", r"$\\ln(e^x) + C$"],
-        "answer": r"$e^x + C$",
-        "marks": 3
-    },
-    {
-        "question": r"Which represents the slope-intercept form of a line?",
-        "options": [r"$ax + by = c$", r"$y = mx + b$", r"$\\frac{x}{a} + \\frac{y}{b} = 1$", r"$(y - y_1) = m(x - x_1)$"],
-        "answer": r"$y = mx + b$",
-        "marks": 2
-    }
-]
-
-subjective = [
-    {
-        "question": r"Given the function $f(x) = x^3 - 3x^2 + 2x$, find $f'(x)$ and solve $f'(x) = 0$.",
-        "answer": r"$f'(x) = 3x^2 - 6x + 2$. Using quadratic formula: $x = \\frac{6 \\pm \\sqrt{36-24}}{6} = 1 \\pm \\frac{\\sqrt{3}}{3}$",
-        "marks": 8
-    },
-    {
-        "question": r"A particle moves along a line with position $s(t) = t^3 - 6t^2 + 9t$. Find when the velocity is zero.",
-        "answer": r"Velocity $v(t) = s'(t) = 3t^2 - 12t + 9 = 3(t^2 - 4t + 3) = 3(t-1)(t-3)$. Zero when $t = 1$ or $t = 3$.",
-        "marks": 7
-    },
-    {
-        "question": r"Evaluate the definite integral $\\int_0^2 (x^2 + 1) dx$ using the fundamental theorem of calculus.",
-        "answer": r"$\\int_0^2 (x^2 + 1) dx = \\left[\\frac{x^3}{3} + x\\right]_0^2 = \\frac{8}{3} + 2 - 0 = \\frac{14}{3}$",
-        "marks": 5
+        "question": r"For a mass {{ m }} kg on a spring with constant {{ k }} N/m, find the period of oscillation.",
+        "answer": r"The period of a mass-spring system is $T = 2\\pi\\sqrt{\\frac{m}{k}} = 2\\pi\\sqrt{\\frac{{{ m }}}{{{ k }}}} = {{ period }}$ seconds",
+        "marks": 6,
+        "variables": {
+            "m": [0.5, 1.0, 1.5, 2.0],
+            "k": [50, 100, 150, 200],
+            "period": "{{ (2 * pi * sqrt(m/k)) | round(2) }}"
+        }
     }
 ]'''
     }
@@ -249,10 +123,26 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
             print(f"[ERROR] Questions format error: {e}")
             return None, f"Error in questions format: {str(e)}"
         
-        # Create temporary file for questions
+        # Create temporary file for questions with header metadata
         print("[DEBUG] Creating temporary files...")
+        
+        # Add header metadata to questions file
+        quiz_metadata = f"""
+# Quiz Configuration
+quiz_config = {{
+    "title": "{header_config.get('title', 'Quiz')}",
+    "subject": "{header_config.get('subject', '')}",
+    "exam_info": "{header_config.get('exam_info', '')}",
+    "institution": "",
+    "date": "",
+    "duration": "",
+    "instructions": ""
+}}
+
+"""
+        
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            f.write(questions_text)
+            f.write(quiz_metadata + questions_text)
             questions_file = f.name
         
         debug_log.append(f"✓ Questions file created: {questions_file}")
@@ -290,20 +180,14 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
             print(f"[DEBUG] Using random seed: {random_seed}")
             start_time = time.time()
             
-            # Prepare header configuration for quiz generation
-            quiz_config = {
-                "title": header_config.get("title", "Quiz"),
-                "subject": header_config.get("subject", ""),
-                "exam_info": header_config.get("exam_info", "")
-            }
-            print(f"[DEBUG] Header config: {quiz_config}")
+            # Header configuration is now included in the questions file as quiz_config
+            print(f"[DEBUG] Header metadata included in questions file: title='{header_config.get('title', 'Quiz')}', subject='{header_config.get('subject', '')}', exam_info='{header_config.get('exam_info', '')}'")
             
             success = generator.generate_quizzes(
                 num_sets=num_sets,
                 template_name=template,
                 compile_pdf=True,
-                seed=random_seed,
-                quiz_config=quiz_config
+                seed=random_seed
             )
             
             end_time = time.time()
@@ -389,7 +273,7 @@ def main():
         num_sets = st.slider("Sets", 1, 5, 2)
     
     with col_ctrl3:
-        example = st.selectbox("Examples", ["", "Physics", "Mathematics", "Programming", "Machine Learning", "Template"])
+        example = st.selectbox("Examples", ["", "Physics", "Machine Learning"])
     
     with col_ctrl4:
         if st.button("Load Example", disabled=not example):
