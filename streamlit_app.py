@@ -36,13 +36,20 @@ def load_example_questions(subject):
         "marks": 2
     },
     {
-        "question": r"A ball is dropped from height {{ h }} m. What is its velocity just before hitting the ground?",
-        "options": [r"$\\sqrt{2g \\times {{ h }}}$ m/s", r"$g \\times {{ h }}$ m/s", r"$\\frac{g \\times {{ h }}}{2}$ m/s", r"$2g \\times {{ h }}$ m/s"],
-        "answer": r"$\\sqrt{2g \\times {{ h }}}$ m/s",
-        "marks": 3,
-        "variables": {
-            "h": [10, 15, 20, 25, 30]
-        }
+        "question": r"A ball is dropped from height 20 m. What is its velocity just before hitting the ground?",
+        "options": [r"$\\sqrt{2g \\times 20}$ m/s", r"$g \\times 20$ m/s", r"$\\frac{g \\times 20}{2}$ m/s", r"$2g \\times 20$ m/s"],
+        "answer": r"$\\sqrt{2g \\times 20}$ m/s",
+        "marks": 3
+    },
+    {
+        "template": r"A car travels at {{ speed }} km/h for {{ time }} hours. What distance does it cover?",
+        "options": [r"{{ speed * time }} km", r"{{ speed + time }} km", r"{{ speed / time }} km", r"{{ speed - time }} km"],
+        "answer": r"{{ speed * time }} km",
+        "variables": [
+            {"speed": 60, "time": 2},
+            {"speed": 80, "time": 3}
+        ],
+        "marks": 3
     }
 ]
 
@@ -53,41 +60,96 @@ subjective = [
         "marks": 8
     },
     {
-        "question": r"A projectile motion problem with variables.",
+        "template": r"A projectile is launched with initial velocity {{ v0 }} m/s at angle {{ angle }}°. Calculate the maximum height and range.",
+        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g}$ m. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}°)}{g}$ m.",
+        "variables": [
+            {"v0": 20, "angle": 30},
+            {"v0": 25, "angle": 45}
+        ],
+        "marks": 8
+    },
+    {
+        "question": r"A ball is thrown upward with initial velocity $v_0 = 20$ m/s.",
         "parts": [
             {
-                "question": r"A ball is thrown at {{ angle }}° with velocity {{ v0 }} m/s. Find the maximum height.",
-                "answer": r"$H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g} = {{ height }}$ m",
-                "marks": 4
+                "question": r"Calculate the maximum height reached.",
+                "answer": r"Using $v^2 = v_0^2 - 2gh$ at maximum height where $v = 0$: $h = \\frac{v_0^2}{2g} = \\frac{20^2}{2 \\times 9.8} = 20.4$ m",
+                "marks": 3
             },
             {
-                "question": r"Calculate the range of the projectile.",
-                "answer": r"$R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}°)}{g} = {{ range }}$ m", 
-                "marks": 4
-            },
-            {
-                "question": r"At what angle is the range maximum for the same initial speed?",
-                "answer": r"Range is maximum at 45° since $\\sin(2\\theta)$ is maximum when $2\\theta = 90°$",
+                "question": r"Find the time taken to reach maximum height.",
+                "answer": r"Using $v = v_0 - gt$ where $v = 0$: $t = \\frac{v_0}{g} = \\frac{20}{9.8} = 2.04$ s",
                 "marks": 2
             }
         ],
-        "marks": 10,
-        "variables": {
-            "v0": [20, 25, 30],
-            "angle": [30, 45, 60],
-            "height": "{{ (v0 * sin(radians(angle)))**2 / (2 * 9.8) | round(1) }}",
-            "range": "{{ v0**2 * sin(radians(2*angle)) / 9.8 | round(1) }}"
-        }
+        "marks": 5
+    }
+]''',
+        "Machine Learning": '''mcq = [
+    {
+        "question": r"Which of the following best describes the bias-variance tradeoff in machine learning?",
+        "options": [
+            r"High bias models always perform better than high variance models",
+            r"Bias and variance are independent and don't affect each other", 
+            r"Reducing bias typically increases variance, and vice versa",
+            r"Variance only matters in unsupervised learning"
+        ],
+        "answer": r"Reducing bias typically increases variance, and vice versa",
+        "marks": 2
     },
     {
-        "question": r"For a mass {{ m }} kg on a spring with constant {{ k }} N/m, find the period of oscillation.",
-        "answer": r"The period of a mass-spring system is $T = 2\\pi\\sqrt{\\frac{m}{k}} = 2\\pi\\sqrt{\\frac{{{ m }}}{{{ k }}}} = {{ period }}$ seconds",
-        "marks": 6,
-        "variables": {
-            "m": [0.5, 1.0, 1.5, 2.0],
-            "k": [50, 100, 150, 200],
-            "period": "{{ (2 * pi * sqrt(m/k)) | round(2) }}"
-        }
+        "question": r"In a decision tree, which impurity measure is most commonly used for classification tasks?",
+        "options": [
+            r"Mean Squared Error (MSE)",
+            r"Gini Impurity", 
+            r"Mean Absolute Error (MAE)",
+            r"R-squared"
+        ],
+        "answer": r"Gini Impurity",
+        "marks": 2
+    },
+    {
+        "template": r"In k-fold cross-validation with k={{ k_value }}, how many times is the model trained?",
+        "options": [r"{{ k_value - 1 }}", r"{{ k_value }}", r"{{ k_value + 1 }}", r"{{ k_value * 2 }}"],
+        "answer": r"{{ k_value }}",
+        "variables": [
+            {"k_value": 5},
+            {"k_value": 10}
+        ],
+        "marks": 2
+    }
+]
+
+subjective = [
+    {
+        "question": r"Compare and contrast overfitting and underfitting in machine learning models. Provide strategies to address each issue.",
+        "answer": r"Overfitting: model memorizes training data, high training accuracy but low validation accuracy. Solutions: regularization, more data, simpler model. Underfitting: model too simple, poor performance on both training and validation. Solutions: more complex model, feature engineering.",
+        "marks": 8
+    },
+    {
+        "template": r"Consider a dataset with {{ n_pos }} positive samples and {{ n_neg }} negative samples. Calculate the precision if the model predicts {{ tp }} true positives and {{ fp }} false positives.",
+        "answer": r"Precision = TP/(TP+FP) = {{ tp }}/({{ tp }}+{{ fp }}) = {{ tp/(tp+fp) }}",
+        "variables": [
+            {"n_pos": 100, "n_neg": 50, "tp": 85, "fp": 10},
+            {"n_pos": 200, "n_neg": 80, "tp": 180, "fp": 15}
+        ],
+        "marks": 6
+    },
+    {
+        "question": r"Analyze the performance of a neural network model:",
+        "parts": [
+            {
+                "question": r"Explain the vanishing gradient problem and its impact on deep networks.",
+                "answer": r"Gradients become exponentially small in early layers due to product of small derivatives, preventing learning in deep networks.",
+                "marks": 4
+            },
+            {
+                "question": r"Suggest two techniques to mitigate this problem.",
+                "answer": r"1) Use ReLU activation functions instead of sigmoid/tanh, 2) Apply batch normalization or gradient clipping",
+                "marks": 4
+            }
+        ],
+        "marks": 8
     }
 ]'''
     }
@@ -323,14 +385,14 @@ def main():
         "marks": 2
     },
     {
-        "question": r"A car travels at {{ speed }} km/h for {{ time }} hours. What distance does it cover?",
+        "template": r"A car travels at {{ speed }} km/h for {{ time }} hours. What distance does it cover?",
         "options": [r"{{ speed * time }} km", r"{{ speed + time }} km", r"{{ speed / time }} km", r"{{ speed - time }} km"],
         "answer": r"{{ speed * time }} km",
-        "marks": 3,
-        "variables": {
-            "speed": [60, 80, 100, 120],
-            "time": [2, 3, 4, 5]
-        }
+        "variables": [
+            {"speed": 60, "time": 2},
+            {"speed": 80, "time": 3}
+        ],
+        "marks": 3
     }
 ]
 
@@ -341,15 +403,13 @@ subjective = [
         "marks": 5
     },
     {
-        "question": r"A projectile is launched with initial velocity {{ v0 }} m/s at angle {{ angle }}°.",
-        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g} = {{ height }} m$. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}°)}{g} = {{ range }} m$.",
-        "marks": 8,
-        "variables": {
-            "v0": [20, 25, 30],
-            "angle": [30, 45, 60],
-            "height": "{{ (v0 * sin(radians(angle)))**2 / (2 * 9.8) | round(1) }}",
-            "range": "{{ v0**2 * sin(radians(2*angle)) / 9.8 | round(1) }}"
-        }
+        "template": r"A projectile is launched with initial velocity {{ v0 }} m/s at angle {{ angle }}°. Calculate the maximum height and range.",
+        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g}$ m. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}°)}{g}$ m.",
+        "variables": [
+            {"v0": 20, "angle": 30},
+            {"v0": 25, "angle": 45}
+        ],
+        "marks": 8
     },
     {
         "question": r"Solve the physics problem step by step.",
@@ -363,14 +423,9 @@ subjective = [
                 "question": r"Find the time taken to reach maximum height.",
                 "answer": r"Using $v = v_0 - gt$ where $v = 0$: $t = \\frac{v_0}{g} = \\frac{20}{9.8} = 2.04$ s",
                 "marks": 2
-            },
-            {
-                "question": r"Calculate the total time of flight.",
-                "answer": r"Total time = $2t = 2 \\times 2.04 = 4.08$ s (time to go up and come back down)",
-                "marks": 3
             }
         ],
-        "marks": 8
+        "marks": 5
     }
 ]'''
         
