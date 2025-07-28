@@ -35,7 +35,16 @@ st.set_page_config(
 def load_example_questions(subject):
     """Load example questions for different subjects"""
     examples = {
-        "Physics": '''mcq = [
+        "Physics": '''# Quiz metadata - NEW in Setwise v2.0!
+quiz_metadata = {
+    "title": "Physics Fundamentals Quiz",
+    "subject": "Physics", 
+    "duration": "60 minutes",
+    "total_marks": 25,
+    "instructions": ["Show all work", "Use proper units"]
+}
+
+mcq = [
     {
         "question": r"What is the SI unit of force?",
         "options": [r"Joule", r"Newton", r"Watt", r"Pascal"],
@@ -43,16 +52,36 @@ def load_example_questions(subject):
         "marks": 2
     },
     {
-        "question": r"A ball is dropped from height 20 m. What is its velocity just before hitting the ground?",
-        "options": [r"$\\sqrt{2g \\times 20}$ m/s", r"$g \\times 20$ m/s", r"$\\frac{g \\times 20}{2}$ m/s", r"$2g \\times 20$ m/s"],
-        "answer": r"$\\sqrt{2g \\times 20}$ m/s",
+        "template": r"A ball is dropped from height {{ h }} m. What is its velocity just before hitting the ground? (g = 9.8 m/s²)",
+        "options": [
+            r"$\\sqrt{2g \\times {{ h }}}$ ≈ {{ velocity:.1f }} m/s",
+            r"$g \\times {{ h }}$ = {{ h * 9.8 }} m/s", 
+            r"$\\frac{g \\times {{ h }}}{2}$ = {{ h * 4.9 }} m/s",
+            r"$2g \\times {{ h }}$ = {{ 2 * h * 9.8 }} m/s"
+        ],
+        "answer": r"$\\sqrt{2g \\times {{ h }}}$ ≈ {{ velocity:.1f }} m/s",
+        "variables": [
+            {"h": 20, "velocity": 19.8},
+            {"h": 45, "velocity": 29.7},
+            {"h": 80, "velocity": 39.6}
+        ],
         "marks": 3
     },
     {
-        "question": r"Which law states that force equals mass times acceleration?",
-        "options": [r"Newton's First Law", r"Newton's Second Law", r"Newton's Third Law", r"Conservation of Energy"],
-        "answer": r"Newton's Second Law",
-        "marks": 2
+        "template": r"Calculate kinetic energy: KE = ½mv² with m = {{ mass }} kg and v = {{ velocity }} m/s",
+        "options": [
+            r"{{ 0.5 * mass * velocity**2 }} J",
+            r"{{ mass * velocity**2 }} J",
+            r"{{ 0.5 * mass * velocity }} J", 
+            r"{{ mass * velocity }} J"
+        ],
+        "answer": r"{{ 0.5 * mass * velocity**2 }} J",
+        "variables": [
+            {"mass": 2, "velocity": 10},  # KE = 100 J
+            {"mass": 5, "velocity": 6},   # KE = 90 J  
+            {"mass": 3, "velocity": 8}    # KE = 96 J
+        ],
+        "marks": 3
     }
 ]
 
@@ -88,7 +117,18 @@ subjective = [
         "marks": 5
     }
 ]''',
-        "Machine Learning": '''mcq = [
+        "Machine Learning": '''# Showcase NEW Setwise v2.0 features!
+quiz_metadata = {
+    "title": "Machine Learning Fundamentals",
+    "subject": "Computer Science",
+    "course_code": "CS 4780", 
+    "duration": "90 minutes",
+    "total_marks": 50,
+    "instructor": "Prof. AI",
+    "instructions": ["Show all calculations", "Explain your reasoning"]
+}
+
+mcq = [
     {
         "question": r"Which of the following best describes the bias-variance tradeoff?",
         "options": [
@@ -100,48 +140,74 @@ subjective = [
         "marks": 2
     },
     {
-        "question": r"Which impurity measure is most commonly used for classification in decision trees?",
-        "options": [r"MSE", r"Gini Impurity", r"MAE"],
-        "answer": r"Gini Impurity",
+        "template": r"In k-fold cross-validation with k={{ k }}, what percentage of data is used for validation in each fold?",
+        "options": [
+            r"{{ (100/k):.1f }}%",
+            r"{{ (100*(k-1)/k):.1f }}%", 
+            r"{{ 100/k**2 }}%",
+            r"{{ 50 }}%"
+        ],
+        "answer": r"{{ (100/k):.1f }}%",
+        "variables": [
+            {"k": 5},   # 20% validation
+            {"k": 10},  # 10% validation
+            {"k": 3}    # 33.3% validation
+        ],
         "marks": 2
+    },
+    {
+        "template": r"A dataset has {{ n_samples }} samples and {{ n_features }} features. Using {{ train_pct }}% for training, how many samples for training?",
+        "options": [
+            r"{{ int(n_samples * train_pct / 100) }} samples",
+            r"{{ int(n_samples * (100-train_pct) / 100) }} samples",
+            r"{{ n_features * train_pct }} samples", 
+            r"{{ n_samples }} samples"
+        ],
+        "answer": r"{{ int(n_samples * train_pct / 100) }} samples",
+        "variables": [
+            {"n_samples": 1000, "train_pct": 80, "n_features": 10},  # 800 training
+            {"n_samples": 500, "train_pct": 70, "n_features": 5},   # 350 training
+            {"n_samples": 1500, "train_pct": 75, "n_features": 8}   # 1125 training
+        ],
+        "marks": 3
     }
 ]
 
 subjective = [
     {
         "question": r"Compare overfitting and underfitting in machine learning models.",
-        "answer": r"Overfitting: model memorizes training data, high training accuracy but low validation accuracy. Underfitting: model too simple, poor performance on both training and validation.",
+        "answer": r"Overfitting: model memorizes training data, high training accuracy but low validation accuracy. Solutions: regularization, more data. Underfitting: model too simple, poor performance on both. Solutions: more complex model, feature engineering.",
         "marks": 6
     },
     {
-        "template": r"""Consider the following dataset for linear regression:
-
-\\begin{center}
-\\begin{tabular}{|c|c|c|}
-\\hline
-\\textbf{Sample} & \\textbf{Feature} & \\textbf{Target} \\\\
-\\hline
-1 & {{ x1 }} & {{ y1 }} \\\\
-\\hline
-2 & {{ x2 }} & {{ y2 }} \\\\
-\\hline
-\\end{tabular}
-\\end{center}
-
-Calculate the mean squared error if predictions are {{ pred1 }} and {{ pred2 }}.""",
+        "template": r"Consider a neural network with {{ layers }} hidden layers, each with {{ neurons }} neurons. Calculate total parameters if input dimension is {{ input_dim }} and output is {{ output_dim }}.",
         "variables": [
             {
-                "x1": 2, "y1": 5, "x2": 4, "y2": 11, 
-                "pred1": 4.8, "pred2": 10.5,
-                "answer": "MSE = ((5-4.8)² + (11-10.5)²)/2 = 0.145"
+                "layers": 2, "neurons": 64, "input_dim": 784, "output_dim": 10,
+                "answer": "Layer 1: (784×64)+64=50,240. Layer 2: (64×64)+64=4,160. Output: (64×10)+10=650. Total: 55,050 parameters"
             },
             {
-                "x1": 1, "y1": 3, "x2": 3, "y2": 7,
-                "pred1": 2.9, "pred2": 7.1, 
-                "answer": "MSE = ((3-2.9)² + (7-7.1)²)/2 = 0.01"
+                "layers": 1, "neurons": 128, "input_dim": 1000, "output_dim": 5,
+                "answer": "Layer 1: (1000×128)+128=128,128. Output: (128×5)+5=645. Total: 128,773 parameters"
             }
         ],
-        "marks": 5
+        "marks": 8
+    },
+    {
+        "question": r"Model Performance Analysis:",
+        "parts": [
+            {
+                "question": r"Given training accuracy = 95% and validation accuracy = 65%, what problem does this indicate?",
+                "answer": r"This indicates overfitting. Large gap between training (95%) and validation (65%) shows the model memorized training data rather than learning generalizable patterns.",
+                "marks": 3
+            },
+            {
+                "question": r"Suggest three techniques to address this issue.",
+                "answer": r"1) Regularization (L1/L2) to penalize large weights. 2) Dropout during training to prevent co-adaptation. 3) Early stopping based on validation performance.",
+                "marks": 6
+            }
+        ],
+        "marks": 9
     }
 ]'''
     }
@@ -408,11 +474,42 @@ def display_pdf_embed(pdf_data, height=400, key_suffix=""):
         st.markdown("*Use the Download PDF button to view the quiz (PDF viewer not available)*")
 
 def main():
-    st.title("Setwise Quiz Generator")
-    st.markdown("Professional LaTeX quiz generator with live preview")
+    st.title("🎯 Setwise Quiz Generator")
+    st.markdown("**Professional LaTeX quiz generator with advanced templating**")
     
-    # Add notice about session state reset
-    st.info("🔄 **Updated!** Questions have been reset to the working format. Previous complex questions that were failing have been replaced with simple, tested examples.")
+    # ✨ NEW FEATURES SHOWCASE
+    st.success("""
+    🎉 **NEW in Setwise v2.0!** This webapp now showcases enhanced features:
+    
+    ✅ **Quiz Metadata** - Professional headers with title, duration, instructions  
+    ✅ **Templated MCQ Questions** - Variables in both questions AND options  
+    ✅ **Multi-part Questions** - Complex problems with individual marks  
+    ✅ **Enhanced Examples** - Physics & Machine Learning with templates  
+    
+    Try the **Physics** or **Machine Learning** examples to see templated questions in action! 🚀
+    """)
+    
+    # Feature comparison table
+    with st.expander("📊 **What's New in v2.0**"):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("**Before v2.0:**")
+            st.markdown("""
+            - Basic questions only
+            - No quiz metadata  
+            - MCQ templates blocked
+            - Simple subjective questions
+            """)
+            
+        with col2:
+            st.markdown("**After v2.0 ✨:**")  
+            st.markdown("""
+            - **Quiz metadata** with title, duration, etc.
+            - **MCQ templates** with variables  
+            - **Multi-part questions** with individual marks
+            - **Enhanced examples** for Physics & ML
+            """)
     
     # Show status if package not available
     if not SETWISE_AVAILABLE:
@@ -464,9 +561,17 @@ def main():
     with col_left:
         st.subheader("Questions Editor")
         
-        # FORCE RESET: Clear old session state and use working questions
-        # This ensures both local and Streamlit Cloud use the same working format
-        st.session_state.questions = '''mcq = [
+        # ✨ NEW: Showcase Setwise v2.0 enhanced features!
+        st.session_state.questions = '''# ✨ NEW Setwise v2.0 Features Demo!
+quiz_metadata = {
+    "title": "Enhanced Setwise Demo Quiz",
+    "subject": "Mathematics & Science",
+    "duration": "45 minutes", 
+    "total_marks": 20,
+    "instructions": ["Show your work", "Use proper units"]
+}
+
+mcq = [
     {
         "question": r"What is 2 + 2?",
         "options": [r"3", r"4", r"5", r"6"],
@@ -474,23 +579,79 @@ def main():
         "marks": 1
     },
     {
-        "question": r"Which planet is closest to the Sun?",
-        "options": [r"Venus", r"Mercury", r"Earth", r"Mars"],
-        "answer": r"Mercury",
-        "marks": 1
+        "template": r"Calculate: {{ a }} × {{ b }} = ?",
+        "options": [
+            r"{{ a * b }}",
+            r"{{ a + b }}", 
+            r"{{ a - b }}",
+            r"{{ a / b if b != 0 else 'undefined' }}"
+        ],
+        "answer": r"{{ a * b }}",
+        "variables": [
+            {"a": 6, "b": 7},   # 42
+            {"a": 8, "b": 9},   # 72
+            {"a": 4, "b": 5}    # 20
+        ],
+        "marks": 2
+    },
+    {
+        "template": r"A circle has radius {{ r }} cm. What is its area? (π ≈ 3.14)",
+        "options": [
+            r"{{ 3.14 * r**2 }} cm²",
+            r"{{ 2 * 3.14 * r }} cm²",
+            r"{{ 3.14 * r }} cm²",
+            r"{{ r**2 }} cm²"
+        ],
+        "answer": r"{{ 3.14 * r**2 }} cm²",
+        "variables": [
+            {"r": 3},   # Area = 28.26 cm²
+            {"r": 5},   # Area = 78.5 cm²
+            {"r": 2}    # Area = 12.56 cm²
+        ],
+        "marks": 3
     }
 ]
 
 subjective = [
     {
-        "question": r"Explain the concept of addition.",
-        "answer": r"Addition is the mathematical operation of combining numbers to get their sum.",
-        "marks": 5
+        "question": r"Explain the concept of mathematical operations.",
+        "answer": r"Mathematical operations are procedures that combine numbers to produce new numbers. The four basic operations are addition, subtraction, multiplication, and division.",
+        "marks": 4
     },
     {
-        "question": r"Describe the solar system.",
-        "answer": r"The solar system consists of the Sun and the celestial objects that orbit it, including planets, moons, asteroids, and comets.",
-        "marks": 5
+        "template": r"Calculate the area and perimeter of a rectangle with length {{ length }} units and width {{ width }} units.",
+        "variables": [
+            {
+                "length": 8, "width": 5,
+                "answer": "Area = length × width = 8 × 5 = 40 square units. Perimeter = 2(length + width) = 2(8 + 5) = 26 units."
+            },
+            {
+                "length": 12, "width": 3, 
+                "answer": "Area = length × width = 12 × 3 = 36 square units. Perimeter = 2(length + width) = 2(12 + 3) = 30 units."
+            }
+        ],
+        "marks": 6
+    },
+    {
+        "question": r"Problem Solving Steps:",
+        "parts": [
+            {
+                "question": r"What is 15 + 25?",
+                "answer": r"15 + 25 = 40",
+                "marks": 1
+            },
+            {
+                "question": r"What is 40 ÷ 8?", 
+                "answer": r"40 ÷ 8 = 5",
+                "marks": 1
+            },
+            {
+                "question": r"Explain why these operations give these results.",
+                "answer": r"Addition combines quantities: 15 + 25 counts all units together. Division splits equally: 40 ÷ 8 means 40 split into 8 equal groups of 5.",
+                "marks": 2
+            }
+        ],
+        "marks": 4
     }
 ]'''
         
