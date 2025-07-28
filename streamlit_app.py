@@ -188,15 +188,46 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         return None, f"Unexpected error: {str(e)}"
 
 def display_pdf_embed(pdf_data, height=400):
-    """Display PDF using iframe"""
-    base64_pdf = base64.b64encode(pdf_data).decode('utf-8')
-    pdf_html = f'''
-    <iframe src="data:application/pdf;base64,{base64_pdf}" 
-            width="100%" height="{height}px" type="application/pdf"
-            style="border: 1px solid #ddd; border-radius: 4px;">
-    </iframe>
-    '''
-    st.markdown(pdf_html, unsafe_allow_html=True)
+    """Display PDF with Brave browser compatibility"""
+    try:
+        # Show PDF info first
+        st.info(f"📄 PDF generated successfully ({len(pdf_data):,} bytes)")
+        
+        # Add browser compatibility note
+        st.markdown("""
+        **Preview Options:**
+        - **Download PDF** button → Opens PDF in your default viewer
+        - **View PDF** button → Alternative preview (if main preview is blocked)
+        """)
+        
+        # Provide immediate preview download
+        st.download_button(
+            label="📄 View PDF Preview",
+            data=pdf_data,
+            file_name="quiz_preview.pdf",
+            mime="application/pdf",
+            key=f"preview_{hash(str(pdf_data[:100]))}",
+            help="Click to open PDF in your browser or PDF viewer"
+        )
+        
+        # Try iframe as fallback (will work in some browsers)
+        with st.expander("🔍 Try Inline Preview (may be blocked by some browsers)"):
+            try:
+                base64_pdf = base64.b64encode(pdf_data).decode('utf-8')
+                pdf_html = f'''
+                <iframe src="data:application/pdf;base64,{base64_pdf}" 
+                        width="100%" height="{height}px" type="application/pdf"
+                        style="border: 1px solid #ddd; border-radius: 4px;">
+                    <p>Your browser does not support PDFs. <a href="data:application/pdf;base64,{base64_pdf}">Download the PDF</a>.</p>
+                </iframe>
+                '''
+                st.markdown(pdf_html, unsafe_allow_html=True)
+            except Exception:
+                st.warning("Inline preview not available - please use the download buttons above")
+            
+    except Exception as e:
+        st.warning(f"PDF preview unavailable: {str(e)}")
+        st.info(f"📄 PDF generated successfully ({len(pdf_data):,} bytes) - use Download PDF button to view")
 
 def main():
     st.title("Setwise Quiz Generator")
