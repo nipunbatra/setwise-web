@@ -35,7 +35,124 @@ st.set_page_config(
 def load_example_questions(subject):
     """Load example questions for different subjects"""
     examples = {
-        "Physics": '''# Quiz metadata - NEW in Setwise v2.0!
+        "Enhanced Demo": '''# 🚀 Enhanced Setwise Demo - Showcasing Advanced Features!
+quiz_metadata = {
+    "title": "Advanced Math & Science Quiz",
+    "subject": "Mathematics & Physics",
+    "duration": "60 minutes", 
+    "total_marks": 35,
+    "instructions": ["Show all working", "Use appropriate units", "Round to 2 decimal places where needed"]
+}
+
+mcq = [
+    {
+        "question": r"What is the value of $\\pi$ (pi) rounded to 2 decimal places?",
+        "options": [r"3.14", r"3.15", r"3.16", r"3.13"],
+        "answer": r"3.14",
+        "marks": 2
+    },
+    {
+        "template": r"If a circle has radius {{ r }} cm, what is its area? (Use $\\pi = 3.14$)",
+        "options": [
+            r"${{ 3.14 * r * r }}$ cm$^2$",
+            r"${{ 2 * 3.14 * r }}$ cm$^2$", 
+            r"${{ 3.14 * r }}$ cm$^2$",
+            r"${{ r * r }}$ cm$^2$"
+        ],
+        "answer": r"${{ 3.14 * r * r }}$ cm$^2$",
+        "variables": [
+            {"r": 5},
+            {"r": 7},
+            {"r": 10}
+        ],
+        "marks": 3
+    },
+    {
+        "template": r"What is {{ a }} $\\times$ {{ b }}?",
+        "options": [
+            r"{{ a * b }}",
+            r"{{ a + b }}",
+            r"{{ a - b }}",
+            r"{{ (a * b) + 1 }}"
+        ],
+        "answer": r"{{ a * b }}",
+        "variables": [
+            {"a": 12, "b": 8},
+            {"a": 15, "b": 6},
+            {"a": 9, "b": 11}
+        ],
+        "marks": 2
+    }
+]
+
+subjective = [
+    {
+        "template": r"A ball is thrown upward with initial velocity {{ v0 }} m/s.",
+        "parts": [
+            {
+                "question": r"Calculate the maximum height reached (use $g = 9.8$ m/s$^2$)",
+                "answer": r"$h = \\frac{v_0^2}{2g} = \\frac{{{ v0 }}^2}{2 \\times 9.8} = \\frac{{{ v0 * v0 }}}{19.6} = {{ (v0 * v0 / 19.6) | round(2) }}$ m",
+                "marks": 4
+            },
+            {
+                "question": r"How long does it take to reach maximum height?",
+                "answer": r"$t = \\frac{v_0}{g} = \\frac{{{ v0 }}}{9.8} = {{ (v0 / 9.8) | round(2) }}$ seconds",
+                "marks": 3
+            }
+        ],
+        "variables": [
+            {"v0": 20},
+            {"v0": 30}
+        ],
+        "marks": 7
+    },
+    {
+        "parts": [
+            {
+                "question": r"Define kinetic energy and write its formula.",
+                "answer": r"Kinetic energy is the energy possessed by an object due to its motion. Formula: $KE = \\frac{1}{2}mv^2$",
+                "marks": 3
+            },
+            {
+                "question": r"A car of mass 1000 kg moves at 20 m/s. Calculate its kinetic energy.",
+                "answer": r"$KE = \\frac{1}{2}mv^2 = \\frac{1}{2} \\times 1000 \\times 20^2 = \\frac{1}{2} \\times 1000 \\times 400 = 200,000$ J",
+                "marks": 4
+            },
+            {
+                "question": r"What happens to kinetic energy if velocity doubles?",
+                "answer": r"If velocity doubles, kinetic energy increases by a factor of 4 (since KE $\\propto$ v$^2$)",
+                "marks": 2
+            }
+        ],
+        "marks": 9
+    },
+    {
+        "template": r"A rectangle has length {{ length }} cm and width {{ width }} cm.",
+        "parts": [
+            {
+                "question": r"Calculate the area.",
+                "answer": r"Area = length $\\times$ width = {{ length }} $\\times$ {{ width }} = {{ length * width }} cm$^2$",
+                "marks": 2
+            },
+            {
+                "question": r"Calculate the perimeter.",
+                "answer": r"Perimeter = 2(length + width) = 2({{ length }} + {{ width }}) = {{ 2 * (length + width) }} cm",
+                "marks": 2
+            },
+            {
+                "question": r"If we increase both dimensions by 50%, what is the new area?",
+                "answer": r"New length = {{ length * 1.5 }} cm, new width = {{ width * 1.5 }} cm. New area = {{ length * 1.5 }} $\\times$ {{ width * 1.5 }} = {{ (length * width * 2.25) }} cm$^2$",
+                "marks": 3
+            }
+        ],
+        "variables": [
+            {"length": 12, "width": 8},
+            {"length": 15, "width": 10}
+        ],
+        "marks": 7
+    }
+]''',
+        "Physics": '''# Quiz metadata for professional headers
 quiz_metadata = {
     "title": "Physics Fundamentals Quiz",
     "subject": "Physics", 
@@ -52,14 +169,14 @@ mcq = [
         "marks": 2
     },
     {
-        "template": r"A ball is dropped from height {{ h }} m. What is its velocity just before hitting the ground? (g = 9.8 m/s²)",
+        "template": r"A ball is dropped from height {{ h }} m. What is its velocity just before hitting the ground? (g = 9.8 m/s$^2$)",
         "options": [
-            r"$\\sqrt{2g \$\times$ {{ h }}}$ ≈ {{ velocity:.1f }} m/s",
-            r"$g \$\times$ {{ h }}$ = {{ h * 9.8 }} m/s", 
-            r"$\\frac{g \$\times$ {{ h }}}{2}$ = {{ h * 4.9 }} m/s",
-            r"$2g \$\times$ {{ h }}$ = {{ 2 * h * 9.8 }} m/s"
+            r"$\\sqrt{2g \\times {{ h }}}$ $\\approx$ {{ velocity:.1f }} m/s",
+            r"$g \\times {{ h }}$ = {{ h * 9.8 }} m/s", 
+            r"$\\frac{g \\times {{ h }}}{2}$ = {{ h * 4.9 }} m/s",
+            r"$2g \\times {{ h }}$ = {{ 2 * h * 9.8 }} m/s"
         ],
-        "answer": r"$\\sqrt{2g \$\times$ {{ h }}}$ ≈ {{ velocity:.1f }} m/s",
+        "answer": r"$\\sqrt{2g \\times {{ h }}}$ $\\approx$ {{ velocity:.1f }} m/s",
         "variables": [
             {"h": 20, "velocity": 19.8},
             {"h": 45, "velocity": 29.7},
@@ -68,7 +185,7 @@ mcq = [
         "marks": 3
     },
     {
-        "template": r"Calculate kinetic energy: KE = ½mv² with m = {{ mass }} kg and v = {{ velocity }} m/s",
+        "template": r"Calculate kinetic energy: KE = $\\frac{1}{2}$mv$^2$ with m = {{ mass }} kg and v = {{ velocity }} m/s",
         "options": [
             r"{{ 0.5 * mass * velocity**2 }} J",
             r"{{ mass * velocity**2 }} J",
@@ -92,8 +209,8 @@ subjective = [
         "marks": 8
     },
     {
-        "template": r"A projectile is launched with initial velocity {{ v0 }} m/s at angle {{ angle }}°. Calculate the maximum height and range.",
-        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}°)^2}{2g}$ m. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \$\times$ {{ angle }}°)}{g}$ m.",
+        "template": r"A projectile is launched with initial velocity {{ v0 }} m/s at angle {{ angle }}$^\\circ$. Calculate the maximum height and range.",
+        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}^\\circ)^2}{2g}$ m. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}^\\circ)}{g}$ m.",
         "variables": [
             {"v0": 20, "angle": 30},
             {"v0": 25, "angle": 45}
@@ -105,7 +222,7 @@ subjective = [
         "parts": [
             {
                 "question": r"Calculate the maximum height reached.",
-                "answer": r"Using $v^2 = v_0^2 - 2gh$ at maximum height where $v = 0$: $h = \\frac{v_0^2}{2g} = \\frac{20^2}{2 \$\times$ 9.8} = 20.4$ m",
+                "answer": r"Using $v^2 = v_0^2 - 2gh$ at maximum height where $v = 0$: $h = \\frac{v_0^2}{2g} = \\frac{20^2}{2 \\times 9.8} = 20.4$ m",
                 "marks": 3
             },
             {
@@ -117,7 +234,7 @@ subjective = [
         "marks": 5
     }
 ]''',
-        "Machine Learning": '''# Showcase NEW Setwise v2.0 features!
+        "Machine Learning": '''# Machine Learning quiz with advanced features
 quiz_metadata = {
     "title": "Machine Learning Fundamentals",
     "subject": "Computer Science",
@@ -551,48 +668,7 @@ def display_pdf_embed(pdf_data, height=400, key_suffix=""):
 
 def main():
     st.title("🎯 Setwise Quiz Generator")
-    st.markdown("**Professional LaTeX quiz generator with advanced templating**")
-    
-    # ✨ NEW FEATURES SHOWCASE
-    st.info("""
-    🎉 **NEW in Setwise v2.0!** This webapp showcases enhanced features:
-    
-    ✅ **Quiz Metadata** - Professional headers with title, duration, instructions  
-    ✅ **Templated MCQ Questions** - Variables in both questions AND options  
-    ✅ **Multi-part Questions** - Complex problems with individual marks  
-    ✅ **Enhanced Examples** - Physics & Machine Learning with templates  
-    """)
-    
-    st.warning("""
-    ⚠️ **Server Limitations:** The web interface has LaTeX and processing limitations. 
-    For best results with advanced features, **install locally**: 
-    ```bash
-    pip install git+https://github.com/nipunbatra/setwise.git
-    ```
-    💡 Try the **"Try Simpler Example"** button if generation fails!
-    """)
-    
-    # Feature comparison table
-    with st.expander("📊 **What's New in v2.0**"):
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("**Before v2.0:**")
-            st.markdown("""
-            - Basic questions only
-            - No quiz metadata  
-            - MCQ templates blocked
-            - Simple subjective questions
-            """)
-            
-        with col2:
-            st.markdown("**After v2.0 ✨:**")  
-            st.markdown("""
-            - **Quiz metadata** with title, duration, etc.
-            - **MCQ templates** with variables  
-            - **Multi-part questions** with individual marks
-            - **Enhanced examples** for Physics & ML
-            """)
+    st.markdown("Generate professional LaTeX quizzes with dynamic templated questions")
     
     # Show status if package not available
     if not SETWISE_AVAILABLE:
@@ -610,32 +686,32 @@ def main():
         num_sets = st.slider("Sets", 1, 5, 2)
     
     with col_ctrl3:
-        example = st.selectbox("Examples", ["", "Physics", "Machine Learning"])
+        example = st.selectbox("Examples", ["", "Enhanced Demo", "Physics", "Machine Learning"])
     
     with col_ctrl4:
         if st.button("Load Example", disabled=not example):
             st.session_state.questions = load_example_questions(example)
             st.rerun()
     
-    # Controls row 2 - Header customization
-    st.markdown("**Quiz Header Customization:**")
-    col_header1, col_header2, col_header3 = st.columns([1, 1, 1])
-    
-    with col_header1:
-        quiz_title = st.text_input("Quiz Title", value="Quiz", help="Main title that appears at the top")
-    
-    with col_header2:
-        subject_name = st.text_input("Subject", value="", help="Subject name (e.g., 'Machine Learning', 'Physics')")
-    
-    with col_header3:
-        exam_info = st.text_input("Exam Info", value="", help="Additional info (e.g., 'Midterm Exam', 'Final Test')")
-    
-    # Store header info in session state for quiz generation
-    st.session_state.header_config = {
-        "title": quiz_title,
-        "subject": subject_name,
-        "exam_info": exam_info
-    }
+    # Header customization - simplified
+    with st.expander("Quiz Header Customization"):
+        col_header1, col_header2, col_header3 = st.columns([1, 1, 1])
+        
+        with col_header1:
+            quiz_title = st.text_input("Quiz Title", value="Quiz")
+        
+        with col_header2:
+            subject_name = st.text_input("Subject", value="")
+        
+        with col_header3:
+            exam_info = st.text_input("Duration/Info", value="")
+        
+        # Store header info in session state for quiz generation
+        st.session_state.header_config = {
+            "title": quiz_title,
+            "subject": subject_name,
+            "exam_info": exam_info
+        }
     
     # Main split pane layout
     col_left, col_right = st.columns([1, 1])
@@ -644,20 +720,13 @@ def main():
     with col_left:
         st.subheader("Questions Editor")
         
-        # ✨ NEW: Showcase Setwise v2.0 enhanced features!
         if 'questions' not in st.session_state:
-            # Try to load from file first, fallback to inline
-            try:
-                with open('simple_working_test.py', 'r') as f:
-                    st.session_state.questions = f.read()
-            except:
-# Load working example that's been tested locally
-                st.session_state.questions = '''# ✨ Setwise v2.0 Demo - Tested and Working!
+            st.session_state.questions = '''# Simple Demo Quiz
 quiz_metadata = {
-    "title": "Enhanced Setwise Demo Quiz",
-    "subject": "Mathematics & Science",
-    "duration": "45 minutes", 
-    "total_marks": 20,
+    "title": "Math Quiz",
+    "subject": "Mathematics",
+    "duration": "30 minutes", 
+    "total_marks": 10,
     "instructions": ["Show your work", "Use proper units"]
 }
 
@@ -666,128 +735,20 @@ mcq = [
         "question": r"What is 2 + 2?",
         "options": [r"3", r"4", r"5", r"6"],
         "answer": r"4",
-        "marks": 1
-    },
-    {
-        "template": r"Calculate: {{ a }} + {{ b }} = ?",
-        "options": [
-            r"{{ a + b }}",
-            r"{{ a - b }}", 
-            r"{{ a * b }}",
-            r"{{ a }}"
-        ],
-        "answer": r"{{ a + b }}",
-        "variables": [
-            {"a": 3, "b": 4},   # 3 + 4 = 7
-            {"a": 5, "b": 2},   # 5 + 2 = 7  
-            {"a": 8, "b": 1}    # 8 + 1 = 9
-        ],
         "marks": 2
     },
     {
-        "template": r"A circle has radius {{ r }} cm. What is its area? (pi = 3.14)",
-        "options": [
-            r"{{ 3.14 * r * r }} square cm",
-            r"{{ 2 * 3.14 * r }} square cm",
-            r"{{ 3.14 * r }} square cm",
-            r"{{ r * r }} square cm"
-        ],
-        "answer": r"{{ 3.14 * r * r }} square cm",
-        "variables": [
-            {"r": 2},   # Area = 12.56
-            {"r": 3},   # Area = 28.26
-            {"r": 5}    # Area = 78.5
-        ],
-        "marks": 3
-    }
-]
-
-subjective = [
-    {
-        "question": r"Explain the concept of mathematical operations.",
-        "answer": r"Mathematical operations are procedures that combine numbers to produce new numbers. The four basic operations are addition, subtraction, multiplication, and division.",
-        "marks": 4
-    },
-    {
-        "template": r"Calculate the area and perimeter of a rectangle with length {{ length }} units and width {{ width }} units.",
-        "variables": [
-            {
-                "length": 8, "width": 5,
-                "answer": "Area = length $\times$ width = 8 $\times$ 5 = 40 square units. Perimeter = 2(length + width) = 2(8 + 5) = 26 units."
-            },
-            {
-                "length": 12, "width": 3, 
-                "answer": "Area = length $\times$ width = 12 $\times$ 3 = 36 square units. Perimeter = 2(length + width) = 2(12 + 3) = 30 units."
-            }
-        ],
-        "marks": 6
-    },
-    {
-        "question": r"Problem Solving Steps:",
-        "parts": [
-            {
-                "question": r"What is 15 + 25?",
-                "answer": r"15 + 25 = 40",
-                "marks": 1
-            },
-            {
-                "question": r"What is 40 $\div$ 8?", 
-                "answer": r"40 $\div$ 8 = 5",
-                "marks": 1
-            },
-            {
-                "question": r"Explain why these operations give these results.",
-                "answer": r"Addition combines quantities: 15 + 25 counts all units together. Division splits equally: 40 $\div$ 8 means 40 split into 8 equal groups of 5.",
-                "marks": 2
-            }
-        ],
-        "marks": 4
-    }
-]
-quiz_metadata = {
-    "title": "Enhanced Setwise Demo Quiz",
-    "subject": "Mathematics & Science",
-    "duration": "45 minutes", 
-    "total_marks": 20,
-    "instructions": ["Show your work", "Use proper units"]
-}
-
-mcq = [
-    {
-        "question": r"What is 2 + 2?",
-        "options": [r"3", r"4", r"5", r"6"],
-        "answer": r"4",
-        "marks": 1
-    },
-    {
-        "template": r"Calculate: {{ a }} $\times$ {{ b }} = ?",
+        "template": r"Calculate: {{ a }} $\\times$ {{ b }} = ?",
         "options": [
             r"{{ a * b }}",
             r"{{ a + b }}", 
             r"{{ a - b }}",
-            r"{{ a / b if b != 0 else 'undefined' }}"
+            r"{{ a }}"
         ],
         "answer": r"{{ a * b }}",
         "variables": [
-            {"a": 6, "b": 7},   # 42
-            {"a": 8, "b": 9},   # 72
-            {"a": 4, "b": 5}    # 20
-        ],
-        "marks": 2
-    },
-    {
-        "template": r"A circle has radius {{ r }} cm. What is its area? (π ≈ 3.14)",
-        "options": [
-            r"{{ 3.14 * r**2 }} cm²",
-            r"{{ 2 * 3.14 * r }} cm²",
-            r"{{ 3.14 * r }} cm²",
-            r"{{ r**2 }} cm²"
-        ],
-        "answer": r"{{ 3.14 * r**2 }} cm²",
-        "variables": [
-            {"r": 3},   # Area = 28.26 cm²
-            {"r": 5},   # Area = 78.5 cm²
-            {"r": 2}    # Area = 12.56 cm²
+            {"a": 3, "b": 4},
+            {"a": 5, "b": 2}
         ],
         "marks": 3
     }
@@ -795,44 +756,20 @@ mcq = [
 
 subjective = [
     {
-        "question": r"Explain the concept of mathematical operations.",
-        "answer": r"Mathematical operations are procedures that combine numbers to produce new numbers. The four basic operations are addition, subtraction, multiplication, and division.",
-        "marks": 4
-    },
-    {
-        "template": r"Calculate the area and perimeter of a rectangle with length {{ length }} units and width {{ width }} units.",
-        "variables": [
-            {
-                "length": 8, "width": 5,
-                "answer": "Area = length $\times$ width = 8 $\times$ 5 = 40 square units. Perimeter = 2(length + width) = 2(8 + 5) = 26 units."
-            },
-            {
-                "length": 12, "width": 3, 
-                "answer": "Area = length $\times$ width = 12 $\times$ 3 = 36 square units. Perimeter = 2(length + width) = 2(12 + 3) = 30 units."
-            }
-        ],
-        "marks": 6
-    },
-    {
-        "question": r"Problem Solving Steps:",
+        "question": r"Multi-part Problem:",
         "parts": [
             {
                 "question": r"What is 15 + 25?",
                 "answer": r"15 + 25 = 40",
-                "marks": 1
-            },
-            {
-                "question": r"What is 40 $\div$ 8?", 
-                "answer": r"40 $\div$ 8 = 5",
-                "marks": 1
-            },
-            {
-                "question": r"Explain why these operations give these results.",
-                "answer": r"Addition combines quantities: 15 + 25 counts all units together. Division splits equally: 40 $\div$ 8 means 40 split into 8 equal groups of 5.",
                 "marks": 2
+            },
+            {
+                "question": r"Explain why addition works this way.",
+                "answer": r"Addition combines quantities together to get the total.",
+                "marks": 3
             }
         ],
-        "marks": 4
+        "marks": 5
     }
 ]'''
         
@@ -913,111 +850,34 @@ subjective = [
                 pass
             
             if error:
-                st.error("⚠️ Quiz Generation Failed")
-            
-                # Add quick actions for user
-                col_error1, col_error2, col_error3 = st.columns(3)
-            
-                with col_error1:
-                    if st.button("💡 Try Simpler Example", use_container_width=True):
-                        # Load the verified working example
-                        try:
-                            with open('simple_working_test.py', 'r') as f:
-                                st.session_state.questions = f.read()
-                            st.rerun()
-                        except:
-                            # Fallback to inline simple example
-                            st.session_state.questions = '''# Ultra simple test
-quiz_metadata = {
-    "title": "Simple Test Quiz",
-    "duration": "30 minutes",
-    "total_marks": 10
-}
-
-mcq = [{
-    "question": r"What is 2 + 2?",
-    "options": [r"3", r"4", r"5", r"6"],
-    "answer": r"4",
-    "marks": 2
-}]
-
-subjective = [{
-    "question": r"What is addition?",
-    "answer": r"Addition combines numbers.",
-    "marks": 3
-}]'''
-                            st.rerun()
-            
-                with col_error2:
-                    if st.button("📋 Copy for Local Testing", use_container_width=True):
-                        # Create local test instructions
-                        local_test = f'''# Save this as test_quiz.py
-{questions_text}
-
-# Then run locally:
-# pip install git+https://github.com/nipunbatra/setwise.git
-# setwise generate --questions-file test_quiz.py --sets 1'''
-                        st.code(local_test, language="python")
-            
-                with col_error3:
-                    if st.button("🔍 Show Raw Logs", use_container_width=True):
+                st.error("Quiz Generation Failed")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button("Try Enhanced Demo", use_container_width=True):
+                        st.session_state.questions = load_example_questions("Enhanced Demo")
+                        st.rerun()
+                
+                with col2:
+                    if st.button("Show Error Details", use_container_width=True):
                         st.session_state.show_raw_logs = True
             
-                # Show different error views
-                if st.session_state.get('show_raw_logs', False):
-                    with st.expander("🔍 Raw Server Logs (Technical Details)", expanded=True):
+                # Simplified error display
+                with st.expander("View Error Details"):
+                    if "LaTeX files created but PDF compilation failed" in error:
+                        st.warning("LaTeX compilation failed - try simpler expressions or test locally")
+                    elif "No LaTeX files created" in error:
+                        st.warning("Question processing failed - check Python syntax")
+                    else:
+                        st.warning("Generation failed - try simpler questions or test locally")
+                    
+                    if st.session_state.get('show_raw_logs', False):
                         st.text(error)
                         if st.button("Hide Raw Logs"):
                             st.session_state.show_raw_logs = False
-                else:
-                    with st.expander("View Error Details", expanded=False):
-                        # Parse and show user-friendly error info
-                        if "LaTeX files created but PDF compilation failed" in error:
-                            st.warning("**LaTeX Compilation Error** 📄")
-                            st.markdown("""
-                            The questions were processed successfully, but PDF generation failed. This usually means:
-                        
-                            - **LaTeX is not properly installed on the server**
-                            - **Complex math expressions need fixing**
-                            - **Missing LaTeX packages**
-                        
-                            **💡 Try:**
-                            1. Use simpler math expressions
-                            2. Test locally with your own LaTeX installation
-                            3. Check the "Try Simpler Example" button above
-                            """)
-                        elif "No LaTeX files created" in error:
-                            st.warning("**Question Processing Error** ❌")
-                            st.markdown("""
-                            The questions couldn't be processed. This usually means:
-                        
-                            - **Syntax error in questions file**
-                            - **Invalid question structure**
-                            - **Template rendering error**
-                        
-                            **💡 Try:**
-                            1. Check your Python syntax
-                            2. Validate question format
-                            3. Use the "Try Simpler Example" button above
-                            """)
-                        else:
-                            st.info("**General Generation Error** ⚠️")
-                            st.markdown("""
-                            Quiz generation failed for unknown reasons. This could be:
-                        
-                            - **Server configuration issues**
-                            - **Temporary file permission problems**
-                            - **Resource limitations**
-                        
-                            **💡 Try:**
-                            1. Refresh the page and try again
-                            2. Use simpler questions
-                            3. Test locally (recommended)
-                            """)
-                    
-                        # Always show the technical details as a sub-expander
-                        with st.expander("🔧 Technical Details (for debugging)"):
-                            st.text(error)
+                    else:
+                        if st.button("Show Technical Details"):
+                            st.session_state.show_raw_logs = True
             elif quiz_sets:
                 # Display each PDF set in rows
                 for i, quiz_set in enumerate(quiz_sets):
@@ -1085,74 +945,41 @@ subjective = [{
             # Show instructions when no preview
             st.info("📝 Enter questions and click 'Generate Quiz Sets' to get started!")
     
-            # Enhanced help with troubleshooting
-            with st.expander("📚 How to Use This Interface", expanded=False):
+            with st.expander("📚 Quick Help"):
                 st.markdown("""
-                **✨ Quick Start:**
-                1. **Edit questions** in the left pane (or load an example)
-                2. **Choose template** (default/compact/minimal) and number of sets
-                3. **Click "Generate Quiz Sets"** to see live PDF previews
-                4. **Download** PDFs and answer keys when ready
+                **Quick Start:**
+                1. Edit questions or load an example
+                2. Choose template and number of sets  
+                3. Click "Generate Quiz Sets"
+                4. Download PDFs and answer keys
         
-                **📋 Question Format:**
+                **Question Format:**
                 ```python
-                # Required arrays
                 mcq = [...]          # Multiple choice questions
                 subjective = [...]   # Written answer questions
-        
-                # Optional (NEW in v2.0!)
-                quiz_metadata = {    # Professional headers
+                quiz_metadata = {    # Optional headers
                     "title": "My Quiz",
                     "duration": "60 minutes"
                 }
                 ```
         
-                **🔧 NEW v2.0 Features:**
-                - **Templated MCQ:** Use `{{ variables }}` in questions and options
-                - **Quiz metadata:** Professional headers with title, duration
-                - **Multi-part questions:** Individual marks for each part
-        
-                **💡 If Generation Fails:**
-                - Try the **"Physics"** or **"Machine Learning"** examples first
-                - Use **"Try Simpler Example"** button if you see errors
-                - **Test locally** for best reliability: `pip install git+https://github.com/nipunbatra/setwise.git`
-                """)
-    
-            # Add a tips section
-            with st.expander("💡 Pro Tips & Troubleshooting"):
+                **Features:**
+                - Templated questions with `{{ variables }}`
+                - Multi-part subjective questions
+                - Professional PDF output
+                """) 
+            
+            with st.expander("💡 Troubleshooting"):
                 st.markdown("""
-                **🎯 Best Practices:**
-                - Start with **built-in examples** (Physics, ML) to see v2.0 features
-                - Use **raw strings** for LaTeX: `r"$x^2$"` instead of `"$x^2$"`
-                - **MCQ answers** must exactly match one of the options
-                - **Test simple questions** first, then add complexity
-        
-                **🔧 Common Issues:**
-                - **"Generation Failed"**: Often due to server LaTeX limitations
-                - **Solution**: Download and test locally for full reliability
-                - **Syntax errors**: Check Python syntax and question structure
-                - **Template errors**: Ensure all `{{ variables }}` are defined
-        
-                **🖥️ Local Testing (Recommended):**
-                ```bash
-                # Install Setwise locally for best experience
-                pip install git+https://github.com/nipunbatra/setwise.git
-        
-                # Create your questions file and test
-                setwise generate --questions-file my_quiz.py --sets 3
-                ```
-        
-                **🌐 This web interface is great for:**
-                - Quick experimentation and demos
-                - Exploring v2.0 features
-                - Learning question formats
-                - Sharing examples
-        
-                **💻 Local installation is better for:**
-                - Production quiz generation
-                - Complex LaTeX expressions
-                - Large question sets
-                - Reliable PDF generation
+                **If generation fails:**
+                - Try the "Enhanced Demo" example first
+                - Use simpler questions
+                - Test locally: `pip install git+https://github.com/nipunbatra/setwise.git`
+                
+                **Common fixes:**
+                - Check Python syntax
+                - Ensure MCQ answers match options exactly
+                - Use raw strings for LaTeX: `r"$x^2$"`
                 """)
 
 if __name__ == "__main__":
