@@ -35,40 +35,19 @@ st.set_page_config(
 def load_example_questions(subject):
     """Load example questions for different subjects"""
     examples = {
-        "Enhanced Demo": '''# 🚀 Enhanced Setwise Demo - Showcasing Advanced Features!
+        "Ultimate Demo": '''# 🚀 Ultimate Setwise Demo - All Features Showcase
+# Templated questions, multi-part problems, matrices, chemistry, circuits, SI units, tables, plots
 quiz_metadata = {
-    "title": "Advanced Math & Science Quiz",
-    "subject": "Mathematics & Physics",
-    "duration": "60 minutes", 
-    "total_marks": 35,
-    "instructions": ["Show all working", "Use appropriate units", "Round to 2 decimal places where needed"]
+    "title": "Ultimate Setwise Demo Quiz",
+    "subject": "Science & Engineering",
+    "duration": "90 minutes",
+    "total_marks": 50,
+    "instructions": ["Show all working clearly", "Use appropriate units", "Include diagrams where helpful"]
 }
 
 mcq = [
     {
-        "question": r"What is the value of $\\pi$ (pi) rounded to 2 decimal places?",
-        "options": [r"3.14", r"3.15", r"3.16", r"3.13"],
-        "answer": r"3.14",
-        "marks": 2
-    },
-    {
-        "template": r"If a circle has radius {{ r }} cm, what is its area? (Use $\\pi = 3.14$)",
-        "options": [
-            r"${{ 3.14 * r * r }}$ cm$^2$",
-            r"${{ 2 * 3.14 * r }}$ cm$^2$", 
-            r"${{ 3.14 * r }}$ cm$^2$",
-            r"${{ r * r }}$ cm$^2$"
-        ],
-        "answer": r"${{ 3.14 * r * r }}$ cm$^2$",
-        "variables": [
-            {"r": 5},
-            {"r": 7},
-            {"r": 10}
-        ],
-        "marks": 3
-    },
-    {
-        "template": r"What is {{ a }} $\\times$ {{ b }}?",
+        "template": r"Calculate {{ a }} $\\times$ {{ b }} = ?",
         "options": [
             r"{{ a * b }}",
             r"{{ a + b }}",
@@ -82,311 +61,119 @@ mcq = [
             {"a": 9, "b": 11}
         ],
         "marks": 2
-    }
-]
-
-subjective = [
-    {
-        "template": r"A ball is thrown upward with initial velocity {{ v0 }} m/s.",
-        "parts": [
-            {
-                "question": r"Calculate the maximum height reached (use $g = 9.8$ m/s$^2$)",
-                "answer": r"$h = \\frac{v_0^2}{2g} = \\frac{{{ v0 }}^2}{2 \\times 9.8} = \\frac{{{ v0 * v0 }}}{19.6} = {{ (v0 * v0 / 19.6) | round(2) }}$ m",
-                "marks": 4
-            },
-            {
-                "question": r"How long does it take to reach maximum height?",
-                "answer": r"$t = \\frac{v_0}{g} = \\frac{{{ v0 }}}{9.8} = {{ (v0 / 9.8) | round(2) }}$ seconds",
-                "marks": 3
-            }
-        ],
-        "variables": [
-            {"v0": 20},
-            {"v0": 30}
-        ],
-        "marks": 7
     },
-    {
-        "parts": [
-            {
-                "question": r"Define kinetic energy and write its formula.",
-                "answer": r"Kinetic energy is the energy possessed by an object due to its motion. Formula: $KE = \\frac{1}{2}mv^2$",
-                "marks": 3
-            },
-            {
-                "question": r"A car of mass 1000 kg moves at 20 m/s. Calculate its kinetic energy.",
-                "answer": r"$KE = \\frac{1}{2}mv^2 = \\frac{1}{2} \\times 1000 \\times 20^2 = \\frac{1}{2} \\times 1000 \\times 400 = 200,000$ J",
-                "marks": 4
-            },
-            {
-                "question": r"What happens to kinetic energy if velocity doubles?",
-                "answer": r"If velocity doubles, kinetic energy increases by a factor of 4 (since KE $\\propto$ v$^2$)",
-                "marks": 2
-            }
-        ],
-        "marks": 9
-    },
-    {
-        "template": r"A rectangle has length {{ length }} cm and width {{ width }} cm.",
-        "parts": [
-            {
-                "question": r"Calculate the area.",
-                "answer": r"Area = length $\\times$ width = {{ length }} $\\times$ {{ width }} = {{ length * width }} cm$^2$",
-                "marks": 2
-            },
-            {
-                "question": r"Calculate the perimeter.",
-                "answer": r"Perimeter = 2(length + width) = 2({{ length }} + {{ width }}) = {{ 2 * (length + width) }} cm",
-                "marks": 2
-            },
-            {
-                "question": r"If we increase both dimensions by 50%, what is the new area?",
-                "answer": r"New length = {{ length * 1.5 }} cm, new width = {{ width * 1.5 }} cm. New area = {{ length * 1.5 }} $\\times$ {{ width * 1.5 }} = {{ (length * width * 2.25) }} cm$^2$",
-                "marks": 3
-            }
-        ],
-        "variables": [
-            {"length": 12, "width": 8},
-            {"length": 15, "width": 10}
-        ],
-        "marks": 7
-    }
-]''',
-        "Physics": '''# Quiz metadata for professional headers
-quiz_metadata = {
-    "title": "Physics Fundamentals Quiz",
-    "subject": "Physics", 
-    "duration": "60 minutes",
-    "total_marks": 25,
-    "instructions": ["Show all work", "Use proper units"]
-}
-
-mcq = [
-    {
-        "question": r"What is the SI unit of force?",
-        "options": [r"Joule", r"Newton", r"Watt", r"Pascal"],
-        "answer": r"Newton",
-        "marks": 2
-    },
-    {
-        "template": r"A ball is dropped from height {{ h }} m. What is its velocity just before hitting the ground? (g = 9.8 m/s$^2$)",
-        "options": [
-            r"$\\sqrt{2g \\times {{ h }}}$ $\\approx$ {{ velocity:.1f }} m/s",
-            r"$g \\times {{ h }}$ = {{ h * 9.8 }} m/s", 
-            r"$\\frac{g \\times {{ h }}}{2}$ = {{ h * 4.9 }} m/s",
-            r"$2g \\times {{ h }}$ = {{ 2 * h * 9.8 }} m/s"
-        ],
-        "answer": r"$\\sqrt{2g \\times {{ h }}}$ $\\approx$ {{ velocity:.1f }} m/s",
-        "variables": [
-            {"h": 20, "velocity": 19.8},
-            {"h": 45, "velocity": 29.7},
-            {"h": 80, "velocity": 39.6}
-        ],
-        "marks": 3
-    },
-    {
-        "template": r"Calculate kinetic energy: KE = $\\frac{1}{2}$mv$^2$ with m = {{ mass }} kg and v = {{ velocity }} m/s",
-        "options": [
-            r"{{ 0.5 * mass * velocity**2 }} J",
-            r"{{ mass * velocity**2 }} J",
-            r"{{ 0.5 * mass * velocity }} J", 
-            r"{{ mass * velocity }} J"
-        ],
-        "answer": r"{{ 0.5 * mass * velocity**2 }} J",
-        "variables": [
-            {"mass": 2, "velocity": 10},  # KE = 100 J
-            {"mass": 5, "velocity": 6},   # KE = 90 J  
-            {"mass": 3, "velocity": 8}    # KE = 96 J
-        ],
-        "marks": 3
-    }
-]
-
-subjective = [
-    {
-        "question": r"Derive the kinetic energy formula. Show that $KE = \\frac{1}{2}mv^2$.",
-        "answer": r"Starting with Newton's second law F=ma and work-energy theorem, we integrate force over distance to get kinetic energy.",
-        "marks": 8
-    },
-    {
-        "template": r"A projectile is launched with initial velocity {{ v0 }} m/s at angle {{ angle }}$^\\circ$. Calculate the maximum height and range.",
-        "answer": r"Maximum height: $H = \\frac{({{ v0 }} \\sin {{ angle }}^\\circ)^2}{2g}$ m. Range: $R = \\frac{{{ v0 }}^2 \\sin(2 \\times {{ angle }}^\\circ)}{g}$ m.",
-        "variables": [
-            {"v0": 20, "angle": 30},
-            {"v0": 25, "angle": 45}
-        ],
-        "marks": 8
-    },
-    {
-        "question": r"A ball is thrown upward with initial velocity $v_0 = 20$ m/s.",
-        "parts": [
-            {
-                "question": r"Calculate the maximum height reached.",
-                "answer": r"Using $v^2 = v_0^2 - 2gh$ at maximum height where $v = 0$: $h = \\frac{v_0^2}{2g} = \\frac{20^2}{2 \\times 9.8} = 20.4$ m",
-                "marks": 3
-            },
-            {
-                "question": r"Find the time taken to reach maximum height.",
-                "answer": r"Using $v = v_0 - gt$ where $v = 0$: $t = \\frac{v_0}{g} = \\frac{20}{9.8} = 2.04$ s",
-                "marks": 2
-            }
-        ],
-        "marks": 5
-    }
-]''',
-        "Machine Learning": '''# Machine Learning quiz with advanced features
-quiz_metadata = {
-    "title": "Machine Learning Fundamentals",
-    "subject": "Computer Science",
-    "course_code": "CS 4780", 
-    "duration": "90 minutes",
-    "total_marks": 50,
-    "instructor": "Prof. AI",
-    "instructions": ["Show all calculations", "Explain your reasoning"]
-}
-
-mcq = [
-    {
-        "question": r"Which of the following best describes the bias-variance tradeoff?",
-        "options": [
-            r"High bias models always perform better",
-            r"Reducing bias typically increases variance, and vice versa",
-            r"Variance only matters in unsupervised learning"
-        ],
-        "answer": r"Reducing bias typically increases variance, and vice versa",
-        "marks": 2
-    },
-    {
-        "template": r"In k-fold cross-validation with k={{ k }}, what percentage of data is used for validation in each fold?",
-        "options": [
-            r"{{ (100/k):.1f }}%",
-            r"{{ (100*(k-1)/k):.1f }}%", 
-            r"{{ 100/k**2 }}%",
-            r"{{ 50 }}%"
-        ],
-        "answer": r"{{ (100/k):.1f }}%",
-        "variables": [
-            {"k": 5},   # 20% validation
-            {"k": 10},  # 10% validation
-            {"k": 3}    # 33.3% validation
-        ],
-        "marks": 2
-    },
-    {
-        "template": r"A dataset has {{ n_samples }} samples and {{ n_features }} features. Using {{ train_pct }}% for training, how many samples for training?",
-        "options": [
-            r"{{ int(n_samples * train_pct / 100) }} samples",
-            r"{{ int(n_samples * (100-train_pct) / 100) }} samples",
-            r"{{ n_features * train_pct }} samples", 
-            r"{{ n_samples }} samples"
-        ],
-        "answer": r"{{ int(n_samples * train_pct / 100) }} samples",
-        "variables": [
-            {"n_samples": 1000, "train_pct": 80, "n_features": 10},  # 800 training
-            {"n_samples": 500, "train_pct": 70, "n_features": 5},   # 350 training
-            {"n_samples": 1500, "train_pct": 75, "n_features": 8}   # 1125 training
-        ],
-        "marks": 3
-    }
-]
-
-subjective = [
-    {
-        "question": r"Compare overfitting and underfitting in machine learning models.",
-        "answer": r"Overfitting: model memorizes training data, high training accuracy but low validation accuracy. Solutions: regularization, more data. Underfitting: model too simple, poor performance on both. Solutions: more complex model, feature engineering.",
-        "marks": 6
-    },
-    {
-        "template": r"Consider a neural network with {{ layers }} hidden layers, each with {{ neurons }} neurons. Calculate total parameters if input dimension is {{ input_dim }} and output is {{ output_dim }}.",
-        "variables": [
-            {
-                "layers": 2, "neurons": 64, "input_dim": 784, "output_dim": 10,
-                "answer": "Layer 1: (784$\times$64)+64=50,240. Layer 2: (64$\times$64)+64=4,160. Output: (64$\times$10)+10=650. Total: 55,050 parameters"
-            },
-            {
-                "layers": 1, "neurons": 128, "input_dim": 1000, "output_dim": 5,
-                "answer": "Layer 1: (1000$\times$128)+128=128,128. Output: (128$\times$5)+5=645. Total: 128,773 parameters"
-            }
-        ],
-        "marks": 8
-    },
-    {
-        "question": r"Model Performance Analysis:",
-        "parts": [
-            {
-                "question": r"Given training accuracy = 95% and validation accuracy = 65%, what problem does this indicate?",
-                "answer": r"This indicates overfitting. Large gap between training (95%) and validation (65%) shows the model memorized training data rather than learning generalizable patterns.",
-                "marks": 3
-            },
-            {
-                "question": r"Suggest three techniques to address this issue.",
-                "answer": r"1) Regularization (L1/L2) to penalize large weights. 2) Dropout during training to prevent co-adaptation. 3) Early stopping based on validation performance.",
-                "marks": 6
-            }
-        ],
-        "marks": 9
-    }
-]''',
-        "Advanced LaTeX": '''# Advanced LaTeX Features - Images, Matrices, Chemistry, Circuits
-quiz_metadata = {
-    "title": "Advanced LaTeX Features Demo",
-    "subject": "Science & Engineering",
-    "duration": "60 minutes", 
-    "total_marks": 40,
-    "instructions": ["Show all working", "Use proper units", "Include diagrams where helpful"]
-}
-
-mcq = [
     {
         "question": r"""
 Consider the matrix:
 \\begin{equation}
 A = \\begin{pmatrix}
-2 & -1 \\\\
--1 & 2
+3 & 1 \\\\
+2 & 4
 \\end{pmatrix}
 \\end{equation}
-What is the determinant of matrix A?""",
-        "options": [r"3", r"4", r"5", r"2"],
-        "answer": r"3",
+What is $\\det(A)$?""",
+        "options": [r"10", r"12", r"14", r"8"],
+        "answer": r"10",
         "marks": 3
     },
     {
         "question": r"""
-The RC circuit time constant is:
+The RC circuit shown has time constant:
 \\begin{center}
-\\begin{circuitikz}
-\\draw (0,0) to[V, l=$V_0$] (0,2) to[R, l=$R$] (3,2) to[C, l=$C$] (3,0) -- (0,0);
+\\begin{circuitikz}[scale=0.8]
+\\draw (0,0) to[V, l=$V_0$] (0,2) to[R, l=\\SI{10}{\\kilo\\ohm}] (3,2) to[C, l=\\SI{100}{\\micro\\farad}] (3,0) -- (0,0);
 \\end{circuitikz}
 \\end{center}
 What is $\\tau$?""",
-        "options": [r"$RC$", r"$\\frac{R}{C}$", r"$\\frac{C}{R}$", r"$R + C$"],
-        "answer": r"$RC$",
-        "marks": 3
+        "options": [r"\\SI{1}{\\second}", r"\\SI{0.1}{\\second}", r"\\SI{10}{\\second}", r"\\SI{0.01}{\\second}"],
+        "answer": r"\\SI{1}{\\second}",
+        "marks": 4
     },
     {
-        "question": r"""
-Using SI units with siunitx package:
-Temperature: \\SI{25}{\\celsius}
-What is this in Kelvin?""",
-        "options": [r"\\SI{298}{\\kelvin}", r"\\SI{273}{\\kelvin}", r"\\SI{248}{\\kelvin}", r"\\SI{300}{\\kelvin}"],
-        "answer": r"\\SI{298}{\\kelvin}",
-        "marks": 2
+        "template": r"If a circle has radius {{ r }} cm, what is its area using $\\pi = 3.14$?",
+        "options": [
+            r"${{ 3.14 * r * r }}$ cm$^2$",
+            r"${{ 2 * 3.14 * r }}$ cm$^2$",
+            r"${{ 3.14 * r }}$ cm$^2$",
+            r"${{ r * r }}$ cm$^2$"
+        ],
+        "answer": r"${{ 3.14 * r * r }}$ cm$^2$",
+        "variables": [
+            {"r": 5},
+            {"r": 7},
+            {"r": 10}
+        ],
+        "marks": 3
     }
 ]
 
 subjective = [
     {
-        "question": r"Chemical Structure Analysis:",
+        "template": r"Physics Problem - Projectile with velocity {{ v0 }} m/s at 30°:",
         "parts": [
             {
-                "question": r"Draw the Lewis structure for water (H$_2$O).",
-                "answer": r"H-O-H with two lone pairs on oxygen",
+                "question": r"Calculate maximum height (use $g = \\SI{9.8}{\\meter\\per\\second\\squared}$).",
+                "answer": r"$h = \\frac{(v_0 \\sin\\theta)^2}{2g} = \\frac{({{ v0 }} \\times 0.5)^2}{19.6} = {{ (v0 * 0.5)**2 / 19.6 | round(1) }}$ m",
+                "marks": 4
+            },
+            {
+                "question": r"Find the time of flight.",
+                "answer": r"$t = \\frac{2v_0 \\sin\\theta}{g} = \\frac{2 \\times {{ v0 }} \\times 0.5}{9.8} = {{ v0 / 9.8 | round(2) }}$ s",
+                "marks": 3
+            }
+        ],
+        "variables": [
+            {"v0": 20},
+            {"v0": 25}
+        ],
+        "marks": 7
+    },
+    {
+        "question": r"""
+Chemical Analysis - Consider ethanol:
+\\begin{center}
+\\chemfig{H-C(-[2]H)(-[6]H)-C(-[2]H)(-[6]H)-OH}
+\\end{center}""",
+        "parts": [
+            {
+                "question": r"What is the molecular formula?",
+                "answer": r"C$_2$H$_6$O (or C$_2$H$_5$OH)",
+                "marks": 2
+            },
+            {
+                "question": r"Calculate molar mass using C=12, H=1, O=16.",
+                "answer": r"Molar mass = $2 \\times 12 + 6 \\times 1 + 1 \\times 16 = 46$ g/mol",
+                "marks": 3
+            }
+        ],
+        "marks": 5
+    },
+    {
+        "question": r"""
+Data Analysis - Material Properties:
+\\begin{center}
+\\begin{tabular}{|l|c|c|}
+\\hline
+\\textbf{Material} & \\textbf{Density} & \\textbf{Strength} \\\\
+& \\textbf{(g/cm³)} & \\textbf{(MPa)} \\\\
+\\hline
+Steel & 7.85 & 250 \\\\
+\\hline
+Aluminum & 2.70 & 95 \\\\
+\\hline
+Carbon Fiber & 1.60 & 1200 \\\\
+\\hline
+\\end{tabular}
+\\end{center}""",
+        "parts": [
+            {
+                "question": r"Calculate specific strength (strength/density) for carbon fiber.",
+                "answer": r"Specific strength = $\\frac{1200}{1.60} = 750$ MPa·cm³/g",
                 "marks": 3
             },
             {
-                "question": r"What is the molecular geometry?",
-                "answer": r"Bent/angular geometry due to lone pairs",
+                "question": r"Why is carbon fiber preferred for aerospace?",
+                "answer": r"Carbon fiber has the highest specific strength (750 vs 32 for steel), providing maximum strength with minimum weight.",
                 "marks": 2
             }
         ],
@@ -394,56 +181,23 @@ subjective = [
     },
     {
         "question": r"""
-Data Table Analysis:
-\\begin{center}
-\\begin{tabular}{|c|c|c|}
-\\hline
-\\textbf{Material} & \\textbf{Density} & \\textbf{Strength} \\\\
-\\hline
-Steel & \\SI{7.85}{\\gram\\per\\cubic\\centi\\meter} & \\SI{400}{\\mega\\pascal} \\\\
-\\hline
-Aluminum & \\SI{2.70}{\\gram\\per\\cubic\\centi\\meter} & \\SI{270}{\\mega\\pascal} \\\\
-\\hline
-\\end{tabular}
-\\end{center}""",
-        "parts": [
-            {
-                "question": r"Calculate the specific strength (strength/density) for steel.",
-                "answer": r"$\\frac{400 \\text{ MPa}}{7.85 \\text{ g/cm}^3} = 51.0$ MPa·cm$^3$/g",
-                "marks": 4
-            },
-            {
-                "question": r"Which material is better for aerospace applications and why?",
-                "answer": r"Aluminum, because it has higher specific strength (100 vs 51), meaning better strength-to-weight ratio",
-                "marks": 3
-            }
-        ],
-        "marks": 7
-    },
-    {
-        "question": r"""
 Matrix Operations:
 \\begin{equation}
-\\text{Given: } A = \\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}, \\quad B = \\begin{pmatrix} 5 & 6 \\\\ 7 & 8 \\end{pmatrix}
+A = \\begin{pmatrix} 2 & 1 \\\\ 1 & 3 \\end{pmatrix}, \\quad \\mathbf{b} = \\begin{pmatrix} 5 \\\\ 8 \\end{pmatrix}
 \\end{equation}""",
         "parts": [
             {
-                "question": r"Calculate $A + B$.",
-                "answer": r"$A + B = \\begin{pmatrix} 6 & 8 \\\\ 10 & 12 \\end{pmatrix}$",
-                "marks": 3
-            },
-            {
-                "question": r"Calculate $AB$ (matrix multiplication).",
-                "answer": r"$AB = \\begin{pmatrix} 19 & 22 \\\\ 43 & 50 \\end{pmatrix}$",
-                "marks": 5
-            },
-            {
-                "question": r"Find $\\det(A)$.",
-                "answer": r"$\\det(A) = 1 \\times 4 - 2 \\times 3 = -2$",
+                "question": r"Calculate $\\det(A)$.",
+                "answer": r"$\\det(A) = 2 \\times 3 - 1 \\times 1 = 5$",
                 "marks": 2
+            },
+            {
+                "question": r"Solve $A\\mathbf{x} = \\mathbf{b}$ for $x_1$.",
+                "answer": r"Using Cramer's rule: $x_1 = \\frac{\\det(A_1)}{\\det(A)} = \\frac{7}{5} = 1.4$",
+                "marks": 4
             }
         ],
-        "marks": 10
+        "marks": 6
     }
 ]'''
     }
@@ -515,7 +269,45 @@ def generate_quiz_pdfs(questions_text, template, num_sets, header_config=None):
         print("[DEBUG] Creating questions file WITHOUT quiz_config metadata...")
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            full_content = questions_text  # Just the questions, no metadata
+            # Parse existing questions to see if quiz_metadata exists
+            questions_lines = questions_text.split('\n')
+            has_quiz_metadata = any('quiz_metadata' in line for line in questions_lines)
+            
+            if header_config and any(header_config.values()):
+                # User has provided header customization
+                if has_quiz_metadata:
+                    # Replace existing quiz_metadata with custom values
+                    full_content = questions_text
+                    # Find and replace the quiz_metadata section
+                    import re
+                    pattern = r'quiz_metadata\s*=\s*\{[^}]*\}'
+                    
+                    custom_metadata = "quiz_metadata = {\n"
+                    if header_config.get('title'):
+                        custom_metadata += f'    "title": "{header_config["title"]}",\n'
+                    if header_config.get('subject'):
+                        custom_metadata += f'    "subject": "{header_config["subject"]}",\n'
+                    if header_config.get('exam_info'):
+                        custom_metadata += f'    "duration": "{header_config["exam_info"]}",\n'
+                    custom_metadata += '    "total_marks": 100\n}'
+                    
+                    full_content = re.sub(pattern, custom_metadata, full_content, flags=re.DOTALL)
+                else:
+                    # Add quiz_metadata at the beginning
+                    metadata_header = "# Custom Quiz Metadata\n"
+                    metadata_header += "quiz_metadata = {\n"
+                    if header_config.get('title'):
+                        metadata_header += f'    "title": "{header_config["title"]}",\n'
+                    if header_config.get('subject'):
+                        metadata_header += f'    "subject": "{header_config["subject"]}",\n'
+                    if header_config.get('exam_info'):
+                        metadata_header += f'    "duration": "{header_config["exam_info"]}",\n'
+                    metadata_header += '    "total_marks": 100\n}\n\n'
+                    
+                    full_content = metadata_header + questions_text
+            else:
+                full_content = questions_text
+            
             f.write(full_content)
             questions_file = f.name
         
@@ -805,7 +597,7 @@ def main():
         num_sets = st.slider("Sets", 1, 5, 2)
     
     with col_ctrl3:
-        example = st.selectbox("Examples", ["", "Enhanced Demo", "Physics", "Machine Learning", "Advanced LaTeX"])
+        example = st.selectbox("Examples", ["", "Ultimate Demo"])
     
     with col_ctrl4:
         if st.button("Load Example", disabled=not example):
@@ -840,18 +632,17 @@ def main():
         st.subheader("Questions Editor")
         
         if 'questions' not in st.session_state:
-            st.session_state.questions = '''# Simple Demo Quiz
+            st.session_state.questions = '''# Simple Demo Quiz - Load "Ultimate Demo" to see all features!
 quiz_metadata = {
-    "title": "Math Quiz",
+    "title": "Simple Math Quiz",
     "subject": "Mathematics",
     "duration": "30 minutes", 
-    "total_marks": 10,
-    "instructions": ["Show your work", "Use proper units"]
+    "total_marks": 15
 }
 
 mcq = [
     {
-        "question": r"What is 2 + 2?",
+        "question": r"What is $2 + 2$?",
         "options": [r"3", r"4", r"5", r"6"],
         "answer": r"4",
         "marks": 2
@@ -866,8 +657,8 @@ mcq = [
         ],
         "answer": r"{{ a * b }}",
         "variables": [
-            {"a": 3, "b": 4},
-            {"a": 5, "b": 2}
+            {"a": 6, "b": 7},
+            {"a": 8, "b": 9}
         ],
         "marks": 3
     }
@@ -878,17 +669,17 @@ subjective = [
         "question": r"Multi-part Problem:",
         "parts": [
             {
-                "question": r"What is 15 + 25?",
-                "answer": r"15 + 25 = 40",
-                "marks": 2
+                "question": r"What is $15 + 25$?",
+                "answer": r"$15 + 25 = 40$",
+                "marks": 3
             },
             {
-                "question": r"Explain why addition works this way.",
-                "answer": r"Addition combines quantities together to get the total.",
-                "marks": 3
+                "question": r"Explain how addition works.",
+                "answer": r"Addition combines quantities together to find the total sum.",
+                "marks": 4
             }
         ],
-        "marks": 5
+        "marks": 7
     }
 ]'''
         
