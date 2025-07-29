@@ -326,6 +326,125 @@ subjective = [
         ],
         "marks": 9
     }
+]''',
+        "Advanced LaTeX": '''# Advanced LaTeX Features - Images, Matrices, Chemistry, Circuits
+quiz_metadata = {
+    "title": "Advanced LaTeX Features Demo",
+    "subject": "Science & Engineering",
+    "duration": "60 minutes", 
+    "total_marks": 40,
+    "instructions": ["Show all working", "Use proper units", "Include diagrams where helpful"]
+}
+
+mcq = [
+    {
+        "question": r"""
+Consider the matrix:
+\\begin{equation}
+A = \\begin{pmatrix}
+2 & -1 \\\\
+-1 & 2
+\\end{pmatrix}
+\\end{equation}
+What is the determinant of matrix A?""",
+        "options": [r"3", r"4", r"5", r"2"],
+        "answer": r"3",
+        "marks": 3
+    },
+    {
+        "question": r"""
+The RC circuit time constant is:
+\\begin{center}
+\\begin{circuitikz}
+\\draw (0,0) to[V, l=$V_0$] (0,2) to[R, l=$R$] (3,2) to[C, l=$C$] (3,0) -- (0,0);
+\\end{circuitikz}
+\\end{center}
+What is $\\tau$?""",
+        "options": [r"$RC$", r"$\\frac{R}{C}$", r"$\\frac{C}{R}$", r"$R + C$"],
+        "answer": r"$RC$",
+        "marks": 3
+    },
+    {
+        "question": r"""
+Using SI units with siunitx package:
+Temperature: \\SI{25}{\\celsius}
+What is this in Kelvin?""",
+        "options": [r"\\SI{298}{\\kelvin}", r"\\SI{273}{\\kelvin}", r"\\SI{248}{\\kelvin}", r"\\SI{300}{\\kelvin}"],
+        "answer": r"\\SI{298}{\\kelvin}",
+        "marks": 2
+    }
+]
+
+subjective = [
+    {
+        "question": r"Chemical Structure Analysis:",
+        "parts": [
+            {
+                "question": r"Draw the Lewis structure for water (H$_2$O).",
+                "answer": r"H-O-H with two lone pairs on oxygen",
+                "marks": 3
+            },
+            {
+                "question": r"What is the molecular geometry?",
+                "answer": r"Bent/angular geometry due to lone pairs",
+                "marks": 2
+            }
+        ],
+        "marks": 5
+    },
+    {
+        "question": r"""
+Data Table Analysis:
+\\begin{center}
+\\begin{tabular}{|c|c|c|}
+\\hline
+\\textbf{Material} & \\textbf{Density} & \\textbf{Strength} \\\\
+\\hline
+Steel & \\SI{7.85}{\\gram\\per\\cubic\\centi\\meter} & \\SI{400}{\\mega\\pascal} \\\\
+\\hline
+Aluminum & \\SI{2.70}{\\gram\\per\\cubic\\centi\\meter} & \\SI{270}{\\mega\\pascal} \\\\
+\\hline
+\\end{tabular}
+\\end{center}""",
+        "parts": [
+            {
+                "question": r"Calculate the specific strength (strength/density) for steel.",
+                "answer": r"$\\frac{400 \\text{ MPa}}{7.85 \\text{ g/cm}^3} = 51.0$ MPa·cm$^3$/g",
+                "marks": 4
+            },
+            {
+                "question": r"Which material is better for aerospace applications and why?",
+                "answer": r"Aluminum, because it has higher specific strength (100 vs 51), meaning better strength-to-weight ratio",
+                "marks": 3
+            }
+        ],
+        "marks": 7
+    },
+    {
+        "question": r"""
+Matrix Operations:
+\\begin{equation}
+\\text{Given: } A = \\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}, \\quad B = \\begin{pmatrix} 5 & 6 \\\\ 7 & 8 \\end{pmatrix}
+\\end{equation}""",
+        "parts": [
+            {
+                "question": r"Calculate $A + B$.",
+                "answer": r"$A + B = \\begin{pmatrix} 6 & 8 \\\\ 10 & 12 \\end{pmatrix}$",
+                "marks": 3
+            },
+            {
+                "question": r"Calculate $AB$ (matrix multiplication).",
+                "answer": r"$AB = \\begin{pmatrix} 19 & 22 \\\\ 43 & 50 \\end{pmatrix}$",
+                "marks": 5
+            },
+            {
+                "question": r"Find $\\det(A)$.",
+                "answer": r"$\\det(A) = 1 \\times 4 - 2 \\times 3 = -2$",
+                "marks": 2
+            }
+        ],
+        "marks": 10
+    }
 ]'''
     }
     return examples.get(subject, "")
@@ -686,7 +805,7 @@ def main():
         num_sets = st.slider("Sets", 1, 5, 2)
     
     with col_ctrl3:
-        example = st.selectbox("Examples", ["", "Enhanced Demo", "Physics", "Machine Learning"])
+        example = st.selectbox("Examples", ["", "Enhanced Demo", "Physics", "Machine Learning", "Advanced LaTeX"])
     
     with col_ctrl4:
         if st.button("Load Example", disabled=not example):
